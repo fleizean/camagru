@@ -1,4 +1,4 @@
-SECRET_KEY=
+SECRET_KEY=django-insecure-sk*%9ulyq6wiq9n$c+sba(112lmrhv9#+1ye3d49&+pbg@sz@7
 DEBUG=False
 BASE_URL=https://localhost:8443
 
