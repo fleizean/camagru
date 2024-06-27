@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from cam.views import login, signup, forgot_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login', login, name='login'),
     path('signup', signup, name='signup'),
-    path('login', login_view, name='login'),
+    path('forgot-password', forgot_password, name='forgot-password'),
 ]

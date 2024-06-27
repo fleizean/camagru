@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.html import mark_safe
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from indianpong.settings import EMAIL_HOST_USER, BASE_URL
+from camagru.settings import EMAIL_HOST_USER, BASE_URL
 from .utils import get_upload_to
 from django.utils import timezone
 import uuid
@@ -17,7 +17,7 @@ class UserProfile(AbstractUser):
     email = models.EmailField(unique=True, max_length=254)
     avatar = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
-    is_42student = models.BooleanField(default=False)
+    is_email_notification = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return f"{self.username}"
@@ -29,6 +29,7 @@ class UserProfile(AbstractUser):
 class Image(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_upload_to)
+    description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
 
@@ -42,8 +43,3 @@ class Like(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
-class UserPreference(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    email_notification = models.BooleanField(default=True)
-    push_notification = models.BooleanField(default=True)
