@@ -48,8 +48,9 @@ def handler404(request, exception):
 
 @never_cache
 def login_view(request):
-    # if request.user.is_authenticated:
-    #    return redirect('home')
+    if request.user.is_authenticated:
+       return redirect('home')
+    error = None
     if request.method == "POST":
         form = AuthenticationUserForm(request, request.POST)
         if form.is_valid():
@@ -58,10 +59,12 @@ def login_view(request):
                 messages.error(request, "Account not verified")
                 return redirect('login') """
             login(request, user)
-            return HttpResponseRedirect("dashboard")
+            return HttpResponseRedirect("home")
+        else:
+            error = "Invalid username or password"
     else:
         form = AuthenticationUserForm()
-    return render(request,"login.html", {"form": form})
+    return render(request,"login.html", {"form": form, "error": error})
 
 @never_cache
 def signup(request):
@@ -107,3 +110,8 @@ def privacy_policy_gpdr(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+@never_cache
+@login_required
+def home(request):
+    return render(request, "home.html")

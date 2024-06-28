@@ -13,7 +13,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     readonly_fields = ('thumbnail',)
     fieldsets = (
         (None, {
-            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification')
+            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification', 'avatar')
         }),
     )
 

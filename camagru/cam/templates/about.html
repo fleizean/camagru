@@ -35,7 +35,7 @@
     <div class="container">
             <div class="sign_up">
                 <div class="nav-logo">
-                    <img src="{% static "assets/bg-images/logo.png" %}" alt="Instagram logo">
+                    <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
                     {% if not request.user.is_authenticated %}
                         <div class="nav-buttons">
                             <a href="/login">

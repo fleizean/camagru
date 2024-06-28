@@ -69,6 +69,54 @@ body {
   box-shadow: -6px 14px 13px 0px rgba(0,0,0,0.2);
 }
 
+
+
+
+
+
+.privacy_policy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4em;
+}
+
+.privacy_policy .privacy_policy-sub-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #524648;
+}
+
+.privacy_policy .privacy_policy-title {
+  font-size: 32px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #3E0F12;
+}
+
+.privacy_policy__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+
+.privacy_policy__container .privacy_policy_description {
+  width: 70%;
+  font-size: 14px;
+  color: #524648;
+  font-weight: bold;
+}
+
+.privacy_policy__container .privacy_policy_description_title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #3E0F12;
+  margin-bottom: -10px;
+}
+
+
 .hide {
   display: none;
 }
@@ -901,6 +949,7 @@ button.sgn_btn:hover {
   color: rgb(38, 38, 38);
   font-size: 17px;
   display: flex;
+  align-items: center;
   flex-direction: row;
   font-weight: 400;
 }
@@ -911,7 +960,7 @@ button.sgn_btn:hover {
 
 .nav .menu ul li a img {
   margin-right: 10px;
-  width: 24px;
+  width: 32px;
 }
 
 .nav .menu ul li a img.circle {
