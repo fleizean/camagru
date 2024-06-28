@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camagru</title> 
+    <title>About Camagru</title> 
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.min.css" %}">
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/assets/favicons/apple-icon-57x57.png" %}">
@@ -33,52 +33,57 @@
 </head>
 <body>
     <div class="container">
-        <div class="sign_up">
-            <div class="nav-logo">
-                <a href=""><img src="{% static "assets/bg-images/logo.png" %}" alt="Instagram logo"></a>
-            </div>
-            <div class="content">
-                
-                <div class="log-on border_insc">
-                    <div class="logo">
-                        <img src="{% static "assets/bg-layers/trouble-login.png" %}" style="width:96px !important" alt="Instagram logo">
-                        <h5 class="trouble-login-h5">Trouble logging in?</h5>
-                        <p>Enter your email, phone, or username and<br> we'll send you a link to get back into your<br> account.</p>
-                    
-                    </div>
-                    <form action="" method="post">
-                        <div>
-                            <input type="email" name="email" id="emai" placeholder="Email or Username">
-                        </div>
-                    </form>
-                    <a href="/signup">
-                        <button class="log_btn">
-                                Send login link
-                        </button>
-                    </a>
-                    <div class="other-ways">
-                        <div class="seperator">
-                            <span class="ligne"></span>
-                            <span class="ou">OR</span>
-                            <span class="ligne"></span>
-                        </div>
-                        <div class="new-account">
-                            <a href="#">
-                                Create new account
+            <div class="sign_up">
+                <div class="nav-logo">
+                    <img src="{% static "assets/bg-images/logo.png" %}" alt="Instagram logo">
+                    {% if not request.user.is_authenticated %}
+                        <div class="nav-buttons">
+                            <a href="/login">
+                                <button class="log_btn">
+                                    Log in
+                                </button>
+                            </a>
+                            <a href="/signup">
+                                <button class="sgn_btn">
+                                    Sign up
+                                </button>
                             </a>
                         </div>
-                    </div>
-                   
+                    {% endif %}
                 </div>
-                <a href="/login"><div class="back-to-login">
-                    <button class="full-page-btn">
-                        Back to login
-                    </button>
-                </div></a>
+                <div class="content" style="max-width:80%">
+                   <div class="about-us">
+                        <span class="about-sub-title">Camagru history</span>
+                        <h2 class="about-title">About Camagru</h2>
+                        <div class="about__container">
+                            <div>
+                                <h2 class="about_description_title">
+                                    What is Camagru?
+                                </h2>
+                                <p class="about_description">
+                                    Camagru is a social media platform that allows users to take pictures and share them with their friends. 
+                                    The platform was created in 2024 by eyagiz, a software developer based in the Turkey. 
+                                    The idea for Camagru came from eyagiz's school Êcole 42, where he was inspired by the idea of creating a social media platform that focused on photos and visual content.
+                                </p>
+                                <hr>
+                                <h2 class="about_description_title">
+                                    How does Camagru work?
+                                </h2>
+                                <p class="about_description">
+                                    Camagru works by allowing users to take pictures using their smartphone or webcam and then share them with their friends. 
+                                    Users can add filters, stickers, and text to their photos to make them more fun and engaging. 
+                                    Users can also like and comment on each other's photos, and share them on other social media platforms like Facebook and Twitter.
+                                </p>
+                            </div>
+                            <div>
+                                <img src="{% static "assets/bg-images/about.png" %}" class="about__img" alt="About Camagru" class="about_image">
+                            </div>
+                        </div>
+                   </div>
+                </div>
             </div>
-        </div>
     </div>
-    <div class="footer">
+    <footer class="footer">
         <p class="copyright">
             &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
         </p>
@@ -88,7 +93,7 @@
             <a href="https://www.github.com/fleizean">Help</a>
             <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
         </p>
-    </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
        

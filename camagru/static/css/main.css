@@ -5,10 +5,68 @@
   padding: 0;
 }
 
+.html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   overflow-x: hidden;
   background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.about-us {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4em;
+}
+
+.about-us .about-sub-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #524648;
+}
+
+.about-us .about-title {
+  font-size: 32px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #3E0F12;
+}
+
+.about__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+
+.about__container .about_description {
+  width: 70%;
+  font-size: 14px;
+  color: #524648;
+  font-weight: bold;
+}
+
+.about__container .about_description_title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #3E0F12;
+  margin-bottom: -10px;
+}
+
+.about__container .about__img {
+  width: 280px;
+  justify-self: center;
+  border-radius: .5rem;
+  box-shadow: -6px 14px 13px 0px rgba(0,0,0,0.2);
 }
 
 .hide {
@@ -21,6 +79,53 @@ body {
 
 .opac_1 {
   opacity: 1 !important;
+}
+
+.main-contain {
+  flex: 1;
+}
+
+.custum-file-upload {
+  height: 125px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  gap: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #cacaca;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+}
+
+.custum-file-upload .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .icon svg {
+  height: 50px;
+  fill: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custum-file-upload .text span {
+  font-weight: 400;
+  color: rgba(75, 85, 99, 1);
+}
+
+.custum-file-upload input {
+  display: none;
 }
 
 .loved {
@@ -74,13 +179,50 @@ button.log_btn {
   color: white;
   width: 100%;
   padding: 7px 16px;
+  font-weight: bold;
   border-radius: 10px;
   opacity: 0.7;
   margin-top: 15px;
 }
 
+.h3-404 {
+  margin-top: 2em;
+  text-align: center;
+  font-size: 23px;
+  font-weight: bold;
+  color: rgb(38, 38, 38);
+}
+
+.p-404 {
+  text-align: center;
+  font-size: 16px;
+  color: #000000;
+}
+
+.p-404 a {
+  color: #000000;
+  font-weight: 700;
+}
+
+.p-404 a:hover {
+  color: rgb(72, 72, 72);
+}
+
 button.log_btn:hover {
   opacity: 1;
+}
+
+button.sgn_btn {
+  color: rgb(0, 149, 246);
+  background-color: transparent;
+  border:none;
+  margin-top: 15px;
+  padding: 7px 16px;
+  font-weight: bold;
+}
+
+button.sgn_btn:hover {
+  color: #01376A;
 }
 
 .border_insc {
@@ -130,6 +272,10 @@ button.log_btn:hover {
 @media screen and (max-width: 768px) {
   .owl-nav {
     width: 80%;
+  }
+
+  .about__img {
+    display:none;
   }
 }
 
@@ -457,7 +603,7 @@ button.log_btn:hover {
   position: relative;
 }
 
-#togglePassword {
+.togglePasswordBtn {
   position: absolute;
   font-size: 14px;
   right: 10px;
@@ -469,13 +615,15 @@ button.log_btn:hover {
   color: rgb(27, 27, 27);
 }
 
-#togglePassword:hover {
+.togglePasswordBtn:hover {
   text-decoration: none;
   color: rgb(142, 142, 142);
 }
 
 .nav-logo {
+  display: flex;
   border-bottom: 1px solid rgb(219, 219, 219);
+  justify-content: flex-start;
 }
 
 .nav-logo img {
@@ -484,7 +632,14 @@ button.log_btn:hover {
   margin-left: 8em;
 }
 
+.nav-buttons {
+  display: flex;
+  gap: 10px; /* Düğmeler arasındaki boşluk */
+  margin-left: auto; /* Düğmelerin sağa yaslanmasını sağlar */
+}
+
 .footer {
+  margin-top: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -953,6 +1108,9 @@ button.log_btn:hover {
     justify-content: center;
     align-self: center;
     margin: 35px 10px;
+  }
+  .about__img {
+    display:none;
   }
 }
 
