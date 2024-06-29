@@ -6,14 +6,14 @@ from django.forms import ModelChoiceField
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'displayname', 'email', 'is_verified', 'is_email_notification', 'thumbnail')
+    list_display = ('id', 'username', 'displayname', 'email', 'is_verified', 'is_email_notification', 'thumbnail', 'bio')
     list_display_links = ('username', 'displayname')
     search_fields = ('username', 'displayname', 'email')
     list_filter = ('is_verified', 'is_email_notification')
     readonly_fields = ('thumbnail',)
     fieldsets = (
         (None, {
-            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification', 'avatar')
+            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification', 'avatar', 'bio')
         }),
     )
 
@@ -25,14 +25,14 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'image', 'description', 'created_at', 'is_deleted')
+    list_display = ('id', 'user', 'image', 'description', 'created_at', 'is_deleted', 'is_edited')
     list_display_links = ('user', 'image')
     search_fields = ('user__username', 'description')
-    list_filter = ('is_deleted',)
+    list_filter = ('is_deleted', 'is_edited')
     readonly_fields = ('created_at',)  # 'image' alanını buradan çıkardık
     fieldsets = (
         (None, {
-            'fields': ('user', 'image', 'description', 'created_at', 'is_deleted')
+            'fields': ('user', 'image', 'description', 'created_at', 'is_deleted', 'is_edited')
         }),
     )
 

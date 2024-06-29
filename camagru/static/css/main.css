@@ -27,9 +27,6 @@ body {
   font-weight: 500;
 }
 
-.search__small__container {
-  
-}
 
 .about-us {
   display: flex;
@@ -230,6 +227,13 @@ img {
 button.follow_text {
   background-color: transparent;
   border: none;
+  color:rgb(0, 149, 246) !important;
+}
+
+button.unfollow_text {
+  background-color: transparent;
+  border: none;
+  color: coral !important;
 }
 
 button.log_btn {
@@ -1488,6 +1492,61 @@ button.sgn_btn:hover {
   color: rgb(142, 142, 142);
 }
 
+.search_section__search_page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.search_section__search_page h2 {
+  color: rgb(38, 38, 38);
+  padding-bottom: 1em;
+  font-size: 25px;
+}
+
+.search_section__search_page form {
+  background-color: rgb(239, 239, 239);
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 1.5em;
+}
+
+.search_section__search_page form input {
+  background: transparent !important;
+  font-weight: 300;
+  padding: 5px 10px;
+  width: 600px;
+  outline: none;
+  border: none !important;
+}
+
+.search_section__search_page .find .desc {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.search_section__search_page .find .desc h4 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.search_section__search_page .find .desc p {
+  margin: 0;
+}
+
+.search_section__search_page .find .desc p a {
+  font-weight: 500;
+  color: rgb(0, 149, 246);
+}
+
+.search_section__search_page .find .account .clear a {
+  color: rgb(142, 142, 142);
+}
+
 .explore_container {
   padding: 2em;
   display: grid;
@@ -2384,6 +2443,10 @@ button.sgn_btn:hover {
   justify-content: space-between;
   width: 100%;
   text-align: center;
+}
+
+#search-posts {
+  max-width: 600px;
 }
 
 .sign_up .content .log-on .logo .seperator span.ou {

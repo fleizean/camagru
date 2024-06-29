@@ -149,8 +149,7 @@ def home(request):
     for profile in user_profiles:
         # En son paylaşılan fotoğrafı al
         image = Image.objects.filter(user=profile).order_by('-created_at').first()
-        
-        if image:  # Eğer fotoğraf varsa
+        if image and not image.is_edited:  # Eğer fotoğraf varsa
             images_data = {
                 'image': image.image.url,
                 'description': image.description,
@@ -161,12 +160,13 @@ def home(request):
                 'humanize_time_diff': humanize_time_diff(image.created_at),
                 'created_at': image.created_at
             }
-            
             profile_data.append({
                 'profile': profile,
                 'images_data': images_data
             })
-    
+        is_followed = request.user.following.filter(id=profile.id).exists()
+        profile.is_followed = is_followed
+
     return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data})
 
 def search_profiles(request):
@@ -179,3 +179,39 @@ def search_profiles(request):
     # Serialize the profiles or manually build the JSON response
     profiles_json = serialize('json', profiles)
     return JsonResponse({'profiles': profiles_json}, safe=False)
+
+
+def search(request):
+    count = UserProfile.objects.aggregate(count=Count('id'))['count']
+    
+    if count > 4:
+        user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:4]
+    else:
+        # Yeterli UserProfile yoksa, mevcut tümünü al
+        user_profiles = UserProfile.objects.all()
+    return render(request, "search.html", {"user_profiles": user_profiles})
+
+@never_cache
+def profile_view(request, username):
+    user = get_object_or_404(UserProfile, username=username)
+    images = Image.objects.filter(user=user).order_by('-created_at')
+    return render(request, "profile.html", {"user": user, "images": images})
+
+@login_required
+def follow_user(request):
+    data = json.loads(request.body)
+    username = data.get('username')
+    action = data.get('action')
+    if username and action:
+        try:
+            target_user = UserProfile.objects.get(username=username)
+            if action == 'follow':
+                request.user.following.add(target_user)
+                target_user.followers.add(request.user)
+            elif action == 'unfollow':
+                request.user.following.remove(target_user)
+                target_user.followers.remove(request.user)
+            return JsonResponse({'status':'ok'})
+        except UserProfile.DoesNotExist:
+            return JsonResponse({'status':'error', 'message': 'User not found.'})
+    return JsonResponse({'status':'error', 'message': 'Invalid request'})

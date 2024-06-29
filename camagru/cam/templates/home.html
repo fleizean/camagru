@@ -44,7 +44,7 @@
                 <!-- nav for big->medium screen -->
                 <div class="nav">
                     <div class="logo">
-                        <a href="./home.html">
+                        <a href="/home">
                             <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
                             <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
                         </a>
@@ -265,7 +265,13 @@
                                     </div>
                                 </div></a>
                                 <div class="switch">
-                                    <button class="follow_text">Follow</button></a>
+                                    {% if suggestion.is_followed %}
+                                        <button class="unfollow_text" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow')">Unfollow</button>
+                                        <button class="follow_text" style="display:none !important;" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow')">Follow</button>
+                                    {% else %}
+                                        <button class="follow_text" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow')">Follow</button>
+                                        <button class="unfollow_text" style="display:none !important;" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow')">Unfollow</button>
+                                    {% endif %}
                                 </div>
                             
                         </div>

@@ -19,13 +19,15 @@ class UserProfile(AbstractUser):
     displayname = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, max_length=254)
     avatar = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    folowers = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
+    following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followings')
     is_verified = models.BooleanField(default=False)
     is_email_notification = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return f"{self.username}"
 
-    
     @property
     def thumbnail(self):
         return mark_safe('<img src="%s" width="50" height="50" />' % (self.avatar.url))
@@ -35,6 +37,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to=get_upload_to_image)
     description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_edited = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
 class Comment(models.Model):

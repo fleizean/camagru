@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function() {
       .then(data => {
         const searchResults = document.getElementById('searchResults');
         searchResults.innerHTML = '';
-        console.log(data);
     
         // JSON stringini JavaScript dizisine dönüştür
         const profiles = JSON.parse(data.profiles);
@@ -78,4 +77,35 @@ function getCookie(name) {
 function clearSearchResults() {
   const searchResults = document.getElementById('searchResults');
   searchResults.innerHTML = '';
+}
+
+function followOrUnfollow(username, action) {
+    console.log(username, action);
+    fetch("/follow/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            username: username,
+            action: action
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (action === "follow") {
+            const followButton = document.getElementById(`followbtn-${username}`);
+            followButton.style.display = "none";
+            const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
+            unfollowButton.style.display = "block";
+        }
+        else if (action === "unfollow") {
+            const followButton = document.getElementById(`followbtn-${username}`);
+            followButton.style.display = "block";
+            const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
+            unfollowButton.style.display = "none";
+        }
+    });
 }
