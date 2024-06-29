@@ -23,5 +23,40 @@ class UserProfileAdmin(admin.ModelAdmin):
         else:
             return "No Avatar"
 
-    
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'image', 'description', 'created_at', 'is_deleted')
+    list_display_links = ('user', 'image')
+    search_fields = ('user__username', 'description')
+    list_filter = ('is_deleted',)
+    readonly_fields = ('created_at',)  # 'image' alanını buradan çıkardık
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'image', 'description', 'created_at', 'is_deleted')
+        }),
+    )
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'image', 'comment', 'created_at')
+    list_display_links = ('user', 'image')
+    search_fields = ('user__username', 'image__description', 'comment')
+    readonly_fields = ('created_at',)
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'image', 'comment', 'created_at')
+        }),
+    )
+
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'image', 'created_at')
+    list_display_links = ('user', 'image')
+    search_fields = ('user__username', 'image__description')
+    readonly_fields = ('created_at',)
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'image', 'created_at')
+        }),
+    )
         

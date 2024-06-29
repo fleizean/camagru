@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from camagru.settings import EMAIL_HOST_USER, BASE_URL, STATICFILES_DIRS
-from .utils import get_upload_to
+from .utils import get_upload_to, get_upload_to_image
 from django.utils import timezone
 import uuid
 from datetime import timedelta
@@ -32,7 +32,7 @@ class UserProfile(AbstractUser):
 
 class Image(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=get_upload_to)
+    image = models.ImageField(upload_to=get_upload_to_image)
     description = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)

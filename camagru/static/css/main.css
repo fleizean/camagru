@@ -1244,11 +1244,13 @@ button.sgn_btn:hover {
 }
 
 .main_section .posts_container .post .image {
-  width: 100%;
+
 }
 
+
 .main_section .posts_container .post .image img {
-  width: 100%;
+  width: 396px;
+  height: 372px;
   border-radius: 5px;
 }
 
@@ -1272,6 +1274,7 @@ button.sgn_btn:hover {
   flex-direction: row;
   justify-content: space-between;
   padding: 10px 0;
+  margin-bottom: -5px;
 }
 
 .main_section .posts_container .post .desc .icons div img {
@@ -1280,9 +1283,39 @@ button.sgn_btn:hover {
   height: 24px;
 }
 
-.main_section .posts_container .post .desc input {
+.main_section .posts_container .post .desc textarea {
   border: none;
-  color: rgb(142, 142, 142);
+  width: 90%;
+  color: rgb(0, 0, 0);
+  overflow-y: auto;
+  resize: none;
+}
+
+.main_section .posts_container .post .desc textarea:focus {
+  outline: none;
+}
+
+.main_section .posts_container .post .desc .post_comment {
+  border: none;
+  background-color: transparent;
+  color: rgb(0, 162, 255);
+  font-weight: bold;
+}
+
+.post_cmmnt {
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+  margin-top: -10px !important;
+}
+
+.post_cmmnt a {
+  font-weight: 600;
+  color: rgb(89, 89, 89);
+}
+
+.main_section .posts_container .post .desc .post_comment:hover {
+  color: rgb(0, 15, 24);
 }
 
 .followers_container {
