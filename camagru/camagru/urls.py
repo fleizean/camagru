@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view
+from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('about', about, name='about'),
     path('privacy-policy-gdpr', privacy_policy_gpdr, name='privacy-policy-gdpr'),
     path('home', home, name='home'),
+    path('search_profiles/', search_profiles, name='search_profiles'),
     path('logout', logout_view, name='logout'),
 ]
 

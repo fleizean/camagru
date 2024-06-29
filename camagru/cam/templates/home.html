@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li id="search_icon">
-                                <a href="/search">
+                                <a href="#">
                                     <img src="{% static "assets/bg-layers/search.png" %}">
                                     <span class="d-none d-lg-block search">Search </span>
                                 </a>
@@ -108,18 +108,7 @@
                             </button>
                            
                         </div>
-                        <div class="left">
-                            <div class="search_bar">
-                                <div class="input-group">
-                                    <div class="form-outline">
-                                        <div>
-                                            <img src="{% static "assets/bg-layers/search.png" %}" alt="search">
-                                        </div>
-                                        <input type="search" id="form1" class="form-control" placeholder="Search" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
 
@@ -139,10 +128,27 @@
             <div class="nav_bottom">
                 <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
                 <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
-                <a href="profile.html"><img class="circle story" src="{{ request.user.avatar.url }}"></a>
+                <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
+                <a href="/profile/{{request.user.username}}"><img class="circle story" src="{{ request.user.avatar.url }}"></a>
             </div>
         </div>
-       
+       <!-- search  -->
+       <div id="search" class="search_section">
+            <h2>Search</h2>
+            <form method="post">
+                <input id="searchInput" type="text" placeholder="Search">
+            </form>
+            <div class="find">
+                <div class="desc">
+                    <h4>Results</h4>
+                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
+                </div>
+                <div class="account" id="searchResults">
+                    
+                </div>
+            </div>
+        </div>
+    <!-- search  -->
         <!--***** nav menu end ****** -->
 
         <div class="second_container">
@@ -156,11 +162,13 @@
 
                     <div class="posts">
                         {% for post in profile_data %}
+                            
                             <div class="post">
                                 <div class="info">
                                     <div class="person">
                                         <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}">
-                                        <a href="#">{{ post.profile.username }}</a>
+                                        <a href="#">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
+                                        
                                         <span class="circle">.</span>
                                         <span>{{post.images_data.humanize_time_diff}}</span>
                                     </div>
@@ -211,6 +219,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr>
                         {% endfor %}
                     </div>
 
@@ -265,6 +274,8 @@
                 </div>
             </div>
         </div>
+
+        
     </div>
 
     <!-- <script src="./sass/vender/bootstrap.bundle.js"></script>
@@ -275,6 +286,7 @@
     <script src="{% static "css/owlcarousel/jquery.min.js" %}"></script>
     <script src="{% static "css/owlcarousel/owl.carousel.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
+    <script src="{% static "js/home.js" %}"></script>
 </body>
 
 </html>

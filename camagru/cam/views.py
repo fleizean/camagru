@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.db.models.aggregates import Count
 from random import randint
+from django.core.serializers import serialize
 from .models import (
     VerifyToken,
     UserProfile,
@@ -158,11 +159,23 @@ def home(request):
                 'likes': image.like_set.count(),
                 'is_liked': image.like_set.filter(user=request.user).exists(),
                 'humanize_time_diff': humanize_time_diff(image.created_at),
+                'created_at': image.created_at
             }
             
             profile_data.append({
                 'profile': profile,
                 'images_data': images_data
             })
-    print(profile_data)
+    
     return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data})
+
+def search_profiles(request):
+    data = json.loads(request.body)
+    query = data.get('query', '')
+
+    # Filter user profiles based on the query
+    profiles = UserProfile.objects.filter(username__icontains=query)
+
+    # Serialize the profiles or manually build the JSON response
+    profiles_json = serialize('json', profiles)
+    return JsonResponse({'profiles': profiles_json}, safe=False)
