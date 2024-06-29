@@ -20,3 +20,10 @@ Camagru is an Instagram-like website. It allows you to take pictures with your w
 
 ### Home
 ![image](https://github.com/fleizean/camagru/assets/66090171/0e928209-005c-4a8b-8de2-7e5f9af5951f)
+
+### Search
+<img width="1440" alt="Ekran Resmi 2024-06-29 21 55 08" src="https://github.com/fleizean/camagru/assets/66090171/47697548-9b56-4984-9c11-08dcd82a91ef">
+
+### Profile
+<img width="1440" alt="Ekran Resmi 2024-06-29 21 52 01" src="https://github.com/fleizean/camagru/assets/66090171/d74098f9-bfe8-4fc9-a27b-a5b8b59597ab">
+
