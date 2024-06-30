@@ -313,11 +313,11 @@
                                 </div></a>
                                 <div class="switch">
                                     {% if suggestion.is_followed %}
-                                        <button class="unfollow_text" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow')">Unfollow</button>
-                                        <button class="follow_text" style="display:none !important;" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow')">Follow</button>
+                                        <button class="unfollow_text" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
+                                        <button class="follow_text" style="display:none !important;" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
                                     {% else %}
-                                        <button class="follow_text" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow')">Follow</button>
-                                        <button class="unfollow_text" style="display:none !important;" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow')">Unfollow</button>
+                                        <button class="follow_text" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
+                                        <button class="unfollow_text" style="display:none !important;" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
                                     {% endif %}
                                 </div>
                             

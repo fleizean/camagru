@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.db.models.aggregates import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from random import randint
 from django.core.serializers import serialize
 from .models import (
@@ -196,8 +197,30 @@ def search(request):
 @never_cache
 def profile_view(request, username):
     user = get_object_or_404(UserProfile, username=username)
-    images = Image.objects.filter(user=user).order_by('-created_at')
-    return render(request, "profile.html", {"user": user, "images": images})
+    images_list = Image.objects.filter(user=user).order_by('-created_at')
+    user.is_followed = request.user.following.filter(id=user.id).exists()
+
+    # Manuel Pagination
+    page = request.GET.get('page', 1)
+    page = int(page) if page.isdigit() else 1
+    per_page = 3  # Her sayfada gösterilecek resim sayısı
+    total_images = images_list.count()
+    total_pages = (total_images + per_page - 1) // per_page  # Toplam sayfa sayısı
+    page_numbers = list(range(1, total_pages + 1))
+    # Sayfalama sınırlarını ayarla
+    start_index = (page - 1) * per_page
+    end_index = start_index + per_page
+    images = images_list[start_index:end_index]
+
+    return render(request, "profile.html", {
+        "user": user,
+        "images": images,
+        "is_followed": user.is_followed,
+        "image_count": total_images,
+        "page_numbers": page_numbers,
+        "page": page,
+        "total_pages": total_pages,
+    })
 
 @login_required
 def follow_user(request):

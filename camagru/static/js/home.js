@@ -79,7 +79,7 @@ function clearSearchResults() {
   searchResults.innerHTML = '';
 }
 
-function followOrUnfollow(username, action) {
+function followOrUnfollow(username, action, page) {
     console.log(username, action);
     fetch("/follow/", {
         method: "POST",
@@ -96,16 +96,37 @@ function followOrUnfollow(username, action) {
     .then(data => {
         console.log(data);
         if (action === "follow") {
-            const followButton = document.getElementById(`followbtn-${username}`);
-            followButton.style.display = "none";
-            const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
-            unfollowButton.style.display = "block";
+            if (page === "profile") {
+                const followButton = document.getElementById("follow__profile__id");
+                followButton.style.display = "none";
+                const unfollowButton = document.getElementById("unfollow__profile__id");
+                unfollowButton.style.display = "block";
+                const followersCount = document.getElementById("followers__count");
+                followersCount.innerHTML = parseInt(followersCount.innerHTML) + 1;
+            }
+            else {
+                const followButton = document.getElementById(`followbtn-${username}`);
+                followButton.style.display = "none";
+                const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
+                unfollowButton.style.display = "block";
+            }
+            
         }
         else if (action === "unfollow") {
-            const followButton = document.getElementById(`followbtn-${username}`);
-            followButton.style.display = "block";
-            const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
-            unfollowButton.style.display = "none";
+            if (page === "profile") {
+                const followButton = document.getElementById("follow__profile__id");
+                followButton.style.display = "block";
+                const unfollowButton = document.getElementById("unfollow__profile__id");
+                unfollowButton.style.display = "none";
+                const followersCount = document.getElementById("followers__count");
+                followersCount.innerHTML = parseInt(followersCount.innerHTML) - 1;
+            }
+            else {
+                const followButton = document.getElementById(`followbtn-${username}`);
+                followButton.style.display = "block";
+                const unfollowButton = document.getElementById(`unfollowbtn-${username}`);
+                unfollowButton.style.display = "none";
+            }
         }
     });
 }

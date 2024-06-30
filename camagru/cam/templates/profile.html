@@ -159,15 +159,26 @@
                             <img src="{{user.avatar.url}}" style="width: 92px !important; height: 92px !important" alt="">
                         </div>
                         <div class="info">
-                            <p class="name">
-                                {{user.username}}
-                                <button class="edit_profile">
-                                    Edit profile 
-                                </button>
+                            <p class="name" style="display:flex !important; align-items:center !important; gap: 10px !important; margin-top: 1.5em; vertical-align: middle !important;">
+                                {{user.username}} 
+                                {% if user.is_verified %}
+                                    <img class="verified" src="{% static "assets/bg-layers/check-circle.png" %}" alt="verified">
+                                {% endif %}
+                                {% if request.user == user %}
+                                    <button class="edit_profile">
+                                        Edit profile 
+                                    </button>
+                                {% elif not user.is_followed %}
+                                    <button class="follow__profile" id="follow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
+                                    <button class="unfollow__profile" id="unfollow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
+                                {% else %}
+                                    <button class="unfollow__profile" id="unfollow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
+                                    <button class="follow__profile" id="follow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
+                                {% endif %}
                             </p>
                             <div class="general_info">
-                                <p><span>{{images.count}}</span> post</p>
-                                <p><span>{{user.followers.count}}</span> followers</p>
+                                <p><span>{{image_count}}</span> post</p>
+                                <p><span id="followers__count">{{user.followers.count}}</span> followers</p>
                                 <p><span>{{user.following.count}}</span> following</p>
                             </div>
                             <p class="nick_name">{{user.displayname}}</p>
@@ -192,44 +203,30 @@
                   <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
                         <div id="posts_sec" class="post">
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/Jqh3rHv/img1.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/2ZxBFVp/img2.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/5vQt677/img3.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/pJ8thst/account13.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/j8L7FPY/account10.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-                        <div id="saved_sec" class="post">
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/6WvdZS9/account12.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/pJ8thst/account13.jpg" alt="">
-                            </div>
+                            {% for image in images %}
+                                <div class="item">
+                                    <img class="img-fluid item_img" src="{{image.image.url}}" alt="">
+                                </div>
+                            {% endfor %}
                             
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
-                        <div id="tagged" class="post">
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/Zhc5hHp/account4.jpg" alt="">
-                            </div>
-                            <div class="item">
-                                <img class="img-fluid item_img" src="https://i.ibb.co/SPTNbJL/account5.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination custom-pagination justify-content-center">
+                            {% for num in page_numbers %}
+                                {% if page == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link"></span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}"></a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>              
+                                   
                     
                   </div>
             </div>

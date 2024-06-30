@@ -166,6 +166,13 @@ body {
   margin-top: 25px;
 }
 
+.verified {
+  margin-top: 5px;
+  margin-left: -6px;
+  width: 20px !important;
+  height: 20px !important;
+}
+
 .modal-post-comment {
   display: flex;
   margin-bottom: 10px;
@@ -433,6 +440,40 @@ button.unfollow_text {
   color: coral !important;
 }
 
+button.follow__profile {
+  background-color: rgb(0, 149, 246);
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 93px;
+  height: 32px;
+  border-radius: 8px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+button.follow__profile:hover {
+  opacity: 1;
+}
+
+button.unfollow__profile {
+  background-color: #bbbbbb;
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 93px;
+  height: 32px;
+  border-radius: 8px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+button.unfollow__profile:hover {
+  opacity: 1;
+}
+
 button.log_btn {
   background-color: rgb(0, 149, 246);
   border: none;
@@ -559,7 +600,7 @@ button.sgn_btn:hover {
   justify-content: center;
 }
 
-.cart div img {
+.cart div img:not(.verified) {
   margin: auto;
   margin-right: 10px;
   width: 48px !important;
@@ -2488,7 +2529,7 @@ button.sgn_btn:hover {
   }
 }
 
-.profile_container .profile_info .info p.name button {
+.profile_container .profile_info .info p.name button:not(.follow__profile, .unfollow__profile) {
   padding: 5px 15px;
   font-size: 15px;
   margin-left: 20px;
@@ -2566,6 +2607,36 @@ button.sgn_btn:hover {
   font-weight: 500;
 }
 
+#pills-home {
+  margin-bottom: 2em;
+}
+
+.custom-pagination .page-item {
+  margin: 0 5px;
+}
+
+
+.custom-pagination .page-link {
+  border: none;
+  border-radius: 20px;
+  background-color: #e9ecef;
+  color: #007bff;
+  width: 10px;
+  height: 8px !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-pagination .page-link:hover {
+  background-color: #d4d9df;
+  color: #0056b3;
+}
+
+.custom-pagination .page-item.active .page-link {
+  width: 35px;
+  background-color: coral;
+}
+
+
 .profile_container hr {
   margin-bottom: 0;
 }
@@ -2610,11 +2681,14 @@ button.sgn_btn:hover {
 
 .profile_container .posts_profile .post .item {
   width: auto;
+  height: 250px;
 }
 
 .profile_container .posts_profile .post .item .item_img {
   max-width: 250px;
   max-height: 250px;
+  border-radius: 15px;
+  object-fit: cover;
 }
 
 @media screen and (max-width: 768px) {
