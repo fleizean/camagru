@@ -109,3 +109,45 @@ function followOrUnfollow(username, action) {
         }
     });
 }
+
+function sendMessage(id, action) {
+    var message = "";
+    console.log(id);
+    console.log(action);
+    if (action == 'notinmodal')
+        message = document.getElementById(`not_inpost_message_${id}`).value;
+    else    
+        message = document.getElementById(`post_message_${id}`).value;
+    fetch("/send_message_post/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            id: id,
+            message: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "ok") {
+            
+            const messageSent = document.getElementById(`messageListField-${id}`);
+            const avatarUrl = data.comment.avatar_url || 'static/assets/profile-photos/default-photo.png';
+            const username = data.comment.username || 'Unknown User';
+            const commentText = data.comment.comment || '';        
+
+            const commentHTML = `
+                <div class="modal-post-comment">
+                    <img src="${avatarUrl}" alt="Avatar" class="modal-post-comment-img">
+                    <a href="/profile/${username}" class="modal-post-comment-username">${username}</a>
+                    <p class="modal-post-comment-comment">${commentText}</p>
+                </div>
+            `;
+            messageSent.innerHTML += commentHTML;
+            document.getElementById(`post_message_${id}`).value = '';
+            document.getElementById(`not_inpost_message_${id}`).value = '';
+        }
+    });
+}

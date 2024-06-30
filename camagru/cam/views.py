@@ -151,9 +151,11 @@ def home(request):
         image = Image.objects.filter(user=profile).order_by('-created_at').first()
         if image and not image.is_edited:  # Eğer fotoğraf varsa
             images_data = {
+                'id': image.id,
                 'image': image.image.url,
                 'description': image.description,
-                'comments': image.comment_set.first(),
+                'first_comment': image.comment_set.first(),
+                'comments': image.comment_set.all(),
                 'comments_count': image.comment_set.count(),
                 'likes': image.like_set.count(),
                 'is_liked': image.like_set.filter(user=request.user).exists(),
@@ -215,3 +217,33 @@ def follow_user(request):
         except UserProfile.DoesNotExist:
             return JsonResponse({'status':'error', 'message': 'User not found.'})
     return JsonResponse({'status':'error', 'message': 'Invalid request'})
+
+def send_message_post(request):
+    user = request.user
+    if not user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'User not authenticated.'})
+
+    data = json.loads(request.body)
+    message = data.get('message')
+    image_id = data.get('id')  # Mesajın gönderileceği resmin ID'si
+
+    if message and image_id:
+        try:
+            # Resmi ve alıcı kullanıcıyı bul
+            image = Image.objects.get(id=image_id)
+            receiver_user = image.user
+
+            # Mesajı Comment modeli olarak kaydet
+            Comment.objects.create(user=user, image=image, comment=message)
+            return JsonResponse({
+                'status': 'ok',
+                'comment': {
+                    'username': user.username,
+                    'avatar_url': user.avatar.url if user.avatar else None,
+                    'comment': message
+                }
+            })
+        except Image.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Image not found.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})

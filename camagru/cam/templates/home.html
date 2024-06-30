@@ -167,7 +167,7 @@
                                 <div class="info">
                                     <div class="person">
                                         <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}">
-                                        <a href="#">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
+                                        <a href="/profile/{{post.profile.username}}">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
                                         
                                         <span class="circle">.</span>
                                         <span>{{post.images_data.humanize_time_diff}}</span>
@@ -202,27 +202,74 @@
                                     </div>
                                     <div class="post_desc">
                                         <p style="margin-top: -1px !important;">
-                                            <a class="bold" href="#">{{ post.profile.username }}</a> {{ post.images_data.description }}
+                                            <a class="bold" href="/profile/{{post.profile.username}}">{{ post.profile.username }}</a> <span>{{ post.images_data.description }}</span>
                                         </p>
                                         
                                         <p style="margin-top: -10px !important;">
-                                            <a class="gray" href="#">View all {{ post.images_data.comments_count }} comments</a>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">View all {{ post.images_data.comments_count }} comments</a>
                                         </p>
-                                        <p class="post_cmmnt">
-                                            <a>{{ post.images_data.comments.user.username }}</a> {{ post.images_data.comments.comment}}
-                                        </p>
+                                        <div class="post__comment">
+                                            <p class="post_cmmnt"><a href="/profile/{{post.images_data.first_comment.user}}">{{ post.images_data.first_comment.user.username }}</a> <span> {{ post.images_data.first_comment.comment}} </span></p>
+                                        </div>
                                         <div style="display:flex; gap:2px;">
-                                            <textarea id="w3review" name="w3review" rows="2" cols="50" oninput="adjustHeight(this)" placeholder="Add a comment..."></textarea>
-                                            <button class="post_comment" data-post-id="{{ post.images_data.id }}">Post</button>
+                                            <textarea id="not_inpost_message_{{post.images_data.id}}" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                            <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `notinmodal`)">Post</button>
                                         </div>
                                         
                                     </div>
                                 </div>
                             </div>
                             <hr>
+
+                            
+                            <div class="modal" id="commentsModal-{{ post.profile.id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true" data-backdrop="false">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-body">
+                                            <!-- Post Sahibi ve Açıklaması -->
+                                            <div class="modal-post-page">
+                                                <div class="modal-post-img">
+                                                    <img src="{{ post.images_data.image }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
+                                                </div>
+                                            </div>
+                                            <div class="modal-post-info-container">
+                                                <div class="modal-post-info">
+                                                    <div class="modal-post-owner">
+                                                        <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-owner-img">
+                                                        <a href="/profile/{{ post.profile.username }}" class="modal-post-owner-username">{{ post.profile.username }}</a>
+                                                        {% if post.profile.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
+                                                        <p class="modal-post-description">{{post.images_data.description}}</p>
+                                                        <p class="modal-post-time">{{ post.images_data.humanize_time_diff }}</p>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="modal-post-comments">
+                                                        <div class="modal-post-comments-container" id="messageListField-{{post.images_data.id}}">
+                                                            {% for comment in post.images_data.comments %}
+                                                                <div class="modal-post-comment">
+                                                                    <img src="{% if comment.user.avatar %} {{ comment.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-comment-img">
+                                                                    <a href="/profile/{{ comment.user.username }}" class="modal-post-comment-username">{{ comment.user.username }}</a>
+                                                                    <p class="modal-post-comment-comment"> {{ comment.comment }}</p>
+                                                                </div>
+                                                                
+                                                            
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-post-comment-input">
+                                                        <textarea class="textarea-post-comment" id="post_message_{{post.images_data.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                                        <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `inmodal`)">Post</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
-
+                    
                 </div>
             </div>
             <!--***** posts_container end ****** -->

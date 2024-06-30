@@ -46,6 +46,19 @@ class Comment(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def humanized_time(self):
+        delta = timezone.now() - self.created_at
+        if delta < timedelta(minutes=1):
+            return "now"
+        elif delta < timedelta(hours=1):
+            return f"{delta.seconds // 60} m"
+        elif delta < timedelta(days=1):
+            return f"{delta.seconds // 3600} h"
+        elif delta < timedelta(days=30):
+            return f"{delta.days} d"
+        else:
+            return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+
 class Like(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)

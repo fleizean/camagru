@@ -20,6 +20,201 @@ body {
   margin: 0;
 }
 
+/* Modalın kendisini ekran boyutuna göre ayarla */
+
+/* Modal overlay ayarları */
+.modal {
+  background-color: transparent !important;
+  border: none !important;
+  z-index: 1000;
+}
+
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: transparent !important; /* Arka plan rengini kaldır */
+  border: none !important; /* Sınırları kaldır */
+  box-shadow: none !important; /* Gölgeyi kaldır */
+  display: flex; /* Flexbox modelini kullan */
+  flex-direction: column; /* İçerikleri dikey olarak sırala */
+  align-items: stretch; /* Tüm içerikleri dikey olarak uzat */
+  max-width: 100%; /* Modal içeriğinin maksimum genişliği */
+  height: 100%; /* Modal içeriğinin yüksekliği */
+  border-radius: 16px 0 0 0; /* Kenar yuvarlaklığı */
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* Tüm boş alanı kapla */
+  padding: 20px;
+}
+
+.modal-img {
+  width: 450px; /* Sabit genişlik */
+  height: 450px; /* Sabit yükseklik */
+  object-fit: cover; /* Resmi kutuya sığdır, taşan kısımları kırp */
+  border-radius: 16px 16px 0 0; /* Kenar yuvarlaklığı */
+  margin-bottom: 20px; /* Alt margini koru */
+}
+
+.modal-post-info-container {
+  background-color: #262626;
+  opacity: 0.99;
+  flex: 1; /* Tüm boş alanı kapla */
+  border-radius: 0 0 16px 16px; /* Kenar yuvarlaklığı */
+  max-width: 450px !important;
+  width: 100%; /* Container'ın maksimum genişliği */
+  color: #fff;
+  overflow-y: auto; /* İçeriği taşarsa kaydırma çubuğunu göster */
+  overflow-x: hidden;
+  margin-top: -20px;
+}
+
+.modal-post-info {
+  margin: 20px;
+}
+
+.modal-post-owner {
+  display: flex;
+  align-items: flex-start;
+  opacity: 1 !important;
+}
+
+.modal-post-owner-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-top: -6px !important;
+  margin-right: 5px;
+  border: 2px solid rgb(0, 149, 246)
+}
+
+.modal-post-info hr {
+  background-color: white !important;
+  height: 1px;
+  border: none;
+  margin-bottom: -10px;
+  opacity: 1 !important; /* Tam opaklık */
+}
+
+.modal-post-owner-username {
+  color: white;
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.modal-post-owner-username:hover {
+  color: #c7c7c7;
+}
+
+.modal-post-owner-verified {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;  
+}
+
+.modal-post-description {
+  color: #ffffff;
+  max-width: calc(59% - 10px); /* Sağ ve sol padding/margin hesaplaması */
+  overflow-wrap: break-word; /* Uzun kelimeleri alt satıra geçir */
+  margin: 0 5px 10px 5px; /* Üst: 0, Sağ: 5px, Alt: 10px, Sol: 5px */
+}
+
+.post_desc p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: -1px !important;
+}
+
+.post_desc .bold {
+  white-space: nowrap;
+  display: inline-block;
+  margin-right: 5px;
+  flex-shrink: 0; /* Kullanıcı adının daralmamasını sağlar */
+}
+
+.post_desc .bold + span {
+  display: inline;
+  overflow-wrap: break-word;
+  flex-shrink: 1; /* Açıklama metninin gerekirse daralmasını sağlar */
+  max-width: 78%; /* Açıklama metninin maksimum genişliğini sınırlar */
+}
+
+.modal-post-comments {
+  overflow-y: scroll;
+}
+
+.modal-post-time {
+  color: #ffffff;
+  font-size: 12px;
+  margin-left: auto;
+  margin-right: 1px;
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+.modal-post-comments-container {
+  display: block;
+  margin-top: 25px;
+}
+
+.modal-post-comment {
+  display: flex;
+  margin-bottom: 10px;
+  flex-wrap: nowrap;
+}
+
+.modal-post-comment-img, .modal-post-comment-username {
+  flex-shrink: 0; /* Bu elemanların daralmasını önler */
+}
+
+.modal-post-comment-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.modal-post-comment-time {
+  color: #ffffff;
+  font-size: 12px;
+  margin-left: auto;
+  margin-right: 1px;
+}
+
+.modal-post-comment-username {
+  color: white;
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.modal-post-comment-comment {
+  color: #ffffff;
+  margin: 0 0 0 0; /* Üstten marj ekleyerek yeni bir satırda başlamasını sağlar */
+  overflow-wrap: break-word;
+  max-width: 100%; /* Maksimum genişliği ayarlar */
+  flex-grow: 1; /* Kalan alanı doldurur */
+}
+
+body.modal-open {
+  overflow: hidden; /* Modal açıkken sayfanın kaymasını engeller */
+  background-color: initial !important; /* Body arkaplan rengini sıfırlar */
+}
+
+.modal-backdrop {
+  display: none !important; /* Backdrop'u tamamen gizle */
+}
+
+
+
 .clear-items-all {
   background-color: transparent;
   border: none;
@@ -208,6 +403,8 @@ a {
   text-decoration: none;
   font-size: 14px;
 }
+
+
 
 p {
   font-size: 15px;
@@ -1275,14 +1472,13 @@ button.sgn_btn:hover {
 }
 
 .main_section .posts_container .post .image {
-  
+  overflow: hidden; /* Kapsayıcıdan taşan içeriği gizle */
+  border-radius: 15px;
 }
 
-
 .main_section .posts_container .post .image img {
-  width: 396px;
+  width: 486px;
   height: 372px;
-  border-radius: 5px;
 }
 
 .main_section .posts_container .post .desc p {
@@ -1322,6 +1518,32 @@ button.sgn_btn:hover {
   resize: none;
 }
 
+.modal-post-comment-input {
+  margin-top: 10px;
+  display: flex;
+  gap: 2px;
+}
+
+.modal-post-comment-input textarea {
+  border: none;
+  background-color: transparent;
+  width: 90%;
+  color: white !important;
+  overflow-y: auto;
+  resize: none;
+}
+
+.modal-post-comment-input textarea:focus {
+  outline: none;
+}
+
+.modal-post-comment-input .post_comment {
+  border: none;
+  background-color: transparent;
+  color: rgb(0, 162, 255);
+  font-weight: bold;
+}
+
 .main_section .posts_container .post .desc textarea:focus {
   outline: none;
 }
@@ -1333,16 +1555,24 @@ button.sgn_btn:hover {
   font-weight: bold;
 }
 
-.post_cmmnt {
-  font-size: 14px;
-  color: rgb(0, 0, 0);
-  font-weight: 500;
-  margin-top: -10px !important;
+.post__comment .post_cmmnt {
+  display: flex;
+  margin-top: -10px;
 }
 
-.post_cmmnt a {
+.post__comment .post_cmmnt a {
   font-weight: 600;
   color: rgb(89, 89, 89);
+  margin-right: 5px;
+  white-space: nowrap; /* Kullanıcı adının taşmasını engeller */
+}
+
+.post__comment .post_cmmnt span {
+  display: inline-block;
+  max-width: calc(100% - 60px); /* Kullanıcı adı için yer bırak */
+  overflow-wrap: break-word;
+  flex-shrink: 1;
+  flex-grow: 1;
 }
 
 .main_section .posts_container .post .desc .post_comment:hover {
