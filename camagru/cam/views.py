@@ -25,6 +25,7 @@ from .forms import (
     DeleteAccountForm,
     AuthenticationUserForm,
     SetPasswordUserForm,
+    SetUserProfileForm,
 )
 
 from os import environ
@@ -162,12 +163,25 @@ def logout_view(request):
 @login_required
 def home(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
-    
-    if count > 5:
-        user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
+    following_users = request.user.following.all()
+    following_users_ids = request.user.following.values_list('id', flat=True)
+
+    # Önerilen kullanıcıları al (mevcut kullanıcı hariç, rastgele 5 kullanıcı)
+    suggested_users = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
+
+    # Önerilen kullanıcılar için takip edilip edilmediğini kontrol et
+    for user in suggested_users:
+        user.is_followed = user.id in following_users_ids
+    if following_users.exists():
+        # Takip edilen kullanıcıların UserProfile'larını al
+        user_profiles = UserProfile.objects.filter(id__in=following_users.values_list('id', flat=True))
     else:
-        # Yeterli UserProfile yoksa, mevcut tümünü al
-        user_profiles = UserProfile.objects.all().exclude(username=request.user.username)
+        # Takip edilen kimse yoksa, mevcut sistem devam eder
+        count = UserProfile.objects.aggregate(count=Count('id'))['count']
+        if count > 5:
+            user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
+        else:
+            user_profiles = UserProfile.objects.all().exclude(username=request.user.username)
 
     # Her UserProfile için en son paylaşılan fotoğrafı ve bu fotoğrafa ait like/comment bilgilerini al
     profile_data = []
@@ -191,10 +205,8 @@ def home(request):
                 'profile': profile,
                 'images_data': images_data
             })
-        is_followed = request.user.following.filter(id=profile.id).exists()
-        profile.is_followed = is_followed
 
-    return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data})
+    return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data, "suggested_users": suggested_users})
 
 def search_profiles(request):
     data = json.loads(request.body)
@@ -254,12 +266,21 @@ def profile_settings(request, username):
         raise Http404
     user = get_object_or_404(UserProfile, username=username)
     if request.method == "POST":
-        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        form = SetUserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            form.save()
+            updated_user = form.save()
+            if 'password' in form.changed_data:
+                update_session_auth_hash(request, updated_user)
             messages.success(request, "Profile updated successfully.")
+            response = redirect(reverse('profile_settings', kwargs={'username': updated_user.username}))
+            response.set_cookie('status', 'success', max_age=10)
+            return response
+        else:
+            response = redirect(reverse('profile_settings', kwargs={'username': user.username}))
+            response.set_cookie('status', 'error', max_age=10)
+            return response
     else:
-        form = UserProfileForm(instance=user)
+        form = SetUserProfileForm(instance=user)
     return render(request, "profile-settings.html", {"form": form, "user": user})
 
 @login_required

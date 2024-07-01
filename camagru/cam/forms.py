@@ -87,3 +87,35 @@ class SetPasswordUserForm(SetPasswordForm):
             user.save()
             VerifyToken.objects.filter(user=user).delete()
         return user
+
+class SetUserProfileForm(UserChangeForm):
+    username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'input'}))
+    displayname = forms.CharField(label='Displayname', widget=forms.TextInput(attrs={'class': 'input'}))
+    bio = forms.CharField(label='Bio', widget=forms.Textarea(attrs={'class': 'input'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'input'}))
+    avatar = forms.ImageField(required=False, label='Avatar', widget=forms.FileInput(attrs={'class': 'input'}))
+    is_email_notification = forms.BooleanField(label='Email Notification', required=False, widget=forms.CheckboxInput(attrs={'class': 'input'}))
+    password = forms.CharField(label='Password', required=False, widget=forms.PasswordInput(attrs={'class': 'input'}))
+
+    class Meta:
+        model = UserProfile
+        fields = ['username', 'displayname', 'bio', 'email', 'avatar', 'is_email_notification', 'password']
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password:
+            # Return None or an empty string if password is not provided
+            return None
+        return password
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data.get('password')
+        if password:
+            user.set_password(password)  # Şifre alanı doluysa yeni şifreyi hashleyip set et
+        else:
+            # Şifre alanı boşsa, kullanıcı profilindeki mevcut şifreyi koru
+            user.password = UserProfile.objects.get(pk=user.pk).password
+        if commit:
+            user.save()
+        return user

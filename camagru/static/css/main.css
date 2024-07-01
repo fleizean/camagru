@@ -44,6 +44,7 @@ body {
   flex-direction: row;
   align-items: center;
   margin-top: 1em;
+  margin-bottom: 3em;
 }
 
 .profile_settings h2 {
@@ -203,6 +204,28 @@ body {
   width: 100%; /* Genişliği artır */
   padding: 10px;
   margin-top: 1em;
+  resize: none;
+}
+
+.button-container {
+  text-align: right;
+  margin-top: 1em;
+}
+
+.button-container .submit__button {
+  background-color: #27a3f6;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px 75px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1em;
+}
+
+.button-container .submit__button:hover {
+  background-color: #0095F6;
 }
 
 .profile-info-container .form-group .form-label {
@@ -1813,8 +1836,10 @@ button.sgn_btn:hover {
 }
 
 .main_section .posts_container .post .image img {
-  width: 486px;
+  width: 577px;
   height: 372px;
+  border-radius: 15px;
+  object-fit: cover;
 }
 
 .main_section .posts_container .post .desc p {

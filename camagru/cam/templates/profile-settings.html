@@ -71,7 +71,7 @@
                             </li>
                             <li>
                                 <a href="/profile/{{request.user.username}}">
-                                    <img class="circle story" src="{{ request.user.avatar.url }}">
+                                    <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
                                     <span class="d-none d-lg-block ">Profile</span>
                                 </a>
                             </li>
@@ -129,7 +129,7 @@
                 <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
                 <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
                 <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
-                <a href="/profile/{{request.user.username}}"><img class="circle story" src="{{ request.user.avatar.url }}"></a>
+                <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
             </div>
         </div>
        <!-- search  -->
@@ -161,31 +161,36 @@
                             {% csrf_token %}
                             <div class="profile-change-container">
                                 <div class="profile-change-img">
-                                    <img src="{{ request.user.avatar.url }}" alt="profile">
+                                    <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} alt="profile" id="profile-img">
                                     <h5>{{ request.user.username }}</h5>
                                 </div>
                                 <div class="profile-change-btn">
-                                    <button class="change-avatar" id="change-profile">Change photo</button>
+                                    <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display: none;"/>
+                                    <button class="change-avatar" type="button" id="change-profile">Change photo</button>
                                 </div>
                             </div>
                             <div class="profile-info-container">
                                 <h5>Profile information</h5>
                                 <div class="form-group">
                                     <p class="form-label">Username</p>
-                                    <input type="text" class="settings-form-control" id="username" name="username" value="{{ request.user.username }}">
+                                    <input type="text" class="settings-form-control" id="id_username" name="username" value="{{ request.user.username }}">
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-label">Displayname</p>
+                                    <input type="text" class="settings-form-control" id="id_displayname" name="displayname" value="{{ request.user.displayname }}">
                                 </div>
                                 <div class="form-group">
                                     <p class="form-label">Email</p>
-                                    <input type="email" class="settings-form-control" id="email" name="email" value="{{ request.user.email }}">
+                                    <input type="email" class="settings-form-control" id="id_email" name="email" value="{{ request.user.email }}">
                                 </div>
                                 <div class="form-group">
                                     <p class="form-label">Bio</p>
-                                    <textarea class="settings-form-control" id="bio" name="bio">{{ request.user.bio }}</textarea>
+                                    <textarea class="settings-form-control" id="id_bio" name="bio">{% if request.user.bio %} {{ request.user.bio }} {% else %} Bio {% endif %}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="password-container">
                                         <p class="form-label">Password</p>
-                                        <input type="password" class="settings-form-control" id="password" name="password">
+                                        <input type="password" class="settings-form-control" id="id_password" name="password">
                                         <button type="button" class="togglePasswordBtn" style="font-weight:bold" id="togglePassword">Show</button>
                                     </div>
                                 </div>
@@ -198,16 +203,30 @@
                                             <p class="email-notification-text">Receive email notifications when someone likes or comments on your posts. You can change whenever.</p>
                                         </div>
                                         <label class="switch">
-                                            <input type="checkbox" name="is_email_notification" {% if request.user.is_email_notification %}checked{% endif %}>
+                                            <input type="checkbox" name="is_email_notification" id="id_is_email_notification" {% if request.user.is_email_notification %}checked{% endif %}>
                                             <span class="slider"></span>
                                         </label>
                                     </div>
                                 </div>
+                                <div class="button-container">
+                                    <button type="submit" class="submit__button">Submit</button>
+                                </div>
                             </div>
                         </form>
+                        
                     </div>
 
-                
+                    <footer class="footer">
+                        <p class="copyright">
+                            &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
+                        </p>
+                        <p class="links">
+                            <a href="/about">About</a>
+                            <a href="https://www.github.com/fleizean">Contact</a>
+                            <a href="https://www.github.com/fleizean">Help</a>
+                            <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
+                        </p>
+                    </footer>
                     
                 </div>
             </div>
@@ -222,6 +241,7 @@
 
     <!-- <script src="./sass/vender/bootstrap.bundle.js"></script>
     <script src="./sass/vender/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://kit.fontawesome.com/b80699d249.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
@@ -229,6 +249,30 @@
     <script src="{% static "css/owlcarousel/owl.carousel.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
     <script src="{% static "js/profile-settings.js" %}"></script>
+
+    
+    <script>
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const status = getCookie('status'); // Cookie'den durum bilgisini al
+            if (status === 'success') {
+                const notyf = new Notyf();
+                notyf.success('User profile updated successfully!');
+                // Başarılı mesaj gösterildikten sonra cookie'yi sil
+                document.cookie = "status=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            } else if (status === 'error') {
+                const notyf = new Notyf();
+                notyf.error('An error occurred while updating the user profile!');
+                // Hata mesajı gösterildikten sonra cookie'yi sil
+                document.cookie = "status=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+        });
+    </script>
 </body>
 
 </html>

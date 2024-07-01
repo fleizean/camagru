@@ -72,7 +72,7 @@
                             </li>
                             <li>
                                 <a href="/profile/{{request.user.username}}">
-                                    <img class="circle story" src="{{ request.user.avatar.url }}">
+                                    <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
                                     <span class="d-none d-lg-block ">Profile</span>
                                 </a>
                             </li>
@@ -130,7 +130,7 @@
                 <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
                 <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
                 <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
-                <a href="/profile/{{request.user.username}}"><img class="circle story" src="{{ request.user.avatar.url }}"></a>
+                <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
             </div>
         </div>
        <!-- search  -->
@@ -156,7 +156,7 @@
             <div class="profile_info">
                 <div class="cart">
                         <div class="img">
-                            <img src="{{user.avatar.url}}" style="width: 92px !important; height: 92px !important" alt="">
+                            <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} style="width: 92px !important; height: 92px !important" alt="">
                         </div>
                         <div class="info">
                             <p class="name" style="display:flex !important; align-items:center !important; gap: 10px !important; margin-top: 1.5em; vertical-align: middle !important;">
@@ -184,7 +184,7 @@
                             <p class="nick_name">{{user.displayname}}</p>
                             <p class="desc">
                                 {% if user.bio %}
-                                    {{user.bio}}
+                                    {{ user.bio|linebreaksbr }}
                                 {% endif %}
                             </p>
                         </div>

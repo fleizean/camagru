@@ -80,7 +80,6 @@ function clearSearchResults() {
 }
 
 function followOrUnfollow(username, action, page) {
-    console.log(username, action);
     fetch("/follow/", {
         method: "POST",
         headers: {
@@ -94,7 +93,6 @@ function followOrUnfollow(username, action, page) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         if (action === "follow") {
             if (page === "profile") {
                 const followButton = document.getElementById("follow__profile__id");
@@ -133,8 +131,6 @@ function followOrUnfollow(username, action, page) {
 
 function sendMessage(id, action) {
     var message = "";
-    console.log(id);
-    console.log(action);
     if (action == 'notinmodal')
         message = document.getElementById(`not_inpost_message_${id}`).value;
     else    
@@ -153,11 +149,21 @@ function sendMessage(id, action) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "ok") {
-            
+           
             const messageSent = document.getElementById(`messageListField-${id}`);
             const avatarUrl = data.comment.avatar_url || 'static/assets/profile-photos/default-photo.png';
             const username = data.comment.username || 'Unknown User';
-            const commentText = data.comment.comment || '';        
+            const commentText = data.comment.comment || '';
+            const messageCount = document.getElementById(`commentCount-${id}`);
+            let messageText = messageCount.innerHTML.toString();
+            let match = messageText.match(/\d+/);
+
+            if (match) {
+                let currentCount = parseInt(match[0]) + 1;
+                messageCount.innerHTML = "View all " + currentCount + " comments";
+            } else {
+                console.error("No number found in messageCount.innerHTML");
+            }
 
             const commentHTML = `
                 <div class="modal-post-comment">
