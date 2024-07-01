@@ -40,6 +40,19 @@ class Image(models.Model):
     is_edited = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
+    def humanized_time(self):
+        delta = timezone.now() - self.created_at
+        if delta < timedelta(minutes=1):
+            return "now"
+        elif delta < timedelta(hours=1):
+            return f"{delta.seconds // 60} m"
+        elif delta < timedelta(days=1):
+            return f"{delta.seconds // 3600} h"
+        elif delta < timedelta(days=30):
+            return f"{delta.days} d"
+        else:
+            return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+
 class Comment(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
@@ -74,7 +87,7 @@ class VerifyToken(models.Model):
         mail_subject = 'Activate your account.'
         message = render_to_string('activate_account_email.html', {
             'user': user,
-            'domain': request.META['HTTP_HOST'],
+            'domain': BASE_URL,
             'token': token.token,
         })
         email = EmailMultiAlternatives(
@@ -86,26 +99,7 @@ class VerifyToken(models.Model):
 
         # Add the HTML version. This could be the same as the body if your email is only HTML.
         email.attach_alternative(message, "text/html")
-
-        # List of images
-        images = ['github.png', '268a.png', 'back.png', 'head.png']
-
-        for img_name in images:
-            img_path = os.path.join(STATICFILES_DIRS[0], "assets", "email", img_name)
-
-            # Open the image file in binary mode
-            with open(img_path, 'rb') as f:
-                image_data = f.read()
-
-            # Create a MIMEImage
-            img = MIMEImage(image_data)
-
-            # Add a 'Content-ID' header. The angle brackets are important.
-            img.add_header('Content-ID', f'<{img_name}>')
-
-            # Attach the image to the email
-            email.attach(img)
-
+        
         # Send the email
         email.send(fail_silently=True)
         #send_mail(mail_subject, message, EMAIL_HOST_USER, [user.email], fail_silently=True, html_message=message)

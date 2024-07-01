@@ -21,8 +21,10 @@ from .models import (
 
 from .forms import (
     UserProfileForm,
+    PasswordResetUserForm,
     DeleteAccountForm,
     AuthenticationUserForm,
+    SetPasswordUserForm,
 )
 
 from os import environ
@@ -71,6 +73,8 @@ def login_view(request):
 
 @never_cache
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect("home")
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -86,7 +90,47 @@ def signup(request):
 
 @never_cache
 def forgot_password(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+    if request.method == "POST":
+        form = PasswordResetUserForm(request.POST or None)
+        if form.is_valid():
+            form.save(request=request)
+            return redirect("password_reset_done")
+    else:
+        form = PasswordResetUserForm()
     return render(request, "forgot-password.html")
+
+@never_cache
+def password_reset_done(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+    return render(request, "password_reset_done.html")
+
+@never_cache
+def set_password(request, uidb64, token):
+    if request.user.is_authenticated:
+        return redirect("home")
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = get_user_model().objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, UserProfile.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        # token is valid, you can show the user a form to enter a new password
+        if request.method == "POST":
+            form = SetPasswordUserForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                #messages.success(request, "Your password has been reset.")
+                return redirect("login")
+        else:
+            form = SetPasswordUserForm(user)
+        return render(request, "set_password.html", {"form": form})
+    else:
+        # invalid token
+        #messages.error(request, "The reset password link is invalid.")
+        return redirect("forgot_password")
 
 @never_cache
 def activate_account(request, token):
@@ -114,42 +158,23 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
-def humanize_time_diff(target_time):
-    now = timezone.now()
-    diff = now - target_time
-    
-    days = diff.days
-    seconds = diff.seconds
-    minutes = seconds // 60
-    hours = seconds // 3600
-    if days > 7:
-        return f"{days // 7} w"
-    elif days > 0:
-        return f"{days} d"
-    elif hours > 0:
-        return f"{hours} hrs"
-    elif minutes > 0:
-        return f"{minutes} min"
-    else:
-        return "now"
-
 @never_cache
 @login_required
 def home(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
     
-    if count > 4:
-        user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:4]
+    if count > 5:
+        user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
     else:
         # Yeterli UserProfile yoksa, mevcut tümünü al
-        user_profiles = UserProfile.objects.all()
+        user_profiles = UserProfile.objects.all().exclude(username=request.user.username)
 
     # Her UserProfile için en son paylaşılan fotoğrafı ve bu fotoğrafa ait like/comment bilgilerini al
     profile_data = []
     for profile in user_profiles:
         # En son paylaşılan fotoğrafı al
         image = Image.objects.filter(user=profile).order_by('-created_at').first()
-        if image and not image.is_edited:  # Eğer fotoğraf varsa
+        if image:  # Eğer fotoğraf varsa
             images_data = {
                 'id': image.id,
                 'image': image.image.url,
@@ -157,9 +182,9 @@ def home(request):
                 'first_comment': image.comment_set.first(),
                 'comments': image.comment_set.all(),
                 'comments_count': image.comment_set.count(),
+                'humanized_time': image.humanized_time,
                 'likes': image.like_set.count(),
                 'is_liked': image.like_set.filter(user=request.user).exists(),
-                'humanize_time_diff': humanize_time_diff(image.created_at),
                 'created_at': image.created_at
             }
             profile_data.append({

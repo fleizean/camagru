@@ -11,9 +11,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from camagru.settings import EMAIL_HOST_USER, STATICFILES_DIRS
+from camagru.settings import EMAIL_HOST_USER, STATICFILES_DIRS, BASE_URL
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm 
-from .models import Image, UserProfile, Comment, Like
+from .models import Image, UserProfile, Comment, Like,VerifyToken
 from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
 
@@ -43,3 +43,47 @@ class AuthenticationUserForm(AuthenticationForm):
         model = UserProfile
         fields = ['username', 'password']
         
+class PasswordResetUserForm(PasswordResetForm):
+    def save(self, domain_override=None, token_generator=default_token_generator, request=None):
+        email = self.cleaned_data["email"]
+        # check if user exists with given email
+        user = UserProfile.objects.filter(email=email).first()
+        if user is None:
+            self.add_error('email', 'User does not exist with this email.')
+            return
+        token = token_generator.make_token(user)
+        VerifyToken.objects.create(user=user, token=token)
+        mail_subject = 'Reset your password'
+        message = render_to_string('password_reset_email.html', {
+            'user': user,
+            'domain': BASE_URL,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': token,
+        })
+
+        
+        email = EmailMultiAlternatives(
+            subject=mail_subject,
+            body=message,  # this is the simple text version
+            from_email=EMAIL_HOST_USER,
+            to=[user.email]
+        )
+
+        # Add the HTML version. This could be the same as the body if your email is only HTML.
+        email.attach_alternative(message, "text/html")
+        email.send(fail_silently=True)
+
+class SetPasswordUserForm(SetPasswordForm):
+    new_password1 = forms.CharField(label='New Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
+    new_password2 = forms.CharField(label='Re New Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
+
+    class Meta:
+        model = UserProfile
+        fields = ['new_password1', 'new_password2']
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            VerifyToken.objects.filter(user=user).delete()
+        return user

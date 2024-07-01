@@ -18,12 +18,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post
+from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post, password_reset_done, set_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('activate/<str:token>/', activate_account, name='activate'),
     path('', login_view, name='login'),
+    path('activate/<str:token>/', activate_account, name='activate'),
     path('login', login_view, name='login'),
     path('signup', signup, name='signup'),
     path('forgot-password', forgot_password, name='forgot-password'),
@@ -36,6 +36,8 @@ urlpatterns = [
     path('follow/', follow_user, name='follow'),
     path('send_message_post/', send_message_post, name='send_message_post'),
     path('like_post/', like_post, name='like_post'),
+    path('password_reset_done/', password_reset_done, name='password_reset_done'),
+    path('set_password/<str:uidb64>/<str:token>/', set_password, name='set_password'),
     path('logout', logout_view, name='logout'),
 ]
 

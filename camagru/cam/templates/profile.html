@@ -239,7 +239,7 @@
                                                                 <a href="/profile/{{ image.user.username }}" class="modal-post-owner-username">{{ image.user.username }}</a>
                                                                 {% if image.user.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
                                                                 {% if image.description %} <p class="modal-post-description">{{image.description}}</p> {% endif%}
-                                                                <p class="modal-post-time">{{ image.humanize_time_diff }}</p>
+                                                                <p class="modal-post-time">{{ image.humanized_time }}</p>
                                                             </div>
                                                             <div class="modal-post-like-comments">
                                                                 <div>

@@ -170,7 +170,7 @@
                                         <a href="/profile/{{post.profile.username}}">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
                                         
                                         <span class="circle">.</span>
-                                        <span>{{post.images_data.humanize_time_diff}}</span>
+                                        <span>{{post.images_data.humanized_time}}</span>
                                     </div>
                                 </div>
                                 <div class="image">
@@ -240,7 +240,7 @@
                                                         <a href="/profile/{{ post.profile.username }}" class="modal-post-owner-username">{{ post.profile.username }}</a>
                                                         {% if post.profile.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
                                                         <p class="modal-post-description">{{post.images_data.description}}</p>
-                                                        <p class="modal-post-time">{{ post.images_data.humanize_time_diff }}</p>
+                                                        <p class="modal-post-time">{{ post.images_data.humanized_time }}</p>
                                                     </div>
                                                     <hr>
                                                     <div class="modal-post-comments">

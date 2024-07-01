@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-sk*%9ulyq6wiq9n$c+sba(112lmrhv9#+1ye3d49&+pbg@sz@7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environ.get("DEBUG", default='True') == 'True'
 
-BASE_URL = environ.get("BASE_URL", default='https://localhost:8443')
+BASE_URL = environ.get("BASE_URL", default='http://localhost:8000')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -169,7 +169,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = '' # environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_USER = 'github' # environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = 'github' # environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_TLS = True
