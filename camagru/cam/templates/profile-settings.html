@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search - Camagru</title>
+    <title>Edit Profile - Camagru</title>
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.min.css" %}">
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/assets/favicons/apple-icon-57x57.png" %}">
@@ -44,7 +44,7 @@
                 <!-- nav for big->medium screen -->
                 <div class="nav">
                     <div class="logo">
-                        <a href="./home.html">
+                        <a href="/home">
                             <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
                             <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
                         </a>
@@ -58,7 +58,7 @@
                                 </a>
                             </li>
                             <li id="search_icon">
-                                <a href="/search">
+                                <a href="#">
                                     <img src="{% static "assets/bg-layers/search.png" %}">
                                     <span class="d-none d-lg-block search">Search </span>
                                 </a>
@@ -133,6 +133,21 @@
             </div>
         </div>
        <!-- search  -->
+       <div id="search" class="search_section">
+            <h2>Search</h2>
+            <form method="post">
+                <input id="searchInput" type="text" placeholder="Search">
+            </form>
+            <div class="find">
+                <div class="desc">
+                    <h4>Results</h4>
+                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
+                </div>
+                <div class="account" id="searchResults">
+                    
+                </div>
+            </div>
+        </div>
     <!-- search  -->
         <!--***** nav menu end ****** -->
 
@@ -140,79 +155,66 @@
             <!--***** posts_container start ****** -->
             <div class="main_section">
                 <div class="posts_container">
-                    <div class="stories">
-                        <div class="owl-carousel items">
-                        </div>
-                    </div>
-
-                    <div class="posts" id="search-posts">
-                        <div class="search_section__search_page">
-                            <h2>Search</h2>
-                            <form method="post">
-                                <input id="searchInput" type="text" placeholder="Search">
-                            </form>
-                            <div class="find">
-                                <div class="desc">
-                                    <h4>Results</h4>
-                                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
+                    <div class="profile_settings">
+                        <h2>Edit profile</h2>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="profile-change-container">
+                                <div class="profile-change-img">
+                                    <img src="{{ request.user.avatar.url }}" alt="profile">
+                                    <h5>{{ request.user.username }}</h5>
                                 </div>
-                                <div class="account" id="searchResults">
-                                    
+                                <div class="profile-change-btn">
+                                    <button class="change-avatar" id="change-profile">Change photo</button>
                                 </div>
                             </div>
-                        </div>
+                            <div class="profile-info-container">
+                                <h5>Profile information</h5>
+                                <div class="form-group">
+                                    <p class="form-label">Username</p>
+                                    <input type="text" class="settings-form-control" id="username" name="username" value="{{ request.user.username }}">
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-label">Email</p>
+                                    <input type="email" class="settings-form-control" id="email" name="email" value="{{ request.user.email }}">
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-label">Bio</p>
+                                    <textarea class="settings-form-control" id="bio" name="bio">{{ request.user.bio }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="password-container">
+                                        <p class="form-label">Password</p>
+                                        <input type="password" class="settings-form-control" id="password" name="password">
+                                        <button type="button" class="togglePasswordBtn" style="font-weight:bold" id="togglePassword">Show</button>
+                                    </div>
+                                </div>
+                                <h5 style="margin-top: 2em;">Notifications</h5>
+                                <div class="form-group">
+                                    <p class="form-label">Email notifications</p>
+                                    <div class="form-check">
+                                        <div style="width: 70% !important">
+                                            <label class="email-notification-headtext" for="email-notifications">Receive email notifications</label>
+                                            <p class="email-notification-text">Receive email notifications when someone likes or comments on your posts. You can change whenever.</p>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" name="is_email_notification" {% if request.user.is_email_notification %}checked{% endif %}>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
+                
+                    
                 </div>
             </div>
             <!--***** posts_container end ****** -->
 
             <!--***** followers_container start ****** -->
-            <div class="followers_container">
-                <div>
-                    <div class="cart">
-                        <a href="/profile/{{request.user.username}}"><div>
-                            <div class="img">
-                                <img src="{{request.user.avatar.url}}" alt="{{request.user.username}}">
-                            </div>
-                            <div class="info">
-                                <p class="name">{{request.user.username}}</p>
-                                <p class="second_name">{{request.user.displayname}}</p>
-                            </div>
-                        </div></a>
-                        <div class="switch">
-                            <a href="/logout" style="color:red;">Logout</a>
-                        </div>
-                    </div>
-                    <div class="suggestions">
-                        <div class="title">
-                            <h4>Suggestions for you</h4>
-                        </div>
-                        {% for suggestion in user_profiles %}
-                        <div class="cart">
-                            
-                                <a href="/profile/{{suggestion.username}}"><div>
-                                    <div class="img">
-                                        {% if not suggestion.avatar %}
-                                            <img src="{% static "assets/profile-photos/default-photo.png" %}" alt="">
-                                        {% else %}
-                                            <img src="{{suggestion.avatar.url}}" alt="">
-                                        {% endif %}
-                                    </div>
-                                    <div class="info">
-                                        <p class="name">{{suggestion.username}}</p>
-                                        <p class="second_name">{{suggestion.displayname}}</p>
-                                    </div>
-                                </div></a>
-                                <div class="switch">
-                                    <button class="follow_text">Follow</button></a>
-                                </div>
-                            
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+           
         </div>
 
         
@@ -226,7 +228,7 @@
     <script src="{% static "css/owlcarousel/jquery.min.js" %}"></script>
     <script src="{% static "css/owlcarousel/owl.carousel.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
-    <script src="{% static "js/home.js" %}"></script>
+    <script src="{% static "js/profile-settings.js" %}"></script>
 </body>
 
 </html>

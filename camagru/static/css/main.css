@@ -29,6 +29,216 @@ body {
   z-index: 1000;
 }
 
+.no-posts {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 300px;
+  align-items: center !important;
+  text-align: center !important;;
+  justify-content: center !important;
+  margin-top: 2em;
+}
+
+.posts_container .profile_settings {
+  display: block;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.profile_settings h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.profile-change-img {
+  display: flex; /* Bu satırı ekleyin */
+  align-items: center; /* img ve h5'i dikey olarak ortalar */
+}
+
+.profile-change-img h5 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  margin:0;
+}
+
+.profile-change-container
+{
+  display: flex; /* Changed from block to flex */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1em;
+  background-color: #EFEFEF;
+  padding: 10px;
+  border-radius: 24px;
+}
+
+.profile-change-img img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.profile-change-btn {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.profile-change-btn .change-avatar {
+  background-color: #27a3f6;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.profile-info-container .form-group {
+  width: 100%;
+}
+
+.email-notification-headtext {
+  font-size: 16px;
+  font-weight:500;
+  color: #000000;
+
+
+}
+
+.profile-info-container h5 {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(0, 149, 246);
+  margin-bottom: 1em;
+  text-align: left !important;
+  margin-top: 1em;
+}
+
+.email-notification-text {
+  font-size: 12px;
+  word-wrap: break-word;
+  color: #000000;
+  margin: 0;
+}
+
+.switch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  width: 3.5em;
+  height: 2em;
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #FFFFFF;
+  border-radius: 50px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.4em;
+  width: 1.4em;
+  left: 0.3em;
+  bottom: 0.3em;
+  background-color: white;
+  border-radius: 50px;
+  box-shadow: 0 0px 20px rgba(0,0,0,0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+.switch input:checked + .slider {
+  background: #000000 !important;
+}
+
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #001f3a;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(1.6em);
+  width: 2em;
+  height: 2em;
+  bottom: 0;
+}
+
+.form-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #DBDFE3;
+  border-radius: 16px;
+  padding: 10px;
+  margin-top: 1em;
+}
+
+.profile-info-container .form-group .settings-form-control {
+  background-color: #EFEFEF;
+  border: 1px solid #DBDFE3;
+  border-radius: 16px;
+  width: 100%; /* Genişliği artır */
+  padding: 10px;
+  margin-top: 1em;
+}
+
+.profile-info-container .form-group .form-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: -5px;
+}
+
+.profile-info-container .form-group .settings-form-control:focus, .profile-info-container .form-group .settings-form-control:hover {
+  border: 1px solid #000000;
+}
+
+.profile-change-btn .change-avatar:hover {
+  background-color: #1d8dbf;
+}
+
+.profile-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+.like-image-home {
+  cursor: pointer;
+}
+
+.like-image-home div i {
+  font-size: 24px;
+}
+
+.like-image-home div i:hover {
+  color: red;
+}
+
 .like-inmodal {
   margin-top: 10px;
 }
@@ -989,7 +1199,7 @@ button.sgn_btn:hover {
   position: absolute;
   font-size: 14px;
   right: 10px;
-  top: 50%;
+  top: 70%;
   transform: translateY(-50%);
   background: none;
   border: none;
@@ -1530,16 +1740,21 @@ button.sgn_btn:hover {
     justify-content: center;
     width: 90vw;
   }
+
+  .post_container {
+    width: 400px !important;;
+  }
 }
 
 .main_section .posts_container {
-  max-width: 470px;
+  min-width: 70%;
 }
 
 @media screen and (max-width: 498px) {
   .main_section .posts_container {
     max-width: 100%;
   }
+  
 }
 
 .main_section .posts_container .post {

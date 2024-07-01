@@ -165,9 +165,9 @@
                                     <img class="verified" src="{% static "assets/bg-layers/check-circle.png" %}" alt="verified">
                                 {% endif %}
                                 {% if request.user == user %}
-                                    <button class="edit_profile">
+                                    <a href="/profile-settings/{{request.user.username}}"><button class="edit_profile">
                                         Edit profile 
-                                    </button>
+                                    </button></a>
                                 {% elif not user.is_followed %}
                                     <button class="follow__profile" id="follow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
                                     <button class="unfollow__profile" id="unfollow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
@@ -183,7 +183,9 @@
                             </div>
                             <p class="nick_name">{{user.displayname}}</p>
                             <p class="desc">
-                                {{user.bio}}
+                                {% if user.bio %}
+                                    {{user.bio}}
+                                {% endif %}
                             </p>
                         </div>
                 </div>
@@ -200,98 +202,102 @@
                     </li>
                     
                   </ul>
+                  {% if not images %} <p style="text-align: center; font-weight:bold; margin-top: 20px; margin-left: 30px;">No posts shared yet.</p> {% endif %}
                   <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
                         <div id="posts_sec" class="post">
                             <div class="profile_container">
                                 <div class="posts_profile">
                                   <div id="posts_sec" class="post">
-                                    {% for image in images %}
-                                      <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ image.id }}"><div class="item">
-                                        <div class="image-container">
-                                          <img class="img-fluid item_img" src="{{ image.image.url }}" alt="">
-                                          <div class="overlay">
-                                            <div class="icons">
-                                              <span class="like-icon"><i class="fa fa-heart"></i></span>
-                                              <span class="like-count">{{ image.like_set.count }}</span>
-                                              <span class="comment-icon"><i class="fa fa-comment"></i></span>
-                                              <span class="comment-count">{{ image.comment_set.count }}</span>
+                                    {% if images %}
+                                        {% for image in images %}
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ image.id }}"><div class="item">
+                                            <div class="image-container">
+                                            <img class="img-fluid item_img" src="{{ image.image.url }}" alt="">
+                                            <div class="overlay">
+                                                <div class="icons">
+                                                <span class="like-icon"><i class="fa fa-heart"></i></span>
+                                                <span class="like-count">{{ image.like_set.count }}</span>
+                                                <span class="comment-icon"><i class="fa fa-comment"></i></span>
+                                                <span class="comment-count">{{ image.comment_set.count }}</span>
+                                                </div>
                                             </div>
-                                          </div>
-                                        </div>
-                                      </div></a>
+                                            </div>
+                                        </div></a>
 
-                                      <div class="modal" id="commentsModal-{{ image.id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true" data-backdrop="false">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                               
-                                                <div class="modal-body">
-                                                    <!-- Post Sahibi ve Açıklaması -->
-                                                    <div class="modal-post-page">
-                                                        <div class="modal-post-img">
-                                                            <img src="{{ image.image.url }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-post-info-container">
-                                                        <div class="modal-post-info">
-                                                            <div class="modal-post-owner">
-                                                                <img src="{% if image.user.avatar %} {{ image.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-owner-img">
-                                                                <a href="/profile/{{ image.user.username }}" class="modal-post-owner-username">{{ image.user.username }}</a>
-                                                                {% if image.user.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
-                                                                {% if image.description %} <p class="modal-post-description">{{image.description}}</p> {% endif%}
-                                                                <p class="modal-post-time">{{ image.humanized_time }}</p>
+                                        <div class="modal" id="commentsModal-{{ image.id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true" data-backdrop="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                
+                                                    <div class="modal-body">
+                                                        <!-- Post Sahibi ve Açıklaması -->
+                                                        <div class="modal-post-page">
+                                                            <div class="modal-post-img">
+                                                                <img src="{{ image.image.url }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
                                                             </div>
-                                                            <div class="modal-post-like-comments">
-                                                                <div>
+                                                        </div>
+                                                        <div class="modal-post-info-container">
+                                                            <div class="modal-post-info">
+                                                                <div class="modal-post-owner">
+                                                                    <img src="{% if image.user.avatar %} {{ image.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-owner-img">
+                                                                    <a href="/profile/{{ image.user.username }}" class="modal-post-owner-username">{{ image.user.username }}</a>
+                                                                    {% if image.user.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
+                                                                    {% if image.description %} <p class="modal-post-description">{{image.description}}</p> {% endif%}
+                                                                    <p class="modal-post-time">{{ image.humanized_time }}</p>
+                                                                </div>
+                                                                <div class="modal-post-like-comments">
+                                                                    <div>
+                                                                        {% if image.is_liked_by_user %}
+                                                                            <span class="like-icon" id="like-icon-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></span>
+                                                                            <span class="like-count" id="like-count-{{image.id}}">{{ image.like_set.count }}</span>
+                                                                        {% else %}
+                                                                            <span class="like-icon" id="like-icon-{{image.id}}"><i class="fa fa-heart"></i></span>
+                                                                            <span class="like-count" id="like-count-{{image.id}}">{{ image.like_set.count }}</span>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="comment-icon"><i class="fa fa-comment"></i></span>
+                                                                        <span class="comment-count" id="comment-count-{{image.id}}">{{ image.comment_set.count }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="modal-post-comments">
+                                                                    <p style="margin-top:5px; margin-bottom: -5px; text-align:center;">Comments</p>
+                                                                    <div class="modal-post-comments-container" id="messageListField-{{image.id}}">
+                                                                        {% for comment in image.comment_set.all %}
+                                                                            <div class="modal-post-comment">
+                                                                                <img src="{% if comment.user.avatar %} {{ comment.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-comment-img">
+                                                                                <a href="/profile/{{ comment.user.username }}" class="modal-post-comment-username">{{ comment.user.username }}</a>
+                                                                                <p class="modal-post-comment-comment"> {{ comment.comment }}</p>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="like-inmodal">
+                                                                    <p style="margin-top:5px; margin-bottom: 5px; text-align:center;">Like Action</p>
                                                                     {% if image.is_liked_by_user %}
-                                                                        <span class="like-icon" id="like-icon-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></span>
-                                                                        <span class="like-count" id="like-count-{{image.id}}">{{ image.like_set.count }}</span>
+                                                                        <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="display:none" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
+                                                                        <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" ><i class="fa-solid fa-heart"></i></a>
                                                                     {% else %}
-                                                                        <span class="like-icon" id="like-icon-{{image.id}}"><i class="fa fa-heart"></i></span>
-                                                                        <span class="like-count" id="like-count-{{image.id}}">{{ image.like_set.count }}</span>
+                                                                        <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
+                                                                        <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" style="display:none"><i class="fa-solid fa-heart"></i></a>
                                                                     {% endif %}
                                                                 </div>
-                                                                <div>
-                                                                    <span class="comment-icon"><i class="fa fa-comment"></i></span>
-                                                                    <span class="comment-count" id="comment-count-{{image.id}}">{{ image.comment_set.count }}</span>
+                                                                <div class="modal-post-comment-input">
+                                                                    <textarea class="textarea-post-comment" id="post_message_{{image.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                                                    <button class="post_comment" onclick="sendMessage(`{{image.id}}`, `inmodal`)">Post</button>
                                                                 </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="modal-post-comments">
-                                                                <p style="margin-top:5px; margin-bottom: -5px; text-align:center;">Comments</p>
-                                                                <div class="modal-post-comments-container" id="messageListField-{{image.id}}">
-                                                                    {% for comment in image.comment_set.all %}
-                                                                        <div class="modal-post-comment">
-                                                                            <img src="{% if comment.user.avatar %} {{ comment.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-comment-img">
-                                                                            <a href="/profile/{{ comment.user.username }}" class="modal-post-comment-username">{{ comment.user.username }}</a>
-                                                                            <p class="modal-post-comment-comment"> {{ comment.comment }}</p>
-                                                                        </div>
-                                                                    {% endfor %}
-                                                                </div>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="like-inmodal">
-                                                                <p style="margin-top:5px; margin-bottom: 5px; text-align:center;">Like Action</p>
-                                                                {% if image.is_liked_by_user %}
-                                                                    <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="display:none" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
-                                                                    <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" ><i class="fa-solid fa-heart"></i></a>
-                                                                {% else %}
-                                                                    <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
-                                                                    <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" style="display:none"><i class="fa-solid fa-heart"></i></a>
-                                                                {% endif %}
-                                                            </div>
-                                                            <div class="modal-post-comment-input">
-                                                                <textarea class="textarea-post-comment" id="post_message_{{image.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
-                                                                <button class="post_comment" onclick="sendMessage(`{{image.id}}`, `inmodal`)">Post</button>
                                                             </div>
                                                         </div>
+                                                        
                                                     </div>
-                                                    
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {% endfor %}
+                                        {% endfor %}
+                                   
+                                    {% endif %}
                                   </div>
                                 </div>
                               </div>

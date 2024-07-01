@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post, password_reset_done, set_password
+from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post, password_reset_done, set_password, profile_settings, handler404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +33,7 @@ urlpatterns = [
     path('search_profiles/', search_profiles, name='search_profiles'),
     path('search', search, name='search'),
     path('profile/<str:username>/', profile_view, name='profile'),
+    path('profile-settings/<str:username>/', profile_settings, name='profile_settings'),
     path('follow/', follow_user, name='follow'),
     path('send_message_post/', send_message_post, name='send_message_post'),
     path('like_post/', like_post, name='like_post'),

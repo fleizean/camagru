@@ -248,6 +248,20 @@ def profile_view(request, username):
         "total_pages": total_pages,
     })
 
+@never_cache
+def profile_settings(request, username):
+    if request.user.username != username:
+        raise Http404
+    user = get_object_or_404(UserProfile, username=username)
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+    else:
+        form = UserProfileForm(instance=user)
+    return render(request, "profile-settings.html", {"form": form, "user": user})
+
 @login_required
 def follow_user(request):
     data = json.loads(request.body)

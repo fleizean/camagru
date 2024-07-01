@@ -181,28 +181,36 @@
                                         <div class="icon_left d-flex">
                                             <div class="like">
                                                 {% if not post.images_data.is_liked %}
-                                                    <div class="non-liked-{{post.profile.username}}">
-                                                        <img src="{% static "assets/bg-layers/love.png"%}">
-                                                    </div>
+                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="color: #000000;" id="non-liked-{{post.images_data.id}}">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div></a>
+
+                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="display:none !important; color: red !important;" id="liked-{{post.images_data.id}}">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div></a>
                                                 {% else %}
-                                                    <div class="liked-{{post.profile.username}}">
-                                                        <img src="{% static "assets/bg-layers/heart.png" %}">
-                                                    </div>    
+                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="color: red !important;" id="liked-{{post.images_data.id}}">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div></a>
+
+                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="display:none !important; color: #000000;" id="non-liked-{{post.images_data.id}}">
+                                                        <i class="fas fa-heart"></i>
+                                                    </div></a>
                                                 {% endif %}                                            
                                             </div>
                                             <div class="chat">
-                                                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#message_modal">
+                                                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">
                                                     <img src="{% static "assets/bg-layers/bubble-chat.png" %}" style="width: 28px !important; margin-bottom:5px; ">
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="liked" style="margin-top: -10px !important;">
-                                        <a class="bold" href="#">{{ post.images_data.likes }} likes</a>
+                                        <a class="bold" id="like-count-{{post.images_data.id}}">{{ post.images_data.likes }} likes</a>
                                     </div>
                                     <div class="post_desc">
                                         <p style="margin-top: -1px !important;">
-                                            <a class="bold" href="/profile/{{post.profile.username}}">{{ post.profile.username }}</a> <span>{{ post.images_data.description }}</span>
+                                            <a class="bold" href="/profile/{{post.profile.username}}">{{ post.profile.username }}</a> {% if post.images_data.description %} <span>{{ post.images_data.description }}</span> {% endif %}
                                         </p>
                                         
                                         <p style="margin-top: -10px !important;">

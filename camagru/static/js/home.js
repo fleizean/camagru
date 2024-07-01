@@ -172,3 +172,41 @@ function sendMessage(id, action) {
         }
     });
 }
+
+function likeImage(image_id, action) {
+    console.log(image_id);
+    console.log(action);
+    const likeCount = document.getElementById(`like-count-${image_id}`);
+
+    fetch("/like_post/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            id: image_id,
+            action: action
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (action === "like") {
+            
+            likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1 + " likes";   
+            const likeButton = document.getElementById(`non-liked-${image_id}`);     
+            likeButton.style.display = "none";
+            const unlikeButton = document.getElementById(`liked-${image_id}`);
+            unlikeButton.style.display = "block";   
+        }
+        else if (action === "unlike") {
+            
+            likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1 + " likes";
+            const likeButton = document.getElementById(`non-liked-${image_id}`);     
+            likeButton.style.display = "block";
+            const unlikeButton = document.getElementById(`liked-${image_id}`);
+            unlikeButton.style.display = "none";
+        }
+    });
+}
