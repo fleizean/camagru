@@ -19,11 +19,19 @@ Camagru is an Instagram-like website. It allows you to take pictures with your w
 <img width="1440" alt="Ekran Resmi 2024-06-29 13 27 34" src="https://github.com/fleizean/camagru/assets/66090171/6e4cdab0-4cbf-4d4a-904f-30dadee4b9de">
 
 ### Home
-![image](https://github.com/fleizean/camagru/assets/66090171/0e928209-005c-4a8b-8de2-7e5f9af5951f)
+<img width="1440" alt="Ekran Resmi 2024-07-01 20 20 10" src="https://github.com/fleizean/camagru/assets/66090171/d29a0e39-dfe7-4097-95be-0ac6ae285553">
 
 ### Search
 <img width="1440" alt="Ekran Resmi 2024-06-29 21 55 08" src="https://github.com/fleizean/camagru/assets/66090171/47697548-9b56-4984-9c11-08dcd82a91ef">
 
 ### Profile
-<img width="1440" alt="Ekran Resmi 2024-06-29 21 52 01" src="https://github.com/fleizean/camagru/assets/66090171/d74098f9-bfe8-4fc9-a27b-a5b8b59597ab">
+<img width="1438" alt="Ekran Resmi 2024-07-01 20 16 34" src="https://github.com/fleizean/camagru/assets/66090171/d2f498f1-1fa7-482f-8efe-6d188650b4be">
+
+### Profile Settings
+<img width="1319" alt="Ekran Resmi 2024-07-01 20 13 20" src="https://github.com/fleizean/camagru/assets/66090171/4b10f5ff-984f-4cac-8ab9-a1fac1c85d03">
+
+### Mail Templates
+<img width="1151" alt="Ekran Resmi 2024-07-01 20 20 51" src="https://github.com/fleizean/camagru/assets/66090171/5981258b-5366-4293-b55e-e5f3ba913476">
+
+<img width="1165" alt="Ekran Resmi 2024-07-01 20 21 15" src="https://github.com/fleizean/camagru/assets/66090171/835e7b46-c0ad-48f7-bccc-928496fe6735">
 
