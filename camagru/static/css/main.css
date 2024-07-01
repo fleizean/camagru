@@ -39,6 +39,10 @@ body {
   margin-top: 2em;
 }
 
+.post_desc {
+  width: 577px !important;
+}
+
 .posts_container .profile_settings {
   display: block;
   flex-direction: row;
@@ -1930,7 +1934,7 @@ button.sgn_btn:hover {
 
 .post__comment .post_cmmnt span {
   display: inline-block;
-  max-width: calc(100% - 60px); /* Kullanıcı adı için yer bırak */
+  max-width: calc(90% - 60px); /* Kullanıcı adı için yer bırak */
   overflow-wrap: break-word;
   flex-shrink: 1;
   flex-grow: 1;
