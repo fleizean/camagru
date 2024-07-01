@@ -9,7 +9,6 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import Http404
 from django.db.models.aggregates import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from random import randint
 from django.core.serializers import serialize
 from .models import (
@@ -199,14 +198,16 @@ def profile_view(request, username):
     user = get_object_or_404(UserProfile, username=username)
     images_list = Image.objects.filter(user=user).order_by('-created_at')
     user.is_followed = request.user.following.filter(id=user.id).exists()
-
+    for image in images_list:
+        image.is_liked_by_user = Like.objects.filter(user=request.user, image=image).exists()
     # Manuel Pagination
-    page = request.GET.get('page', 1)
-    page = int(page) if page.isdigit() else 1
+    page = request.GET.get('page', 1)  # Eğer 'page' parametresi yoksa varsayılan olarak 1 değerini kullan
+    page = int(page) if str(page).isdigit() else 1  # Sayfa numarasını güvenli bir şekilde int'e çevir
     per_page = 3  # Her sayfada gösterilecek resim sayısı
     total_images = images_list.count()
     total_pages = (total_images + per_page - 1) // per_page  # Toplam sayfa sayısı
     page_numbers = list(range(1, total_pages + 1))
+
     # Sayfalama sınırlarını ayarla
     start_index = (page - 1) * per_page
     end_index = start_index + per_page
@@ -266,6 +267,28 @@ def send_message_post(request):
                     'comment': message
                 }
             })
+        except Image.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Image not found.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+def like_post(request):
+    user = request.user
+    if not user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'User not authenticated.'})
+
+    data = json.loads(request.body)
+    image_id = data.get('id')
+    action = data.get('action')
+
+    if image_id and action:
+        try:
+            image = Image.objects.get(id=image_id)
+            if action == 'like':
+                Like.objects.create(user=user, image=image)
+            elif action == 'unlike':
+                Like.objects.filter(user=user, image=image).delete()
+            return JsonResponse({'status': 'ok'})
         except Image.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Image not found.'})
     else:

@@ -29,6 +29,30 @@ body {
   z-index: 1000;
 }
 
+.like-inmodal {
+  margin-top: 10px;
+}
+
+.like-inmodal i {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.like-inmodal i:hover{
+  color: red;
+}
+
+.modal-post-like-comments {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.modal-post-like-comments div span.like-count {
+  margin-right: 10px;
+}
+
 .modal-dialog {
   display: flex;
   justify-content: center;
@@ -164,6 +188,62 @@ body {
 .modal-post-comments-container {
   display: block;
   margin-top: 25px;
+}
+
+.item .image-container {
+  position: relative;
+  display: block;
+  width: 200px;
+  height: 250px;
+}
+
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  border-radius: 16px;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay arka plan rengi */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+
+.icons {
+  color: white;
+  text-align: center;
+}
+
+.icons span {
+  display: block;
+  margin: 5px 0;
+}
+
+.like-icon, .comment-icon {
+  font-size: 20px;
+}
+
+.like-count, .comment-count {
+  font-size: 16px;
+}
+
+.item_img {
+  display: block;
+  width: 100%;
+}
+
+.item_img:hover {
+  filter: brightness(0.8);
 }
 
 .verified {
@@ -2669,8 +2749,8 @@ button.sgn_btn:hover {
 
 .profile_container .posts_profile .post {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
 }
 
 @media screen and (max-width: 991px) {
@@ -2680,21 +2760,29 @@ button.sgn_btn:hover {
 }
 
 .profile_container .posts_profile .post .item {
-  width: auto;
-  height: 250px;
+  box-sizing: border-box;
 }
 
 .profile_container .posts_profile .post .item .item_img {
-  max-width: 250px;
-  max-height: 250px;
+  width: 250px;
+  height: 250px;
   border-radius: 15px;
   object-fit: cover;
 }
 
 @media screen and (max-width: 768px) {
+  .profile_container .posts_profile .post {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .profile_container .posts_profile .post .item {
+    margin: 5px;
+  }
+
   .profile_container .posts_profile .post .item .item_img {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 100%;
+    max-height: none;
   }
 }
 
