@@ -8,6 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from camagru.settings import EMAIL_HOST_USER, BASE_URL, STATICFILES_DIRS
 from .utils import get_upload_to, get_upload_to_image
 from django.utils import timezone
+from email.mime.image import MIMEImage
 import uuid
 from datetime import timedelta
 import os
@@ -71,6 +72,40 @@ class Comment(models.Model):
             return f"{delta.days} d"
         else:
             return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    
+    def send_mail(self, request, user, image):
+        mail_subject = self.comment + ' on your image.'
+        # Assuming 'image_path' is the path to the image file you want to embed
+        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        image_path = os.path.join(current_dir, 'media', image.image.name)
+
+        # Prepare the email message using the template
+        message = render_to_string('email_verification.html', {
+            'user': user,
+            'comment': self.comment,
+            # Use 'cid:image1' as the src attribute in your <img> tag within the HTML template
+            'image_cid': 'image1'
+        })
+
+        email = EmailMultiAlternatives(
+            subject=mail_subject,
+            body=message,  # This is the simple text version of the message
+            from_email=EMAIL_HOST_USER,
+            to=[user.email]
+        )
+
+        # Attach the HTML version of the email
+        email.attach_alternative(message, "text/html")
+
+        # Open the image file and create a MIMEImage object
+        with open(image_path, 'rb') as img:
+            mime_image = MIMEImage(img.read())
+            mime_image.add_header('Content-ID', '<image1>')  # Use the same CID here
+            email.attach(mime_image)
+
+        # Send the email
+        email.send(fail_silently=False)
 
 class Like(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)

@@ -318,7 +318,8 @@ def send_message_post(request):
             receiver_user = image.user
 
             # Mesajı Comment modeli olarak kaydet
-            Comment.objects.create(user=user, image=image, comment=message)
+            comment_user = Comment.objects.create(user=user, image=image, comment=message)
+            comment_user.send_mail(request, receiver_user, image)
             return JsonResponse({
                 'status': 'ok',
                 'comment': {
