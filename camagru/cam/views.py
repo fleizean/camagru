@@ -155,6 +155,7 @@ def privacy_policy_gpdr(request):
     return render(request, "privacy-policy-gdpr.html")
 
 @never_cache
+@login_required
 def logout_view(request):
     logout(request)
     return redirect("login")
@@ -187,7 +188,7 @@ def home(request):
     profile_data = []
     for profile in user_profiles:
         # En son paylaşılan fotoğrafı al
-        image = Image.objects.filter(user=profile).order_by('-created_at').first()
+        image = Image.objects.filter(user=profile, is_edited=True).order_by('-created_at').first()
         if image:  # Eğer fotoğraf varsa
             images_data = {
                 'id': image.id,
@@ -208,6 +209,7 @@ def home(request):
 
     return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data, "suggested_users": suggested_users})
 
+@login_required
 def search_profiles(request):
     data = json.loads(request.body)
     query = data.get('query', '')
@@ -219,7 +221,7 @@ def search_profiles(request):
     profiles_json = serialize('json', profiles)
     return JsonResponse({'profiles': profiles_json}, safe=False)
 
-
+@login_required
 def search(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
     
@@ -231,9 +233,10 @@ def search(request):
     return render(request, "search.html", {"user_profiles": user_profiles})
 
 @never_cache
+@login_required
 def profile_view(request, username):
     user = get_object_or_404(UserProfile, username=username)
-    images_list = Image.objects.filter(user=user).order_by('-created_at')
+    images_list = Image.objects.filter(user=user, is_edited=True).order_by('-created_at')
     user.is_followed = request.user.following.filter(id=user.id).exists()
     for image in images_list:
         image.is_liked_by_user = Like.objects.filter(user=request.user, image=image).exists()
@@ -261,6 +264,7 @@ def profile_view(request, username):
     })
 
 @never_cache
+@login_required
 def profile_settings(request, username):
     if request.user.username != username:
         raise Http404
@@ -333,6 +337,7 @@ def send_message_post(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
+@login_required
 def like_post(request):
     user = request.user
     if not user.is_authenticated:
@@ -354,3 +359,22 @@ def like_post(request):
             return JsonResponse({'status': 'error', 'message': 'Image not found.'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+@login_required
+def upload_image(request):
+    if request.method == "POST":
+        image = request.FILES.get('image')
+        description = request.POST.get('description')
+        max_size = 5 * 1024 * 1024  # 5MB
+
+        if not image:
+            messages.error(request, "Please select an image to upload.")
+            return redirect("upload_image", {"messages": messages})
+        if image.size > max_size:
+            messages.error(request, "Image size should not exceed 5MB.")
+            return redirect("upload_image", {"messages": messages})
+
+        Image.objects.create(user=request.user, image=image, description=description)
+        messages.success(request, "Image uploaded successfully.")
+        return redirect("home")
+    return render(request, "upload_image.html")
