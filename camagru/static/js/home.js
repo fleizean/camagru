@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (profiles.length > 0) {
             profiles.forEach(profile => {
                 const fields = profile.fields;
+                fields.avatar = fields.avatar || 'assets/profile-photos/default-photo.png';
                 searchResults.innerHTML += `
                 <div class="cart">
                 <a href="/profile/${fields.username}"><div>

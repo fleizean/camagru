@@ -174,7 +174,7 @@
                                     </div>
                                 </div>
                                 <div class="image">
-                                    <img src="{{ post.images_data.image }}">
+                                    <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}">
                                 </div>
                                 <div class="desc">
                                     <div class="icons">
@@ -238,7 +238,7 @@
                                             <!-- Post Sahibi ve Açıklaması -->
                                             <div class="modal-post-page">
                                                 <div class="modal-post-img">
-                                                    <img src="{{ post.images_data.image }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
+                                                    <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
                                                 </div>
                                             </div>
                                             <div class="modal-post-info-container">

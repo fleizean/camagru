@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile - Camagru</title>
+    <title>Upload Image - Camagru</title>
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "css/vender/bootstrap.min.css" %}">
     <link rel="apple-touch-icon" sizes="57x57" href="{% static "/assets/favicons/apple-icon-57x57.png" %}">
@@ -156,80 +156,107 @@
             <div class="main_section" style="display:flex !important; justify-content:center !important; text-align:center; align-items:center; ">
                 <div class="posts_container" style="width: 100%; max-width: 600px;">
                     <div class="upload_image_container">
+                        <div id="msg">
+                            <p id="msgText"></p>
+                        </div>
                         <h2>Create new post</h2>
                         <hr>
-                        <div class="upload__file">
-                            <div class="take">
-                                <div class="capture">
-                                    <video id="captureVideo" autoplay=""></video>
-                                    <img id="captureFilter" alt="filter">
-                                </div>
-                                <div class="preview">
-                                    <canvas id="photoPreview"></canvas>
-                                    <img id="importPreview" class="import" alt="import_preview">
-                                    <img id="previewFilter" class="filter" alt="filter">
-                                </div>
-                                <div id="filters" class="filters">
-                                        <button class="filterBtn" data-id="1" data-file="transparent.png">
-                                            <img src="static/assets/filters/cat-falling.png" alt="transparent.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="2" data-file="evil.png">
-                                            <img src="static/assets/filters/cat-woman.png" alt="evil.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="3" data-file="falling_cat.png">
-                                            <img src="static/assets/filters/dog-face.png" alt="falling_cat.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="4" data-file="blue_flower_frame.png">
-                                            <img src="static/assets/filters/gold-crown.png" alt="blue_flower_frame.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="5" data-file="beard.png">
-                                            <img src="static/assets/filters/heart.png" alt="beard.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="6" data-file="pikachu.png">
-                                            <img src="static/assets/filters/pikachu-gif.gif" alt="pikachu.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="7" data-file="flames.png">
-                                            <img src="static/assets/filters/recep-ivedik-gif.gif" alt="flames.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/uwu-face.png" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/recep-ivedik-2.gif" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/recep-ivedik-3.gif" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/messi.png" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/ronaldo.png" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/ana-de-armas.png" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/emma-stone.png" alt="dog.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="dog.png">
-                                            <img src="static/assets/filters/margot-robbie.png" alt="dog.png">
-                                        </button>
-                                         
+                        
+                            {% csrf_token %}
+                            <div class="upload__file">
+                                <div class="take">
+                                    <div class="capture">
+                                        <video id="captureVideo" autoplay=""></video>
+                                        <img id="captureFilter" alt="filter">
                                     </div>
-                                <div id="waiting" class="waiting" style="display: none;"></div>
-                                <div class="buttons">
-                                    <button id="takePhotoBtn" class="take-photo-btn" disabled="">Take Photo</button>
-                                    <div class="file-input">
-                                        <input id="importInput" type="file" accept=".jpg, .jpeg, .png">
-                                        <label id="importBtn" for="importInput">Import Photo</label>
+                                    <div class="preview">
+                                        <canvas id="photoPreview"></canvas>
+                                        <img id="importPreview" class="import" alt="import_preview">
+                                        <img id="previewFilter" class="filter" alt="filter">
                                     </div>
-                                    <button id="publishPhotoBtn" class="publish-photo-btn" disabled="">Publish Photos</button>
-                                    <button id="cancelBtn" class="cancel-btn">Cancel</button>
-                                    <button id="saveBtn" class="save-btn">Save</button>
+                                    <div id="filters" class="filters">
+                                        <button class="filterBtn" data-id="1" data-file="cat-falling.png">
+                                            <img src="static/assets/filters/cat-falling.png" alt="cat-falling.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="2" data-file="cat-woman.png">
+                                            <img src="static/assets/filters/cat-woman.png" alt="cat-woman.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="3" data-file="dog-face.png">
+                                            <img src="static/assets/filters/dog-face.png" alt="dog-face.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="4" data-file="gold-crown.png">
+                                            <img src="static/assets/filters/gold-crown.png" alt="gold-crown.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="5" data-file="heart.png">
+                                            <img src="static/assets/filters/heart.png" alt="heart.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="6" data-file="pikachu-gif.gif">
+                                            <img src="static/assets/filters/pikachu-gif.gif" alt="pikachu-gif.gif">
+                                        </button>
+                                        <button class="filterBtn" data-id="7" data-file="recep-ivedik-gif.gif">
+                                            <img src="static/assets/filters/recep-ivedik-gif.gif" alt="recep-ivedik-gif.gif">
+                                        </button>
+                                        <button class="filterBtn" data-id="8" data-file="uwu-face.png">
+                                            <img src="static/assets/filters/uwu-face.png" alt="uwu-face.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="9" data-file="recep-ivedik-2.gif">
+                                            <img src="static/assets/filters/recep-ivedik-2.gif" alt="recep-ivedik-2.gif">
+                                        </button>
+                                        <button class="filterBtn" data-id="10" data-file="recep-ivedik-3.gif">
+                                            <img src="static/assets/filters/recep-ivedik-3.gif" alt="recep-ivedik-3.gif">
+                                        </button>
+                                        <button class="filterBtn" data-id="11" data-file="messi.png">
+                                            <img src="static/assets/filters/messi.png" alt="messi.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="12" data-file="ronaldo.png">
+                                            <img src="static/assets/filters/ronaldo.png" alt="ronaldo.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="13" data-file="ana-de-armas.png">
+                                            <img src="static/assets/filters/ana-de-armas.png" alt="ana-de-armas.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="14" data-file="emma-stone.png">
+                                            <img src="static/assets/filters/emma-stone.png" alt="emma-stone.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="15" data-file="margot-robbie.png">
+                                            <img src="static/assets/filters/margot-robbie.png" alt="margot-robbie.png">
+                                        </button>
+                                        <button class="filterBtn" data-id="16" data-file="arda_guler.png">
+                                            <img src="static/assets/filters/arda_guler.png" alt="arda_guler.png">
+                                        </button>
+                                    </div>
+                                    <div id="effectFilters" class="effectFilters">
+                                        <button class="effectFilterBtn" data-id="17" data-file="vintage-photo" onclick="applyFilter('contrast(1.5) sepia(0.5)')">
+                                            <img src="static/assets/filters/vintage-photo.jpeg" alt="vintage-photo.jpeg">
+                                        </button>
+                                        <button class="effectFilterBtn" data-id="18" data-file="moon-photo" onclick="applyFilter('grayscale(1) brightness(0.7)')">
+                                            <img src="static/assets/filters/moon-photo.webp" alt="moon-photo.webp">
+                                        </button>
+                                        <button class="effectFilterBtn" data-id="19" data-file="sepia-photo" onclick="applyFilter('sepia(1)')">
+                                            <img src="static/assets/filters/sepia-photo.jpeg" alt="sepia-photo.jpeg">
+                                        </button>
+                                        <button class="effectFilterBtn" data-id="20" data-file="retro-photo" onclick="applyFilter('sepia(0.5) contrast(1.5) brightness(1.1) saturate(0.8)')">
+                                            <img src="static/assets/filters/retro-photo.jpeg" alt="retro-photo.jpeg">
+                                        </button>
+                                        <button class="effectFilterBtn" data-id="21" data-file="cross-process-photo" onclick="applyFilter('contrast(1.25) sepia(0.4) saturate(1.3) hue-rotate(-15deg)')">
+                                            <img src="static/assets/filters/cross-process-photo.jpeg" alt="cross-process-photo.jpeg">
+                                        </button>
+                                    </div>
+                                    <div id="waiting" class="waiting" style="display: none;"></div>
+                                    <div class="description" id="descriptionContain" style="display:none;">
+                                        <textarea id="description" placeholder="Description"></textarea>
+                                    </div>
+                                    <div class="buttons">
+                                        <button id="takePhotoBtn" class="take-photo-btn" disabled="">Take Photo</button>
+                                        <div class="file-input">
+                                            <input id="importInput" type="file" accept=".jpg, .jpeg, .png">
+                                            <label id="importBtn" for="importInput">Import Photo</label>
+                                        </div>
+                                        <button id="cancelBtn" class="cancel-btn">Cancel</button>
+                                        <button id="saveBtn" class="save-btn">Save</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                    
                     </div>
 
                     <footer class="footer">
@@ -257,6 +284,7 @@
 
     <!-- <script src="./sass/vender/bootstrap.bundle.js"></script>
     <script src="./sass/vender/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://kit.fontawesome.com/b80699d249.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>

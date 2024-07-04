@@ -11,6 +11,10 @@ from django.http import Http404
 from django.db.models.aggregates import Count
 from random import randint
 from django.core.serializers import serialize
+from PIL import ImageSequence, Image as PilImage, ImageOps
+from django.core.files.base import ContentFile
+import base64
+from io import BytesIO
 from .models import (
     VerifyToken,
     UserProfile,
@@ -199,6 +203,7 @@ def home(request):
                 'comments_count': image.comment_set.count(),
                 'humanized_time': image.humanized_time,
                 'likes': image.like_set.count(),
+                'effect': image.effect,
                 'is_liked': image.like_set.filter(user=request.user).exists(),
                 'created_at': image.created_at
             }
@@ -378,3 +383,59 @@ def upload_image(request):
         messages.success(request, "Image uploaded successfully.")
         return redirect("home")
     return render(request, "upload_image.html")
+
+
+@login_required
+def save_photo(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user = UserProfile.objects.get(username=request.user.username)
+            
+            base64_image = data.get('image')
+            if base64_image.startswith('data:image'):
+                base64_image = base64_image.split(',')[1]
+            
+            filter_name = data.get('filter')
+            effect = data.get('effect')
+            description = data.get('description')
+            image_data = base64.b64decode(base64_image)
+            image = PilImage.open(BytesIO(image_data))
+            
+            filter_path = 'static/assets/filters/' + filter_name
+            cat_woman_filter = PilImage.open(filter_path)
+            
+            # Filtrenin GIF olup olmadığını kontrol et
+            if cat_woman_filter.format == 'GIF':
+                frames = [frame.copy() for frame in ImageSequence.Iterator(cat_woman_filter)]
+                processed_frames = []
+                
+                for frame in frames:
+                    # Filtre karesini ana resmin boyutuna sığdır
+                    resized_frame = ImageOps.fit(frame, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
+                    # Filtreyi her bir kareye uygula
+                    combined_frame = PilImage.alpha_composite(image.convert("RGBA"), resized_frame.convert("RGBA"))
+                    processed_frames.append(combined_frame)
+                
+                # İşlenmiş kareleri GIF olarak kaydet
+                result_image_io = BytesIO()
+                processed_frames[0].save(result_image_io, format='GIF', save_all=True, append_images=processed_frames[1:], loop=0, duration=cat_woman_filter.info['duration'], dispose=cat_woman_filter.info.get('dispose', 2))
+            else:
+                # Filtre GIF değilse, tek kareli resim için filtreyi uygula
+                resized_filter = ImageOps.fit(cat_woman_filter, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
+                combined_image = PilImage.alpha_composite(image.convert("RGBA"), resized_filter.convert("RGBA"))
+                result_image_io = BytesIO()
+                combined_image.save(result_image_io, format='PNG')
+            
+            result_image_content_file = ContentFile(result_image_io.getvalue(), name='filtered_image.' + ('gif' if cat_woman_filter.format == 'GIF' else 'png'))
+            
+            new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect)
+            new_image.save()
+            
+            return JsonResponse({'message': 'Image saved successfully.'})
+        except UnidentifiedImageError:
+            return JsonResponse({'error': 'Cannot identify image file'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)

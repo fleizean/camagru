@@ -37,6 +37,7 @@ class Image(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_upload_to_image)
     description = models.CharField(max_length=255, blank=True, null=True)
+    effect = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_edited = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)

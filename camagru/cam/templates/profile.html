@@ -215,7 +215,7 @@
                                             {% if image.is_edited %}
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ image.id }}"><div class="item">
                                                 <div class="image-container">
-                                                <img class="img-fluid item_img" src="{{ image.image.url }}" alt="">
+                                                <img class="img-fluid item_img" {% if image.effect %} style="filter: {{image.effect}}" {% endif %} src="{{ image.image.url }}" alt="">
                                                 <div class="overlay">
                                                     <div class="icons">
                                                     <span class="like-icon"><i class="fa fa-heart"></i></span>
@@ -235,7 +235,7 @@
                                                             <!-- Post Sahibi ve Açıklaması -->
                                                             <div class="modal-post-page">
                                                                 <div class="modal-post-img">
-                                                                    <img src="{{ image.image.url }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
+                                                                    <img {% if image.effect %} style="filter: {{image.effect}}" {% endif %} src="{{ image.image.url }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
                                                                 </div>
                                                             </div>
                                                             <div class="modal-post-info-container">
