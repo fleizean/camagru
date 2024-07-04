@@ -161,7 +161,6 @@
                         </div>
                         <h2>Create new post</h2>
                         <hr>
-                        
                             {% csrf_token %}
                             <div class="upload__file">
                                 <div class="take">
@@ -214,10 +213,7 @@
                                         <button class="filterBtn" data-id="13" data-file="ana-de-armas.png">
                                             <img src="static/assets/filters/ana-de-armas.png" alt="ana-de-armas.png">
                                         </button>
-                                        <button class="filterBtn" data-id="14" data-file="emma-stone.png">
-                                            <img src="static/assets/filters/emma-stone.png" alt="emma-stone.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="15" data-file="margot-robbie.png">
+                                        <button class="filterBtn" data-id="14" data-file="margot-robbie.png">
                                             <img src="static/assets/filters/margot-robbie.png" alt="margot-robbie.png">
                                         </button>
                                         <button class="filterBtn" data-id="16" data-file="arda_guler.png">
@@ -260,8 +256,6 @@
                     </div>
                     <h2 class="ex-images-h2">Explore</h2>
                     <div class="ex-images">
-                      
-                      
                             {% for post in images %}
                             <div class="ex-image-container" id="deletedPost-{{post.id}}">
                                 <a>

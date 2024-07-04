@@ -75,18 +75,23 @@ class Comment(models.Model):
             return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
     
     def send_mail(self, request, user, image):
-        mail_subject = self.comment + ' on your image.'
+        mail_subject = user.username + ' replied your image.'
         # Assuming 'image_path' is the path to the image file you want to embed
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+        user_avatar = os.path.join(current_dir, 'media', user.avatar.name)
         image_path = os.path.join(current_dir, 'media', image.image.name)
-
+        print(user_avatar)
+        print(image_path)
         # Prepare the email message using the template
         message = render_to_string('email_verification.html', {
             'user': user,
             'comment': self.comment,
-            # Use 'cid:image1' as the src attribute in your <img> tag within the HTML template
-            'image_cid': 'image1'
+            'url': BASE_URL,
+            'image_cid': 'image1',
+            'comment_count': image.comment_set.count(),
+            'like_count': image.like_set.count(),
+            'avatar_cid': 'avatar',
         })
 
         email = EmailMultiAlternatives(
@@ -103,6 +108,11 @@ class Comment(models.Model):
         with open(image_path, 'rb') as img:
             mime_image = MIMEImage(img.read())
             mime_image.add_header('Content-ID', '<image1>')  # Use the same CID here
+            email.attach(mime_image)
+        
+        with open(user_avatar, 'rb') as img:
+            mime_image = MIMEImage(img.read())
+            mime_image.add_header('Content-ID', '<avatar>')
             email.attach(mime_image)
 
         # Send the email
