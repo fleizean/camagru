@@ -256,7 +256,21 @@
                                     </div>
                                 </div>
                             </div>
-                    
+                            
+                    </div>
+                    <h2 class="ex-images-h2">Explore</h2>
+                    <div class="ex-images">
+                      
+                      
+                            {% for post in images %}
+                            <div class="ex-image-container" id="deletedPost-{{post.id}}">
+                                <a>
+                                    <img src="{{ post.image.url }}" alt="post">
+                                    <button class="ex-delete-button" onclick="deletePost({{ post.id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                </a>
+                            </div>
+                            {% endfor %}
+                       
                     </div>
 
                     <footer class="footer">
@@ -284,6 +298,7 @@
 
     <!-- <script src="./sass/vender/bootstrap.bundle.js"></script>
     <script src="./sass/vender/bootstrap.bundle.min.js"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://kit.fontawesome.com/b80699d249.js" crossorigin="anonymous"></script>

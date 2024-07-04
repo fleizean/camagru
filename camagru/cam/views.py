@@ -367,22 +367,8 @@ def like_post(request):
 
 @login_required
 def upload_image(request):
-    if request.method == "POST":
-        image = request.FILES.get('image')
-        description = request.POST.get('description')
-        max_size = 5 * 1024 * 1024  # 5MB
-
-        if not image:
-            messages.error(request, "Please select an image to upload.")
-            return redirect("upload_image", {"messages": messages})
-        if image.size > max_size:
-            messages.error(request, "Image size should not exceed 5MB.")
-            return redirect("upload_image", {"messages": messages})
-
-        Image.objects.create(user=request.user, image=image, description=description)
-        messages.success(request, "Image uploaded successfully.")
-        return redirect("home")
-    return render(request, "upload_image.html")
+    images = Image.objects.filter(user=request.user, is_edited=True).order_by('-created_at')
+    return render(request, "upload_image.html", {"images": images})
 
 
 @login_required
@@ -439,3 +425,17 @@ def save_photo(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def deletePost(request):
+    data = json.loads(request.body)
+    image_id = data.get('id')
+    if image_id:
+        try:
+            image = Image.objects.get(id=image_id)
+            image.delete()
+            return JsonResponse({'status': 'ok'})
+        except Image.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Image not found.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})

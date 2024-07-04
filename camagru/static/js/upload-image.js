@@ -208,8 +208,6 @@ function messageDisplay(display, message) {
         const req = await savePhotoApi(image, selectedFilter, description, effect);
         if (!req.success) {
             messageDisplay(true, req.message);
-        } else {
-            window.location.href = "/";
         }
     };
 
@@ -265,3 +263,37 @@ function applyFilter(filter) {
   photoPreview.style.filter = filter;
 }
 
+function deletePost(id) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch("/delete-post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ id }),
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status == "ok") {
+          const deletedPost = document.getElementById(`deletedPost-${id}`);
+          deletedPost.style.display = "none";
+          Swal.fire(
+            'Deleted!',
+            'Your post has been deleted.',
+            'success'
+          )
+        }
+      });
+    }
+  })
+}

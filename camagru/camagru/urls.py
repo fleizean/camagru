@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post, password_reset_done, set_password, profile_settings, handler404, upload_image, save_photo
+from cam.views import login_view, signup, forgot_password, activate_account, about, privacy_policy_gpdr, home, logout_view, search_profiles, search, profile_view, follow_user, send_message_post, like_post, password_reset_done, set_password, profile_settings, handler404, upload_image, save_photo, deletePost
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,6 +41,7 @@ urlpatterns = [
     path('set_password/<str:uidb64>/<str:token>/', set_password, name='set_password'),
     path('upload-image', upload_image, name='upload_image'),
     path('save-photo', save_photo, name='save_photo'),
+    path('delete-post', deletePost, name='delete_post'),
     path('logout', logout_view, name='logout'),
 ]
 
