@@ -81,8 +81,6 @@ class Comment(models.Model):
 
         user_avatar = os.path.join(current_dir, 'media', user.avatar.name)
         image_path = os.path.join(current_dir, 'media', image.image.name)
-        print(user_avatar)
-        print(image_path)
         # Prepare the email message using the template
         message = render_to_string('email_verification.html', {
             'user': user,

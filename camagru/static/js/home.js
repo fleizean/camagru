@@ -1,9 +1,9 @@
 let search = document.getElementById("search");
 let search_icon = document.getElementById("search_icon");
 search_icon.addEventListener("click", function(){
-  console.log("click");
   search.classList.toggle("show");
 });
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -181,8 +181,6 @@ function sendMessage(id, action) {
 }
 
 function likeImage(image_id, action) {
-    console.log(image_id);
-    console.log(action);
     const likeCount = document.getElementById(`like-count-${image_id}`);
 
     fetch("/like_post/", {
@@ -198,7 +196,6 @@ function likeImage(image_id, action) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         if (action === "like") {
             
             likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1 + " likes";   

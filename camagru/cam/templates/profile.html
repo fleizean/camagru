@@ -53,7 +53,7 @@
                     <div class="menu">
                         <ul>
                             <li>
-                                <a class="active" href="/home">
+                                <a href="/home">
                                     <img src="{% static "assets/bg-layers/accueil.png" %}">
                                     <span class="d-none d-lg-block">Home</span>
                                 </a>
@@ -71,7 +71,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/profile/{{request.user.username}}">
+                                <a class="active" href="/profile/{{request.user.username}}">
                                     <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
                                     <span class="d-none d-lg-block ">Profile</span>
                                 </a>
@@ -341,7 +341,6 @@
     <script src="{% static "css/owlcarousel/jquery.min.js" %}"></script>
     <script src="{% static "css/owlcarousel/owl.carousel.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
-    <script src="{% static "js/home.js" %}"></script>
     <script src="{% static "js/profile.js" %}"></script>
 </body>
 

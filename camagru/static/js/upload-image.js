@@ -288,9 +288,7 @@ function getCookie(name) {
   }
 
 function savePhotoApi(image, filter, description, effect) {
-    console.log(filter);
-    console.log(effect);
-    console.log(image);
+
     return fetch("/save-photo", {
         method: "POST",
         headers: {
@@ -347,14 +345,12 @@ function deletePost(id) {
     }
   })
 }
-
 let search = document.getElementById("search");
 let search_icon = document.getElementById("search_icon");
+let navItems = document.querySelectorAll("li"); // Tüm li elementlerini seç
 search_icon.addEventListener("click", function(){
-  console.log("click");
   search.classList.toggle("show");
 });
-
 
 function clearSearchResults() {
   const searchResults = document.getElementById('searchResults');

@@ -1522,7 +1522,7 @@ button.sgn_btn:hover {
   display: flex;
   align-items: center;
   flex-direction: row;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .nav .menu ul li a.active {
