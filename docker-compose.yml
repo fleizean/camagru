@@ -1,16 +1,6 @@
 version: '3.9'
 
 services:
-  db:
-    image: postgres:13-alpine
-    restart: always
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-
   web:
     build: 
       context: .
@@ -23,9 +13,6 @@ services:
       - .env
     ports:
       - 8001:8001
-    depends_on:
-      - db
-
   nginx:
     build:
       context: .
@@ -41,7 +28,6 @@ services:
       - web
 
 volumes:
-  db_data:
   staticfiles:
   media:
   ssl_data:

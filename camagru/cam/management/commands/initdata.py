@@ -16,6 +16,5 @@ class Command(BaseCommand):
 			file = File(open('static/assets/profile-photos/default-photo.png', "rb"))
 			super_user.avatar.save(f"{file.name}.png", file, save=False)
 			file.close()
-			super_user.indian_wallet = 1000
 			super_user.save()
 			self.stdout.write(self.style.SUCCESS('Superuser created successfully.'))
