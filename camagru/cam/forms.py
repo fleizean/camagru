@@ -25,6 +25,8 @@ class UserProfileForm(UserCreationForm):
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar')
         if avatar:
+            if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg')):
+                raise ValidationError('File type is not supported')
             if avatar.size > 2*1024*1024:
                 raise ValidationError('Image file least than 2MB')
             return avatar
@@ -164,6 +166,8 @@ class SetUserProfileForm(UserChangeForm):
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar')
         if avatar:
+            if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg')):
+                raise ValidationError('File type is not supported')
             if avatar.size > 3*1024*1024:
                 raise ValidationError('Image file least than 3MB')
             return avatar

@@ -311,6 +311,7 @@ def follow_user(request):
             return JsonResponse({'status':'error', 'message': 'User not found.'})
     return JsonResponse({'status':'error', 'message': 'Invalid request'})
 
+@login_required
 def send_message_post(request):
     user = request.user
     if not user.is_authenticated:
@@ -381,7 +382,9 @@ def save_photo(request):
             base64_image = data.get('image')
             if base64_image.startswith('data:image'):
                 base64_image = base64_image.split(',')[1]
-            
+            else
+                return JsonResponse({'error': 'Invalid image data'}, status=400)
+                        
             filter_name = data.get('filter')
             effect = data.get('effect')
             description = data.get('description')
