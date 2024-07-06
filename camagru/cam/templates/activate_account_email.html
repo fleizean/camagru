@@ -68,7 +68,7 @@
 													  <tbody>
 														<tr>
 														  <td>
-															<p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Hi {% if user.displayname %} {{user.displayname}} {% else %} {{user.username}} {% endif %}</p>
+															<p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">Hi <b>{% if user.displayname %} {{user.displayname}} {% else %} {{user.username}} {% endif %}</b></p>
 															<p style="margin:10px 0 10px 0;color:#565a5c;font-size:18px">You need to verify <span class="il">email</span> address to access your account <span style="color:#2b5a83" id="m_-7626415423304311386body_email"><a href="mailto:{{user.email}}" target="_blank">{{user.email}}</a></span>. <span class="il">Confirm</span> your <span class="il">email</span> address to continue capturing and sharing your moments with the world.</p>
 														  </td>
 														</tr>
