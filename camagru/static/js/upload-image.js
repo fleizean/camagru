@@ -15,7 +15,7 @@ function messageDisplay(display, message) {
   function captureDisplay(display) {
     const captureVideo = document.getElementById("captureVideo");
     const captureFilter = document.getElementById("captureFilter");
-  
+
     if (display) {
       captureVideo.style.display = "block";
       captureFilter.style.display = "block";
@@ -29,6 +29,7 @@ function messageDisplay(display, message) {
     const canvasPreview = document.getElementById("photoPreview");
     const importPreview = document.getElementById("importPreview");
     const previewFilter = document.getElementById("previewFilter");
+    previewFilter.style.filter = selectedEffect;
   
     if (display) {
       canvasPreview.style.display = "block";
@@ -44,7 +45,7 @@ function messageDisplay(display, message) {
   function importPreviewDisplay(uploadedImageData) {
     const importPreview = document.getElementById("importPreview");
     const previewFilter = document.getElementById("previewFilter");
-  
+    previewFilter.style.filter = selectedEffect;
     importPreview.style.display = "block";
     importPreview.src = uploadedImageData;
     previewFilter.style.display = "block";
@@ -52,7 +53,6 @@ function messageDisplay(display, message) {
   
   function filtersDisplay(display) {
     const filters = document.getElementById("filters");
-    
     if (display) {
       filters.style.display = "flex";
     } else {
@@ -174,7 +174,7 @@ function messageDisplay(display, message) {
     };
 
     const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener("input", function() {
+    searchInput.addEventListener("input", function() {
       const query = this.value;
 
       fetch("/search_profiles/", { // Backend endpoint
@@ -306,6 +306,7 @@ function applyFilter(filter) {
   const photoPreview = document.getElementById("photoPreview");
   selectedEffect = filter;
 
+  captureVideo.style.filter = filter;
   captureFilter.style.filter = filter;
   previewFilter.style.filter = filter;
   photoPreview.style.filter = filter;
