@@ -75,13 +75,14 @@ class Comment(models.Model):
             return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
     
     def send_mail(self, request, user, image):
+        if (user.is_email_notification == False):
+            # print('User has disabled email notification')
+            return
         mail_subject = user.username + ' replied your image.'
-        # Assuming 'image_path' is the path to the image file you want to embed
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
         user_avatar = os.path.join(current_dir, 'media', user.avatar.name)
         image_path = os.path.join(current_dir, 'media', image.image.name)
-        # Prepare the email message using the template
         message = render_to_string('email_verification.html', {
             'user': user,
             'comment': self.comment,
@@ -146,5 +147,4 @@ class VerifyToken(models.Model):
         
         # Send the email
         email.send(fail_silently=True)
-        #send_mail(mail_subject, message, EMAIL_HOST_USER, [user.email], fail_silently=True, html_message=message)
 

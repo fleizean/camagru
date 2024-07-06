@@ -218,7 +218,7 @@ def home(request):
 def search_profiles(request):
     data = json.loads(request.body)
     query = data.get('query', '')
-
+    
     # Filter user profiles based on the query
     profiles = UserProfile.objects.filter(username__icontains=query)
 
@@ -248,7 +248,7 @@ def profile_view(request, username):
     # Manuel Pagination
     page = request.GET.get('page', 1)  # Eğer 'page' parametresi yoksa varsayılan olarak 1 değerini kullan
     page = int(page) if str(page).isdigit() else 1  # Sayfa numarasını güvenli bir şekilde int'e çevir
-    per_page = 3  # Her sayfada gösterilecek resim sayısı
+    per_page = 5  # Her sayfada gösterilecek resim sayısı
     total_images = images_list.count()
     total_pages = (total_images + per_page - 1) // per_page  # Toplam sayfa sayısı
     page_numbers = list(range(1, total_pages + 1))
@@ -415,6 +415,8 @@ def save_photo(request):
             
             result_image_content_file = ContentFile(result_image_io.getvalue(), name='filtered_image.' + ('gif' if cat_woman_filter.format == 'GIF' else 'png'))
             
+            if result_image_content_file.size > 3*1024*1024:
+                return JsonResponse({'error': 'Image file size must be less than 3MB'}, status=400)
             new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect)
             new_image.save()
             

@@ -1,12 +1,5 @@
-from datetime import timedelta
-from email.mime.image import MIMEImage
-import os
 from django.core.mail import EmailMultiAlternatives
-from django.core.mail import send_mail
 from django import forms
-from django.urls import reverse
-from django.utils.safestring import mark_safe
-from django.utils import timezone
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -14,20 +7,59 @@ from django.utils.encoding import force_bytes
 from camagru.settings import EMAIL_HOST_USER, STATICFILES_DIRS, BASE_URL
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm 
 from .models import Image, UserProfile, Comment, Like,VerifyToken
-from django.contrib.auth import authenticate, get_user_model
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 
 class UserProfileForm(UserCreationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'input'}))
     displayname = forms.CharField(label='Displayname', widget=forms.TextInput(attrs={'class': 'input'}))
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'input'}))
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
-    password2 = forms.CharField(label='RePassword', widget=forms.PasswordInput(attrs={'class': 'input'}))
+    password2 = forms.CharField(label='ConfirmPassword', widget=forms.PasswordInput(attrs={'class': 'input'}))
     avatar = forms.ImageField(required=False ,label='Avatar', widget=forms.FileInput(attrs={'class': 'input'}))
 
     class Meta:
         model = UserProfile
         fields = ['username', 'displayname', 'email', 'password1', 'password2', 'avatar']
+    
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            if avatar.size > 2*1024*1024:
+                raise ValidationError('Image file least than 2MB')
+            return avatar
+        return None
+    
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if len(password) < 8:
+            raise ValidationError('Password must be at least 8 characters')
+        if not any(char.isdigit() for char in password):
+            raise ValidationError('Password must contain at least one digit')
+        if not any(char.isupper() for char in password):
+            raise ValidationError('Password must contain at least one uppercase letter')
+        if not any(char.islower() for char in password):
+            raise ValidationError('Password must contain at least one lowercase letter')
+        return password
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 != password2:
+            raise ValidationError('Passwords do not match')
+        return password2
+
+    def clean_email(self): # Aslında gerek yok çünkü UserCreationForm zaten kontrol ediyor ve Frontend tarafında da kontrol ediliyor
+        email = self.cleaned_data.get('email')
+        validator = EmailValidator()
+        try:
+            validator(email)
+        except ValidationError:
+            raise ValidationError('Email is not valid')
+        
+        if UserProfile.objects.filter(email=email).exists():
+            raise ValidationError('Email is already taken')
+        return email
 
 class DeleteAccountForm(forms.Form):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
@@ -75,7 +107,7 @@ class PasswordResetUserForm(PasswordResetForm):
 
 class SetPasswordUserForm(SetPasswordForm):
     new_password1 = forms.CharField(label='New Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
-    new_password2 = forms.CharField(label='Re New Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
+    new_password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'class': 'input'}))
 
     class Meta:
         model = UserProfile
@@ -87,6 +119,27 @@ class SetPasswordUserForm(SetPasswordForm):
             user.save()
             VerifyToken.objects.filter(user=user).delete()
         return user
+
+    def clean_new_password1(self):
+        password = self.cleaned_data.get('new_password1')
+        if len(password) < 8:
+            raise ValidationError('Password must be at least 8 characters')
+        if not any(char.isdigit() for char in password):
+            raise ValidationError('Password must contain at least one digit')
+        if not any(char.isupper() for char in password):
+            raise ValidationError('Password must contain at least one uppercase letter')
+        if not any(char.islower() for char in password):
+            raise ValidationError('Password must contain at least one lowercase letter')
+        if not any(char in '@#$%^&+=!.,messageText' for char in password):
+            raise ValidationError('Password must contain at least one of the following: @#$%^&+=!')
+        return password
+    
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 != password2:
+            raise ValidationError('Passwords do not match')
+        return password2
 
 class SetUserProfileForm(UserChangeForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'input'}))
@@ -106,6 +159,33 @@ class SetUserProfileForm(UserChangeForm):
         if not password:
             # Return None or an empty string if password is not provided
             return None
+        return password
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            if avatar.size > 3*1024*1024:
+                raise ValidationError('Image file least than 3MB')
+            return avatar
+        return None
+    
+    def clean_bio(self):
+        bio = self.cleaned_data.get('bio')
+        if len(bio) > 128:
+            raise ValidationError('Bio must be less than 128 characters')
+        return bio
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password:
+            if len(password) < 8:
+                raise ValidationError('Password must be at least 8 characters')
+            if not any(char.isdigit() for char in password):
+                raise ValidationError('Password must contain at least one digit')
+            if not any(char.isupper() for char in password):
+                raise ValidationError('Password must contain at least one uppercase letter')
+            if not any(char.islower() for char in password):
+                raise ValidationError('Password must contain at least one lowercase letter')
         return password
 
     def save(self, commit=True):
