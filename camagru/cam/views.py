@@ -1,62 +1,46 @@
-import os
-from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
+import random
+import json
+import base64
+from django.shortcuts import redirect
 from django.contrib.auth import login, logout
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.http import HttpResponseRedirect
-from django.http import Http404
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models.aggregates import Count
 from random import randint
 from django.core.serializers import serialize
 from PIL import ImageSequence, Image as PilImage, ImageOps
 from django.core.files.base import ContentFile
-import base64
 from io import BytesIO
-from .models import (
-    VerifyToken,
-    UserProfile,
-    Image,
-    Comment,
-    Like,
-)
-
-from .forms import (
-    UserProfileForm,
-    PasswordResetUserForm,
-    DeleteAccountForm,
-    AuthenticationUserForm,
-    SetPasswordUserForm,
-    SetUserProfileForm,
-)
-
-from os import environ
+from .models import VerifyToken, UserProfile, Image, Comment, Like
+from .forms import UserProfileForm, PasswordResetUserForm, DeleteAccountForm, AuthenticationUserForm, SetPasswordUserForm, SetUserProfileForm
 from datetime import datetime, timedelta
-from django.utils.http import urlsafe_base64_decode
 from django.utils import timezone
-import urllib.parse
-import urllib.request
-from urllib.parse import urlencode
-import json
-from django.core.files import File
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
-from django.db.models import Q
 from django.contrib.auth import update_session_auth_hash
-from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from camagru.settings import EMAIL_HOST_USER, BASE_URL, STATICFILES_DIRS
-import random
+from camagru.settings import EMAIL_HOST_USER, BASE_URL
+
+from .utils import (
+    manual_model_to_dict,
+    manual_get_object_or_404,
+    manual_render,
+    manual_login_required,
+    manual_never_cache,
+    manual_add_message,
+    manual_create_content_file,
+    manual_urlsafe_base64_decode,
+    manual_generate_token,
+    manual_update_session_auth_hash,
+    manual_reverse
+)
 
 # Create your views here.
 
 def handler404(request, exception):
-    return render(request, "404.html", status=404)
+    return manual_render(request, "404.html", status=404)
 
-@never_cache
+@manual_never_cache
 def login_view(request):
     if request.user.is_authenticated:
        return redirect('home')
@@ -65,18 +49,15 @@ def login_view(request):
         form = AuthenticationUserForm(request, request.POST)
         if form.is_valid():
             user = form.get_user()
-            """  if not user.is_verified: #TODO confirm_login_allowed make this unnecessary?
-                messages.error(request, "Account not verified")
-                return redirect('login') """
             login(request, user)
             return HttpResponseRedirect("home")
         else:
             error = "Invalid username or password"
     else:
         form = AuthenticationUserForm()
-    return render(request,"login.html", {"form": form, "error": error})
+    return manual_render(request, "login.html", {"form": form, "error": error})
 
-@never_cache
+@manual_never_cache
 def signup(request):
     if request.user.is_authenticated:
         return redirect("home")
@@ -85,15 +66,15 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             obj = VerifyToken.objects.create(
-                user=user, token=default_token_generator.make_token(user)
+                user=user, token=manual_generate_token(user)
             )
             obj.send_verification_email(request, user)
             return HttpResponseRedirect("login")
     else:
         form = UserProfileForm()
-    return render(request, "signup.html", {"form": form})
+    return manual_render(request, "signup.html", {"form": form})
 
-@never_cache
+@manual_never_cache
 def forgot_password(request):
     if request.user.is_authenticated:
         return redirect("home")
@@ -104,68 +85,63 @@ def forgot_password(request):
             return redirect("password_reset_done")
     else:
         form = PasswordResetUserForm()
-    return render(request, "forgot-password.html")
+    return manual_render(request, "forgot-password.html")
 
-@never_cache
+@manual_never_cache
 def password_reset_done(request):
     if request.user.is_authenticated:
         return redirect("home")
-    return render(request, "password_reset_done.html")
+    return manual_render(request, "password_reset_done.html")
 
-@never_cache
+@manual_never_cache
 def set_password(request, uidb64, token):
     if request.user.is_authenticated:
         return redirect("home")
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
+        uid = manual_urlsafe_base64_decode(uidb64).decode()
         user = get_user_model().objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, UserProfile.DoesNotExist):
         user = None
     if user is not None and default_token_generator.check_token(user, token):
-        # token is valid, you can show the user a form to enter a new password
         if request.method == "POST":
             form = SetPasswordUserForm(user, request.POST)
             if form.is_valid():
                 form.save()
-                #messages.success(request, "Your password has been reset.")
                 return redirect("login")
         else:
             form = SetPasswordUserForm(user)
-        return render(request, "set_password.html", {"form": form})
+        return manual_render(request, "set_password.html", {"form": form})
     else:
-        # invalid token
-        #messages.error(request, "The reset password link is invalid.")
         return redirect("forgot_password")
 
-@never_cache
+@manual_never_cache
 def activate_account(request, token):
     try:
         token = VerifyToken.objects.get(token=token)
     except VerifyToken.DoesNotExist:
-        return render(request, "activation_fail.html")
+        return manual_render(request, "activation_fail.html")
     token.user.is_verified = True
     token.user.save()
     token.delete()
-    messages.success(request, "Your account has been verified.")
     login(request, token.user)
     return redirect("profile", request.user.username)
 
-@never_cache
+@manual_never_cache
 def about(request):
-    return render(request, "about.html")
+    return manual_render(request, "about.html")
 
-@never_cache
+@manual_never_cache
 def privacy_policy_gpdr(request):
-    return render(request, "privacy-policy-gdpr.html")
+    return manual_render(request, "privacy-policy-gdpr.html")
 
-@never_cache
-@login_required
+@manual_never_cache
+@manual_login_required
 def logout_view(request):
     logout(request)
     return redirect("login")
 
-@never_cache
-@login_required
+@manual_never_cache
+@manual_login_required
 def home(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
     following_users = request.user.following.all()
@@ -212,9 +188,9 @@ def home(request):
                 'images_data': images_data
             })
 
-    return render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data, "suggested_users": suggested_users})
+    return manual_render(request, "home.html", {"user_profiles": user_profiles, "profile_data": profile_data, "suggested_users": suggested_users})
 
-@login_required
+@manual_login_required
 def search_profiles(request):
     data = json.loads(request.body)
     query = data.get('query', '')
@@ -226,7 +202,7 @@ def search_profiles(request):
     profiles_json = serialize('json', profiles)
     return JsonResponse({'profiles': profiles_json}, safe=False)
 
-@login_required
+@manual_login_required
 def search(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
     
@@ -235,12 +211,12 @@ def search(request):
     else:
         # Yeterli UserProfile yoksa, mevcut tümünü al
         user_profiles = UserProfile.objects.all()
-    return render(request, "search.html", {"user_profiles": user_profiles})
+    return manual_render(request, "search.html", {"user_profiles": user_profiles})
 
-@never_cache
-@login_required
+@manual_never_cache
+@manual_login_required
 def profile_view(request, username):
-    user = get_object_or_404(UserProfile, username=username)
+    user = manual_get_object_or_404(UserProfile, username=username)
     images_list = Image.objects.filter(user=user, is_edited=True).order_by('-created_at')
     user.is_followed = request.user.following.filter(id=user.id).exists()
     for image in images_list:
@@ -258,7 +234,7 @@ def profile_view(request, username):
     end_index = start_index + per_page
     images = images_list[start_index:end_index]
 
-    return render(request, "profile.html", {
+    return manual_render(request, "profile.html", {
         "user": user,
         "images": images,
         "is_followed": user.is_followed,
@@ -268,31 +244,31 @@ def profile_view(request, username):
         "total_pages": total_pages,
     })
 
-@never_cache
-@login_required
+@manual_never_cache
+@manual_login_required
 def profile_settings(request, username):
     if request.user.username != username:
         raise Http404
-    user = get_object_or_404(UserProfile, username=username)
+    user = manual_get_object_or_404(UserProfile, username=username)
     if request.method == "POST":
         form = SetUserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             updated_user = form.save()
             if 'password' in form.changed_data:
-                update_session_auth_hash(request, updated_user)
+                manual_update_session_auth_hash(request, updated_user)
             messages.success(request, "Profile updated successfully.")
-            response = redirect(reverse('profile_settings', kwargs={'username': updated_user.username}))
+            response = redirect(manual_reverse('profile_settings', kwargs={'username': updated_user.username}))
             response.set_cookie('status', 'success', max_age=10)
             return response
         else:
-            response = redirect(reverse('profile_settings', kwargs={'username': user.username}))
+            response = redirect(manual_reverse('profile_settings', kwargs={'username': user.username}))
             response.set_cookie('status', 'error', max_age=10)
             return response
     else:
         form = SetUserProfileForm(instance=user)
-    return render(request, "profile-settings.html", {"form": form, "user": user})
+    return manual_render(request, "profile-settings.html", {"form": form, "user": user})
 
-@login_required
+@manual_login_required
 def follow_user(request):
     data = json.loads(request.body)
     username = data.get('username')
@@ -311,7 +287,7 @@ def follow_user(request):
             return JsonResponse({'status':'error', 'message': 'User not found.'})
     return JsonResponse({'status':'error', 'message': 'Invalid request'})
 
-@login_required
+@manual_login_required
 def send_message_post(request):
     user = request.user
     if not user.is_authenticated:
@@ -343,7 +319,7 @@ def send_message_post(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
-@login_required
+@manual_login_required
 def like_post(request):
     user = request.user
     if not user.is_authenticated:
@@ -366,13 +342,13 @@ def like_post(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
-@login_required
+@manual_login_required
 def upload_image(request):
     images = Image.objects.filter(user=request.user, is_edited=True).order_by('-created_at')
-    return render(request, "upload_image.html", {"images": images})
+    return manual_render(request, "upload_image.html", {"images": images})
 
 
-@login_required
+@manual_login_required
 def save_photo(request):
     if request.method == "POST":
         try:
@@ -382,7 +358,7 @@ def save_photo(request):
             base64_image = data.get('image')
             if base64_image.startswith('data:image'):
                 base64_image = base64_image.split(',')[1]
-            else
+            else:
                 return JsonResponse({'error': 'Invalid image data'}, status=400)
                         
             filter_name = data.get('filter')
@@ -416,7 +392,7 @@ def save_photo(request):
                 result_image_io = BytesIO()
                 combined_image.save(result_image_io, format='PNG')
             
-            result_image_content_file = ContentFile(result_image_io.getvalue(), name='filtered_image.' + ('gif' if cat_woman_filter.format == 'GIF' else 'png'))
+            result_image_content_file = manual_create_content_file(result_image_io.getvalue(), name='filtered_image.' + ('gif' if cat_woman_filter.format == 'GIF' else 'png'))
             
             if result_image_content_file.size > 3*1024*1024:
                 return JsonResponse({'error': 'Image file size must be less than 3MB'}, status=400)
@@ -431,7 +407,7 @@ def save_photo(request):
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
+@manual_login_required
 def deletePost(request):
     data = json.loads(request.body)
     image_id = data.get('id')
