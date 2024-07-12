@@ -364,18 +364,18 @@ def save_photo(request):
             filter_name = data.get('filter')
             effect = data.get('effect')
             description = data.get('description')
-            image_data = base64.b64decode(base64_image)
-            image = PilImage.open(BytesIO(image_data))
+            image_data = base64.b64decode(base64_image) # Base64 veriyi çöz
+            image = PilImage.open(BytesIO(image_data)) # Resmi aç
             
             filter_path = 'static/assets/filters/' + filter_name
-            cat_woman_filter = PilImage.open(filter_path)
+            filter_image = PilImage.open(filter_path)
             
             # Filtrenin GIF olup olmadığını kontrol et
-            if cat_woman_filter.format == 'GIF':
-                frames = [frame.copy() for frame in ImageSequence.Iterator(cat_woman_filter)]
+            if filter_image.format == 'GIF':
+                frames = [frame.copy() for frame in ImageSequence.Iterator(filter_image)] # GIF karesini ayır
                 processed_frames = []
                 
-                for frame in frames:
+                for frame in frames: # Her bir kare için
                     # Filtre karesini ana resmin boyutuna sığdır
                     resized_frame = ImageOps.fit(frame, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
                     # Filtreyi her bir kareye uygula
@@ -384,19 +384,19 @@ def save_photo(request):
                 
                 # İşlenmiş kareleri GIF olarak kaydet
                 result_image_io = BytesIO()
-                processed_frames[0].save(result_image_io, format='GIF', save_all=True, append_images=processed_frames[1:], loop=0, duration=cat_woman_filter.info['duration'], dispose=cat_woman_filter.info.get('dispose', 2))
+                processed_frames[0].save(result_image_io, format='GIF', save_all=True, append_images=processed_frames[1:], loop=0, duration=filter_image.info['duration'], dispose=filter_image.info.get('dispose', 2))
             else:
                 # Filtre GIF değilse, tek kareli resim için filtreyi uygula
-                resized_filter = ImageOps.fit(cat_woman_filter, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
-                combined_image = PilImage.alpha_composite(image.convert("RGBA"), resized_filter.convert("RGBA"))
-                result_image_io = BytesIO()
-                combined_image.save(result_image_io, format='PNG')
+                resized_filter = ImageOps.fit(filter_image, image.size, method=0, bleed=0.0, centering=(0.5, 0.5)) # Filtreyi ana resmin boyutuna sığdır
+                combined_image = PilImage.alpha_composite(image.convert("RGBA"), resized_filter.convert("RGBA")) # Filtreyi ana resme uygula
+                result_image_io = BytesIO() # Sonucu bir dosya nesnesine kaydet
+                combined_image.save(result_image_io, format='PNG') # Sonucu PNG olarak kaydet
             
-            result_image_content_file = manual_create_content_file(result_image_io.getvalue(), name='filtered_image.' + ('gif' if cat_woman_filter.format == 'GIF' else 'png'))
+            result_image_content_file = manual_create_content_file(result_image_io.getvalue(), name='filtered_image.' + ('gif' if filter_image.format == 'GIF' else 'png'))
             
-            if result_image_content_file.size > 3*1024*1024:
-                return JsonResponse({'error': 'Image file size must be less than 3MB'}, status=400)
-            new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect)
+            if result_image_content_file.size > 3*1024*1024: # 3MB'dan büyükse
+                return JsonResponse({'error': 'Image file size must be less than 3MB'}, status=400) # Hata döndür
+            new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect) # Yeni bir Image nesnesi oluştur
             new_image.save()
             
             return JsonResponse({'message': 'Image saved successfully.'})
