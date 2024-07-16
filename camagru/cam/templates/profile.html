@@ -217,10 +217,10 @@
                                                 <img class="img-fluid item_img" {% if image.effect %} style="filter: {{image.effect}}" {% endif %} src="{{ image.image.url }}" alt="">
                                                 <div class="overlay">
                                                     <div class="icons">
-                                                    <span class="like-icon"><i class="fa fa-heart"></i></span>
-                                                    <span class="like-count" id="likeCount-{{image.id}}">{{ image.like_set.count }}</span>
-                                                    <span class="comment-icon"><i class="fa fa-comment"></i></span>
-                                                    <span class="comment-count" id="commentCount-{{image.id}}">{{ image.comment_set.count }}</span>
+                                                        <span class="like-icon"><i class="fa fa-heart"></i></span>
+                                                        <span class="like-count" id="likeCount-{{image.id}}">{{ image.like_set.count }}</span>
+                                                        <span class="comment-icon"><i class="fa fa-comment"></i></span>
+                                                        <span class="comment-count" id="commentCount-{{image.id}}">{{ image.comment_set.count }}</span>
                                                     </div>
                                                 </div>
                                                 </div>
