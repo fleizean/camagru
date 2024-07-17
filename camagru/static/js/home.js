@@ -4,13 +4,22 @@ search_icon.addEventListener("click", function(){
   search.classList.toggle("show");
 });
 
+function escapeHTML(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
   // ID kullanarak input'a erişim
   const searchInput = document.getElementById('searchInput');
   searchInput.addEventListener("input", function() {
-      const query = this.value;
+      const query = escapeHTML(this.value);
 
       fetch("/search_profiles/", { // Backend endpoint
           method: "POST",
@@ -136,6 +145,7 @@ function sendMessage(id, action) {
         message = document.getElementById(`not_inpost_message_${id}`).value;
     else    
         message = document.getElementById(`post_message_${id}`).value;
+    message = escapeHTML(message);
     fetch("/send_message_post/", {
         method: "POST",
         headers: {

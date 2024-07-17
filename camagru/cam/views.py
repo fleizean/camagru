@@ -214,13 +214,20 @@ def search(request):
     return manual_render(request, "search.html", {"user_profiles": user_profiles})
 
 @manual_never_cache
-@manual_login_required
 def profile_view(request, username):
     user = manual_get_object_or_404(UserProfile, username=username)
     images_list = Image.objects.filter(user=user, is_edited=True).order_by('-created_at')
-    user.is_followed = request.user.following.filter(id=user.id).exists()
-    for image in images_list:
-        image.is_liked_by_user = Like.objects.filter(user=request.user, image=image).exists()
+    
+    # Kullanıcı giriş yapmışsa takip edilip edilmediğini kontrol et
+    if request.user.is_authenticated:
+        user.is_followed = request.user.following.filter(id=user.id).exists()
+        for image in images_list:
+            image.is_liked_by_user = Like.objects.filter(user=request.user, image=image).exists()
+    else:
+        user.is_followed = False
+        for image in images_list:
+            image.is_liked_by_user = False
+
     # Manuel Pagination
     page = request.GET.get('page', 1)  # Eğer 'page' parametresi yoksa varsayılan olarak 1 değerini kullan
     page = int(page) if str(page).isdigit() else 1  # Sayfa numarasını güvenli bir şekilde int'e çevir

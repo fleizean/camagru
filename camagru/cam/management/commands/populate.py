@@ -22,6 +22,8 @@ class Command(BaseCommand):
                 image = Image.objects.create(
                     user=user,
                     image="images/deneme/deneme_vuuxPFa.webp",
+                    description="bu bir denemedir",
+                    is_edited=True,
                 )
                 for k in range(3):
                     Comment.objects.create(

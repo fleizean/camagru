@@ -30,6 +30,8 @@ BASE_URL = environ.get("BASE_URL", default='http://localhost:8000')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+SESSION_COOKIE_HTTPONLY = True
+
 CSRF_TRUSTED_ORIGINS = [
     'https://127.0.0.1:8443',
     'https://localhost:8443',

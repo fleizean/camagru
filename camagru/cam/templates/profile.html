@@ -37,8 +37,11 @@
 </head>
 <body>
 
-    <div class="post_page">
+    <div class="post_page" {% if not request.user.is_authenticated %} style="display:flex !important;" {% endif %}>
         <!--***** nav menu start ****** -->
+        {% if request.user.is_authenticated %}
+           
+        
         <div class="nav_menu">
             <div class="fix_top">
                 <!-- nav for big->medium screen -->
@@ -132,7 +135,9 @@
                 <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
             </div>
         </div>
+        {% endif %}
        <!-- search  -->
+        {% if request.user.is_authenticated %}
        <div id="search" class="search_section">
             <h2>Search</h2>
             <form method="post">
@@ -148,10 +153,10 @@
                 </div>
             </div>
         </div>
-    <!-- search  -->
+        {% endif %}
+        <!-- search  -->
         <!--***** nav menu end ****** -->
-
-        <div class="profile_container">
+        <div class="profile_container" >
             <div class="profile_info">
                 <div class="cart">
                         <div class="img">
@@ -163,16 +168,18 @@
                                 {% if user.is_verified %}
                                     <img class="verified" src="{% static "assets/bg-layers/check-circle.png" %}" alt="verified">
                                 {% endif %}
-                                {% if request.user == user %}
-                                    <a href="/profile-settings/{{user.username}}"><button class="edit_profile">
-                                        Edit profile 
-                                    </button></a>
-                                {% elif not user.is_followed %}
-                                    <button class="follow__profile" id="follow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
-                                    <button class="unfollow__profile" id="unfollow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
-                                {% else %}
-                                    <button class="unfollow__profile" id="unfollow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
-                                    <button class="follow__profile" id="follow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
+                                {% if request.user.is_authenticated%}
+                                    {% if request.user == user %}
+                                        <a href="/profile-settings/{{user.username}}"><button class="edit_profile">
+                                            Edit profile 
+                                        </button></a>
+                                    {% elif not user.is_followed %}
+                                        <button class="follow__profile" id="follow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
+                                        <button class="unfollow__profile" id="unfollow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
+                                    {% else %}
+                                        <button class="unfollow__profile" id="unfollow__profile__id" onclick="followOrUnfollow('{{user.username}}', 'unfollow', 'profile')">Unfollow</button>
+                                        <button class="follow__profile" id="follow__profile__id" style="display: none;" onclick="followOrUnfollow('{{user.username}}', 'follow', 'profile')">Follow</button>
+                                    {% endif %}
                                 {% endif %}
                             </p>
                             <div class="general_info">
@@ -277,18 +284,22 @@
                                                                     <hr>
                                                                     <div class="like-inmodal">
                                                                         <p style="margin-top:5px; margin-bottom: 5px; text-align:center;">Like Action</p>
-                                                                        {% if image.is_liked_by_user %}
-                                                                            <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="display:none" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
-                                                                            <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" ><i class="fa-solid fa-heart"></i></a>
-                                                                        {% else %}
-                                                                            <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
-                                                                            <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" style="display:none"><i class="fa-solid fa-heart"></i></a>
+                                                                        {% if request.user.is_authenticated %}
+                                                                            {% if image.is_liked_by_user %}
+                                                                                <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="display:none" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
+                                                                                <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" ><i class="fa-solid fa-heart"></i></a>
+                                                                            {% else %}
+                                                                                <a onclick="likeImage(`{{image.id}}`, `like`)" id="like-image-{{image.id}}" style="color:red !important;"><i class="fa-solid fa-heart"></i></a>
+                                                                                <a onclick="likeImage(`{{image.id}}`, `unlike`)" id="unlike-image-{{image.id}}" style="display:none"><i class="fa-solid fa-heart"></i></a>
+                                                                            {% endif %}
                                                                         {% endif %}
-                                                                    </div>
-                                                                    <div class="modal-post-comment-input">
-                                                                        <textarea class="textarea-post-comment" id="post_message_{{image.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
-                                                                        <button class="post_comment" onclick="sendMessage(`{{image.id}}`, `inmodal`)">Post</button>
-                                                                    </div>
+                                                                        </div>
+                                                                    {% if request.user.is_authenticated %}
+                                                                        <div class="modal-post-comment-input">
+                                                                            <textarea class="textarea-post-comment" id="post_message_{{image.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                                                            <button class="post_comment" onclick="sendMessage(`{{image.id}}`, `inmodal`)">Post</button>
+                                                                        </div>
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                             
@@ -327,8 +338,15 @@
                   </div>
             </div>
         </div>
-        
-        
+    </div>
+    {% if not request.user.is_authenticated %}
+        <div class="must_log_container" style="display: flex !important; justify-content: center !important; background-color: black; opacity: 0.9; padding: 20px;">
+            <div class="must-login" style="color: white; text-align: center;">
+                <p style="font-size: 20px;">Log in to see photos and videos from friends and discover other accounts you'll love.</p>
+                <a href="/login" style="font-size:20px;">Login</a>
+            </div>
+        </div>
+    {% endif %}
 
         
 
@@ -339,7 +357,7 @@
     <script src="{% static "css/owlcarousel/jquery.min.js" %}"></script>
     <script src="{% static "css/owlcarousel/owl.carousel.min.js" %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
-    <script src="{% static "js/profile.js" %}"></script>
+    {% if request.user.is_authenticated %} <script src="{% static "js/profile.js" %}"></script> {% endif %}
 </body>
 
 </html>

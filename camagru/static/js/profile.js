@@ -1,3 +1,13 @@
+
+function escapeHTML(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function likeImage(image_id, action) {
     const likeCount = document.getElementById(`like-count-${image_id}`);
     const likeIcon = document.getElementById(`like-icon-${image_id}`);
@@ -39,8 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // ID kullanarak input'a erişim
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener("input", function () {
-        const query = this.value;
-
+        const query = escapeHTML(this.value);
+        
         fetch("/search_profiles/", { // Backend endpoint
             method: "POST",
             headers: {
@@ -162,6 +172,7 @@ function followOrUnfollow(username, action, page) {
 function sendMessage(id, action) {
     var message = "";
     message = document.getElementById(`post_message_${id}`).value;
+    message = escapeHTML(message);
     fetch("/send_message_post/", {
         method: "POST",
         headers: {
