@@ -42,17 +42,22 @@ def handler404(request, exception):
 
 @manual_never_cache
 def login_view(request):
-    if request.user.is_authenticated:
-       return redirect('home')
     error = None
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == "POST":
         form = AuthenticationUserForm(request, request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, 'You have successfully logged in.')
             return HttpResponseRedirect("home")
         else:
-            error = "Invalid username or password"
+            # Hata mesajlarını kontrol et
+            if form.non_field_errors():
+                error = form.non_field_errors()[0]
+            else:
+                error = "Invalid username or password"
     else:
         form = AuthenticationUserForm()
     return manual_render(request, "login.html", {"form": form, "error": error})
@@ -196,7 +201,7 @@ def search_profiles(request):
     query = data.get('query', '')
     
     # Filter user profiles based on the query
-    profiles = UserProfile.objects.filter(username__icontains=query)
+    profiles = UserProfile.objects.filter(username__icontains=query and ~Q(username_icontain="Kandirali"))
 
     # Serialize the profiles or manually build the JSON response
     profiles_json = serialize('json', profiles)
@@ -300,18 +305,24 @@ def send_message_post(request):
     if not user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'User not authenticated.'})
 
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'})
+    print(data)
     message = data.get('message')
     image_id = data.get('id')  # Mesajın gönderileceği resmin ID'si
 
     if message and image_id:
         try:
+            print(image_id)
             # Resmi ve alıcı kullanıcıyı bul
             image = Image.objects.get(id=image_id)
             receiver_user = image.user
 
             # Mesajı Comment modeli olarak kaydet
             comment_user = Comment.objects.create(user=user, image=image, comment=message)
+            print(comment_user)
             comment_user.send_mail(request, receiver_user, image)
             return JsonResponse({
                 'status': 'ok',
@@ -323,6 +334,10 @@ def send_message_post(request):
             })
         except Image.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Image not found.'})
+        except Exception as e:
+            # Genel hata yakalama ve günlüğe kaydetme
+            print(f"Error: {e}")
+            return JsonResponse({'status': 'error', 'message': 'An error occurred.'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 

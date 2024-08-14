@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.auth.hashers import make_password
 from cam.models import UserProfile, Image, Comment, Like
 from faker import Faker
 import random
@@ -13,7 +14,7 @@ class Command(BaseCommand):
             user = UserProfile.objects.create(
                 username=fake.user_name(),
                 email=fake.email(),
-                password=fake.password(),
+                password=make_password(fake.password()),
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 bio=fake.text()
@@ -35,4 +36,22 @@ class Command(BaseCommand):
                         user=user,
                         image=image
                     )
+        
+        user = UserProfile.objects.create(
+            username="fleizean",
+            email="nsyagz@gmail.com",
+            password=make_password("415263Enes."),
+            first_name="Enes",
+            last_name="Yagiz",
+            bio="I'm a software developer.",
+            is_verified=True
+        )
+
+        image = Image.objects.create(
+            user=user,
+            image="images/deneme/deneme_vuuxPFa.webp",
+            description="bu bir denemedir",
+            is_edited=True,
+        )
+        
         self.stdout.write(self.style.SUCCESS('Successfully populated database'))

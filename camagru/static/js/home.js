@@ -160,7 +160,6 @@ function sendMessage(id, action) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "ok") {
-           
             const messageSent = document.getElementById(`messageListField-${id}`);
             const avatarUrl = data.comment.avatar_url || 'static/assets/profile-photos/default-photo.png';
             const username = data.comment.username || 'Unknown User';
@@ -186,7 +185,12 @@ function sendMessage(id, action) {
             messageSent.innerHTML += commentHTML;
             document.getElementById(`post_message_${id}`).value = '';
             document.getElementById(`not_inpost_message_${id}`).value = '';
+        } else {
+            console.error(data.message);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
 

@@ -2078,6 +2078,8 @@ button.sgn_btn:hover {
   transition: all 1s ease;
   opacity: 1 !important;
   left: 12.6em;
+  height: 700px;
+  overflow-y: auto;
 }
 
 @media screen and (max-width: 991px) {

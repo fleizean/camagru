@@ -1,14 +1,15 @@
+import mimetypes
 from email.mime.image import MIMEImage
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.html import mark_safe
 from django.template.loader import render_to_string
+from email.mime.text import MIMEText
 from django.core.mail import EmailMultiAlternatives
 from camagru.settings import EMAIL_HOST_USER, BASE_URL, STATICFILES_DIRS
-from .utils import get_upload_to, get_upload_to_image
+from .utils import get_upload_to, get_upload_to_image, create_random_svg
 from django.utils import timezone
-from email.mime.image import MIMEImage
 import uuid
 from datetime import timedelta
 import os
@@ -28,6 +29,12 @@ class UserProfile(AbstractUser):
 
     def __str__(self) -> str:
         return f"{self.username}"
+
+    def save(self, *args, **kwargs):
+        if not self.avatar:
+            svg_content = create_random_svg(self.username)
+            self.avatar.save(f"{self.username}.svg", svg_content, save=False)
+        super().save(*args, **kwargs)
 
     @property
     def thumbnail(self):
@@ -75,14 +82,18 @@ class Comment(models.Model):
             return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
     
     def send_mail(self, request, user, image):
-        if (user.is_email_notification == False):
-            # print('User has disabled email notification')
+        if not user.is_email_notification:
             return
-        mail_subject = user.username + ' replied your image.'
-        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-        user_avatar = os.path.join(current_dir, 'media', user.avatar.name)
-        image_path = os.path.join(current_dir, 'media', image.image.name)
+    
+        mail_subject = f'{user.username} replied to your image.'
+        
+        image_path = image.image.path if image.image else None
+        
+        
+        if image_path and not os.path.isfile(image_path):
+            print(f"Image file does not exist: {image_path}")
+            return
+    
         message = render_to_string('email_verification.html', {
             'user': user,
             'comment': self.comment,
@@ -90,33 +101,30 @@ class Comment(models.Model):
             'image_cid': 'image1',
             'comment_count': image.comment_set.count(),
             'like_count': image.like_set.count(),
-            'avatar_cid': 'avatar',
         })
-
+    
         email = EmailMultiAlternatives(
             subject=mail_subject,
-            body=message,  # This is the simple text version of the message
+            body=message,
             from_email=EMAIL_HOST_USER,
             to=[user.email]
         )
-
-        # Attach the HTML version of the email
+    
         email.attach_alternative(message, "text/html")
-
-        # Open the image file and create a MIMEImage object
-        with open(image_path, 'rb') as img:
-            mime_image = MIMEImage(img.read())
-            mime_image.add_header('Content-ID', '<image1>')  # Use the same CID here
-            email.attach(mime_image)
-        
-        with open(user_avatar, 'rb') as img:
-            mime_image = MIMEImage(img.read())
-            mime_image.add_header('Content-ID', '<avatar>')
-            email.attach(mime_image)
-
-        # Send the email
+    
+        if image_path:
+            mime_type, _ = mimetypes.guess_type(image_path)
+            with open(image_path, 'rb') as img:
+                if mime_type == 'image/svg+xml':
+                    mime_image = MIMEText(img.read().decode('utf-8'), _subtype='svg+xml')
+                else:
+                    mime_image = MIMEImage(img.read(), _subtype=mime_type.split('/')[1] if mime_type else 'octet-stream')
+                mime_image.add_header('Content-ID', '<image1>')
+                email.attach(mime_image)
+    
+    
         email.send(fail_silently=False)
-
+    
 class Like(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)

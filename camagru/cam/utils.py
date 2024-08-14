@@ -21,6 +21,22 @@ def get_upload_to(instance, filename):
     filename = "%s_%s.%s" % (instance.username, get_random_string(length=7), ext)
     return filename
 
+
+def create_random_svg(username):
+    hash = hashlib.md5(username.encode()).hexdigest()
+    hue = int(hash, 16) % 360
+    svg_parts = []
+    for i in range(25 if username else 0):
+        if int(hash, 16) & (1 << (i % 15)):
+            x = 7 - i // 5 if i > 14 else i // 5
+            svg_parts.append(f'<rect x="{x}" y="{i % 5}" width="1" height="1"/>')
+    svg_content = f'''
+    <svg viewBox="-1.5 -1.5 8 8" xmlns="http://www.w3.org/2000/svg" fill="hsl({hue}, 95%, 45%)">
+    {''.join(svg_parts)}
+    </svg>
+    '''
+    return ContentFile(svg_content.encode('utf-8'))
+
 def get_upload_to_image(instance, filename):
     ext = filename.split('.')[-1]
     # Kullanıcı adını içeren bir klasör yolu ekleyerek güncelleme

@@ -13,6 +13,7 @@ class Command(BaseCommand):
 		superpass = environ.get("SUPER_PASS", default="9247")
 		if not UserProfile.objects.filter(username=superuser).exists():
 			super_user = UserProfile.objects.create_superuser(superuser, supermail, superpass)
+			super_user.is_verified = True
 			file = File(open('static/assets/profile-photos/default-photo.png', "rb"))
 			super_user.avatar.save(f"{file.name}.png", file, save=False)
 			file.close()

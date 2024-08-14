@@ -76,6 +76,16 @@ class AuthenticationUserForm(AuthenticationForm):
     class Meta:
         model = UserProfile
         fields = ['username', 'password']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        user = UserProfile.objects.filter(username=username).first()
+
+        if user and not user.is_verified:
+            raise ValidationError('Your account is not verified. Please verify your account to log in.')
+
+        return cleaned_data
         
 class PasswordResetUserForm(PasswordResetForm):
     def save(self, domain_override=None, token_generator=default_token_generator, request=None):
