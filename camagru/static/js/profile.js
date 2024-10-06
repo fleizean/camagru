@@ -187,7 +187,7 @@ function sendMessage(id, action) {
         .then(response => response.json())
         .then(data => {
             if (data.status === "ok") {
-
+                const commentCount = document.getElementById(`comment-count-${id}`);
                 const messageSent = document.getElementById(`messageListField-${id}`);
                 const avatarUrl = data.comment.avatar_url || 'static/assets/profile-photos/default-photo.png';
                 const username = data.comment.username || 'Unknown User';
@@ -195,7 +195,7 @@ function sendMessage(id, action) {
                 const messageCount = document.getElementById(`commentCount-${id}`);
                 let messageText = messageCount.innerHTML.toString();
                 let match = messageText.match(/\d+/);
-
+                commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
                 if (match) {
                     let currentCount = parseInt(match[0]) + 1;
                     messageCount.innerHTML = "View all " + currentCount + " comments";

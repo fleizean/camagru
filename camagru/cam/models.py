@@ -86,7 +86,7 @@ class Comment(models.Model):
         if not user.is_email_notification:
             return
     
-        mail_subject = f'{request.username} replied to your image.'
+        mail_subject = f'{request.user.username} replied to your image.'
         
         image_path = image.image.path if image.image else None
         
@@ -96,7 +96,7 @@ class Comment(models.Model):
             return
     
         message = render_to_string('email_verification.html', {
-            'user': request,
+            'user': request.user,
             'comment': self.comment,
             'url': BASE_URL,
             'image_cid': 'image1',

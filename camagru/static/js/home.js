@@ -167,7 +167,6 @@ function sendMessage(id, action) {
             const messageCount = document.getElementById(`commentCount-${id}`);
             let messageText = messageCount.innerHTML.toString();
             let match = messageText.match(/\d+/);
-
             if (match) {
                 let currentCount = parseInt(match[0]) + 1;
                 messageCount.innerHTML = "View all " + currentCount + " comments";
