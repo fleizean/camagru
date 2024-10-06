@@ -35,209 +35,232 @@
     
 </head>
 <body>
-
+    
     <div class="post_page">
         <!--***** nav menu start ****** -->
-        <div class="nav_menu">
-            <div class="fix_top">
-                <!-- nav for big->medium screen -->
-                <div class="nav">
-                    <div class="logo">
-                        <a href="/home">
-                            <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
-                            <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
-                        </a>
-                    </div>
-                    <div class="menu">
-                        <ul>
-                            <li>
-                                <a class="active" href="/home">
-                                    <img src="{% static "assets/bg-layers/accueil.png" %}">
-                                    <span class="d-none d-lg-block">Home</span>
+        <header>
+            <nav>
+                <div class="nav_menu">
+                    <div class="fix_top">
+                        <!-- nav for big->medium screen -->
+                        <div class="nav">
+                            <div class="logo">
+                                <a href="/home">
+                                    <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
+                                    <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
                                 </a>
-                            </li>
-                            <li id="search_icon">
-                                <a href="#">
-                                    <img src="{% static "assets/bg-layers/search.png" %}">
-                                    <span class="d-none d-lg-block search">Search </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/upload-image">
-                                    <img src="{% static "assets/bg-layers/plus-square.png" %}">
-                                    <span class="d-none d-lg-block ">Create</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/profile/{{request.user.username}}">
-                                    <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
-                                    <span class="d-none d-lg-block ">Profile</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="more">
-                        <div class="btn-group dropup">
-                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="{% static "assets/bg-layers/menu.png" %}">
-                                <span class="d-none d-lg-block ">More</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
-                                        <span>Settings</span>
-                                        <img src="{% static "assets/bg-layers/reglage.png" %}">
-                                    </a></li>
-                                <li><a class="dropdown-item" href="/logout">
-                                        <span>Log out</span>
-                                    </a></li>
-                            </ul>
-                        </div>
-                        <!--  -->
-
-                    </div>
-                </div>
-                <!-- nav for small screen  -->
-                <div class="nav_sm">
-                    <div class="content">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
-                            </button>
-                           
-                        </div>
-                       
-                    </div>
-                </div>
-
-                <!-- nav for ex-small screen  -->
-                <div class="nav_xm">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
-                        </button>
-                        
-                    </div>
-                  
-                </div>
-            </div>
-            <!-- menu in the botton for smal screen  -->
-            <div class="nav_bottom">
-                <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
-                <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
-                <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
-                <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
-            </div>
-        </div>
-       <!-- search  -->
-       <div id="search" class="search_section">
-            <h2>Search</h2>
-            <form method="post">
-                <input id="searchInput" type="text" placeholder="Search">
-            </form>
-            <div class="find">
-                <div class="desc">
-                    <h4>Results</h4>
-                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
-                </div>
-                <div class="account" id="searchResults">
-                    
-                </div>
-            </div>
-        </div>
-    <!-- search  -->
-        <!--***** nav menu end ****** -->
-
-        <div class="second_container">
-            <!--***** posts_container start ****** -->
-            <div class="main_section">
-                <div class="posts_container">
-                    <div class="profile_settings">
-                        <h2>Edit profile</h2>
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="profile-change-container">
-                                <div class="profile-change-img">
-                                    <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} alt="profile" id="profile-img">
-                                    <h5>{{ request.user.username }}</h5>
+                            </div>
+                            <div class="menu">
+                                <ul>
+                                    <li>
+                                        <a class="active" href="/home">
+                                            <img src="{% static "assets/bg-layers/accueil.png" %}">
+                                            <span class="d-none d-lg-block">Home</span>
+                                        </a>
+                                    </li>
+                                    <li id="search_icon">
+                                        <a href="#">
+                                            <img src="{% static "assets/bg-layers/search.png" %}">
+                                            <span class="d-none d-lg-block search">Search </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/upload-image">
+                                            <img src="{% static "assets/bg-layers/plus-square.png" %}">
+                                            <span class="d-none d-lg-block ">Create</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/profile/{{request.user.username}}">
+                                            <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
+                                            <span class="d-none d-lg-block ">Profile</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="more">
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="{% static "assets/bg-layers/menu.png" %}">
+                                        <span class="d-none d-lg-block ">More</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
+                                                <span>Settings</span>
+                                                <img src="{% static "assets/bg-layers/reglage.png" %}">
+                                            </a></li>
+                                        <li><a class="dropdown-item" href="/logout">
+                                                <span>Log out</span>
+                                            </a></li>
+                                    </ul>
                                 </div>
-                                <div class="profile-change-btn">
-                                    <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display: none;"/>
-                                    <button class="change-avatar" type="button" id="change-profile">Change photo</button>
+                                <!--  -->
+
+                            </div>
+                        </div>
+                        <!-- nav for small screen  -->
+                        <div class="nav_sm">
+                            <div class="content">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
+                                    </button>
+                                
+                                </div>
+                            
+                            </div>
+                        </div>
+
+                        <!-- nav for ex-small screen  -->
+                        <div class="nav_xm">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
+                                </button>
+                                
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <!-- menu in the botton for smal screen  -->
+                    <div class="nav_bottom">
+                        <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
+                        <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
+                        <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
+                        <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- search  -->
+        <main>
+            <section>
+                <article>
+                    <div id="search" class="search_section">
+                            <h2>Search</h2>
+                            <form method="post">
+                                <input id="searchInput" type="text" placeholder="Search">
+                            </form>
+                            <div class="find">
+                                <div class="desc">
+                                    <h4>Results</h4>
+                                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
+                                </div>
+                                <div class="account" id="searchResults">
+                                    
                                 </div>
                             </div>
-                            <div class="profile-info-container">
-                                <h5>Profile information</h5>
-                                <div class="form-group">
-                                    <p class="form-label">Username</p>
-                                    <input type="text" class="settings-form-control" id="id_username" name="username" value="{{ request.user.username }}">
-                                </div>
-                                <div class="form-group">
-                                    <p class="form-label">Displayname</p>
-                                    <input type="text" class="settings-form-control" id="id_displayname" name="displayname" value="{{ request.user.displayname }}">
-                                </div>
-                                <div class="form-group">
-                                    <p class="form-label">Email</p>
-                                    <input type="email" class="settings-form-control" id="id_email" name="email" value="{{ request.user.email }}">
-                                </div>
-                                <div class="form-group">
-                                    <p class="form-label">Bio</p>
-                                    <textarea class="settings-form-control" id="id_bio" name="bio">{% if request.user.bio %} {{ request.user.bio }} {% else %} Bio {% endif %}</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <div class="password-container">
-                                        <p class="form-label">Password</p>
-                                        <input type="password" class="settings-form-control" id="id_password" name="password">
-                                        <button type="button" class="togglePasswordBtnSettings" style="font-weight:bold" id="togglePassword">Show</button>
-                                    </div>
-                                </div>
-                                <h5 style="margin-top: 2em;">Notifications</h5>
-                                <div class="form-group">
-                                    <p class="form-label">Email notifications</p>
-                                    <div class="form-check">
-                                        <div style="width: 70% !important">
-                                            <label class="email-notification-headtext" for="email-notifications">Receive email notifications</label>
-                                            <p class="email-notification-text">Receive email notifications when someone likes or comments on your posts. You can change whenever.</p>
+                        </div>
+                    <!-- search  -->
+                        <!--***** nav menu end ****** -->
+
+                    <div class="second_container">
+                        <!--***** posts_container start ****** -->
+                        <div class="main_section">
+                            <div class="posts_container">
+                                <div class="profile_settings">
+                                    <h2>Edit profile</h2>
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+
+                                        <div class="profile-change-container">
+                                            <div class="profile-change-img">
+                                                <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} alt="profile" id="profile-img">
+                                                <h5>{{ request.user.username }}</h5>
+                                            </div>
+                                            <div class="profile-change-btn">
+                                                <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display: none;"/>
+                                                <button class="change-avatar" type="button" id="change-profile">Change photo</button>
+                                            </div>
                                         </div>
-                                        <label class="switch">
-                                            <input type="checkbox" name="is_email_notification" id="id_is_email_notification" {% if request.user.is_email_notification %}checked{% endif %}>
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
+                                        <div class="profile-info-container">
+                                            <h5>Profile information</h5>
+                                            <div class="form-group">
+                                                <p class="form-label">Username</p>
+                                                <input type="text" class="settings-form-control" id="id_username" name="username" value="{{ request.user.username }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <p class="form-label">Displayname</p>
+                                                <input type="text" class="settings-form-control" id="id_displayname" name="displayname" value="{{ request.user.displayname }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <p class="form-label">Email</p>
+                                                <input type="email" class="settings-form-control" id="id_email" name="email" value="{{ request.user.email }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <p class="form-label">Bio</p>
+                                                <textarea class="settings-form-control" id="id_bio" name="bio">{% if request.user.bio %} {{ request.user.bio }} {% else %} Bio {% endif %}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="password-container">
+                                                    <p class="form-label">Password</p>
+                                                    <input type="password" class="settings-form-control" id="id_password" name="password">
+                                                    <button type="button" class="togglePasswordBtnSettings" style="font-weight:bold" id="togglePassword">Show</button>
+                                                </div>
+                                            </div>
+                                            <h5 style="margin-top: 2em;">Notifications & Privacy</h5>
+                                            <div class="form-group">
+                                                <p class="form-label">Email notifications</p>
+                                                <div class="form-check">
+                                                    <div style="width: 70% !important">
+                                                        <label class="email-notification-headtext">Receive email notifications</label>
+                                                        <p class="email-notification-text">Receive email notifications when someone likes or comments on your posts. You can change whenever.</p>
+                                                    </div>
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="is_email_notification" id="id_is_email_notification" {% if request.user.is_email_notification %}checked{% endif %}>
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <p class="form-label">Private account</p>
+                                                <div class="form-check">
+                                                    <div style="width: 70% !important">
+                                                        <label class="private-account-headtext">Make your account private</label>
+                                                        <p class="private-account-text">When your account is private, only people you approve can see your photos and videos on Camagru. Your existing followers won't be affected.</p>
+                                                    </div>
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="is_private" id="id_is_private" {% if request.user.is_private %}checked{% endif %}>
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="button-container">
+                                                <button type="submit" class="submit__button">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    
                                 </div>
-                                <div class="button-container">
-                                    <button type="submit" class="submit__button">Submit</button>
-                                </div>
+
+                                <footer class="footer">
+                                    <p class="copyright">
+                                        &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
+                                    </p>
+                                    <p class="links">
+                                        <a href="/about">About</a>
+                                        <a href="https://www.github.com/fleizean">Contact</a>
+                                        <a href="https://www.github.com/fleizean">Help</a>
+                                        <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
+                                    </p>
+                                </footer>
+                                
                             </div>
-                        </form>
-                        
-                    </div>
+                        </div>
+                        <!--***** posts_container end ****** -->
 
-                    <footer class="footer">
-                        <p class="copyright">
-                            &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
-                        </p>
-                        <p class="links">
-                            <a href="/about">About</a>
-                            <a href="https://www.github.com/fleizean">Contact</a>
-                            <a href="https://www.github.com/fleizean">Help</a>
-                            <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
-                        </p>
-                    </footer>
+                        <!--***** followers_container start ****** -->
                     
-                </div>
-            </div>
-            <!--***** posts_container end ****** -->
-
-            <!--***** followers_container start ****** -->
-           
-        </div>
-
-        
+                    </div> 
+                    
+                </article>
+            </section>
+        </main>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script src="https://kit.fontawesome.com/b80699d249.js" crossorigin="anonymous"></script>

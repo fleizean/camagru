@@ -31,34 +31,44 @@
     <link rel="stylesheet" href="{% static "css/main.css" %}">
 </head>
 <body>
-    <div class="container">
+    <main>
+        <div class="container">
             <div class="sign_up">
-                <div class="nav-logo">
-                    <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
-                    {% if not request.user.is_authenticated %}
-                        <div class="nav-buttons">
-                            <a href="/login">
-                                <button class="log_btn">
-                                    Log in
-                                </button>
-                            </a>
-                            <a href="/signup">
-                                <button class="sgn_btn">
-                                    Sign up
-                                </button>
-                            </a>
+                <header>
+                    <nav>
+                        <div class="nav-logo">
+                            <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
+                            {% if not request.user.is_authenticated %}
+                                <div class="nav-buttons">
+                                    <a href="/login">
+                                        <button class="log_btn">
+                                            Log in
+                                        </button>
+                                    </a>
+                                    <a href="/signup">
+                                        <button class="sgn_btn">
+                                            Sign up
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
-                </div>
-                <div class="content" style="max-width:100%">
+                    </nav>
+                </header>
+                <section>
+                    <article>
+                        <div class="content" style="max-width:100%">
 
-                
-                        <h3 class="h3-404">Sorry, activation failed.</h3>
-                        <p class="p-404">Your activation period may have expired and you may need to request it again. <a href="/login">Go back to Camagru.</a></p>
+                        
+                                <h3 class="h3-404">Sorry, activation failed.</h3>
+                                <p class="p-404">Your activation period may have expired and you may need to request it again. <a href="/login">Go back to Camagru.</a></p>
 
-                </div>
+                        </div>
+                    </article>
+                </section>
             </div>
-    </div>
+        </div>
+    </main>
     <footer class="footer">
         <p class="copyright">
             &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.

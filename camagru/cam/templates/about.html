@@ -31,57 +31,67 @@
     <link rel="stylesheet" href="{% static "css/main.css" %}">
 </head>
 <body>
-    <div class="container">
+    <main>
+        <div class="container">
             <div class="sign_up">
-                <div class="nav-logo">
-                    <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
-                    {% if not request.user.is_authenticated %}
-                        <div class="nav-buttons">
-                            <a href="/login">
-                                <button class="log_btn">
-                                    Log in
-                                </button>
-                            </a>
-                            <a href="/signup">
-                                <button class="sgn_btn">
-                                    Sign up
-                                </button>
-                            </a>
+                <header>
+                    <nav>
+                        <div class="nav-logo">
+                            <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
+                            {% if not request.user.is_authenticated %}
+                                <div class="nav-buttons">
+                                    <a href="/login">
+                                        <button class="log_btn">
+                                            Log in
+                                        </button>
+                                    </a>
+                                    <a href="/signup">
+                                        <button class="sgn_btn">
+                                            Sign up
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% endif %}
-                </div>
-                <div class="content" style="max-width:80%">
-                   <div class="about-us">
-                        <span class="about-sub-title">Camagru history</span>
-                        <h2 class="about-title">About Camagru</h2>
-                        <div class="about__container">
-                            <div>
-                                <h2 class="about_description_title">
-                                    What is Camagru?
-                                </h2>
-                                <p class="about_description">
-                                    Camagru is a social media platform that allows users to take pictures and share them with their friends. 
-                                    The platform was created in 2024 by eyagiz, a software developer based in the Turkey. 
-                                    The idea for Camagru came from eyagiz's school Êcole 42, where he was inspired by the idea of creating a social media platform that focused on photos and visual content.
-                                </p>
-                                <hr>
-                                <h2 class="about_description_title">
-                                    How does Camagru work?
-                                </h2>
-                                <p class="about_description">
-                                    Camagru works by allowing users to take pictures using their smartphone or webcam and then share them with their friends. 
-                                    Users can add filters, stickers, and text to their photos to make them more fun and engaging. 
-                                    Users can also like and comment on each other's photos, and share them on other social media platforms like Facebook and Twitter.
-                                </p>
-                            </div>
-                            <div>
-                                <img src="{% static "assets/bg-images/about.png" %}" class="about__img" alt="About Camagru" class="about_image">
+                    </nav>
+                </header>
+                <article>
+                    <section>
+                        <div class="content" style="max-width:80%">
+                            <div class="about-us">
+                                    <span class="about-sub-title">Camagru history</span>
+                                    <h2 class="about-title">About Camagru</h2>
+                                    <div class="about__container">
+                                        <div>
+                                            <h2 class="about_description_title">
+                                                What is Camagru?
+                                            </h2>
+                                            <p class="about_description">
+                                                Camagru is a social media platform that allows users to take pictures and share them with their friends. 
+                                                The platform was created in 2024 by eyagiz, a software developer based in the Turkey. 
+                                                The idea for Camagru came from eyagiz's school Êcole 42, where he was inspired by the idea of creating a social media platform that focused on photos and visual content.
+                                            </p>
+                                            <hr>
+                                            <h2 class="about_description_title">
+                                                How does Camagru work?
+                                            </h2>
+                                            <p class="about_description">
+                                                Camagru works by allowing users to take pictures using their smartphone or webcam and then share them with their friends. 
+                                                Users can add filters, stickers, and text to their photos to make them more fun and engaging. 
+                                                Users can also like and comment on each other's photos, and share them on other social media platforms like Facebook and Twitter.
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <img src="{% static "assets/bg-images/about.png" %}" class="about__img" alt="About Camagru" class="about_image">
+                                        </div>
+                                    </div>
                             </div>
                         </div>
-                   </div>
-                </div>
+                    </section>
+                </article>
             </div>
-    </div>
+        </div>
+    </main>
     <footer class="footer">
         <p class="copyright">
             &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.

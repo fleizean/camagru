@@ -160,11 +160,12 @@ class SetUserProfileForm(UserChangeForm):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'input'}))
     avatar = forms.ImageField(required=False, label='Avatar', widget=forms.FileInput(attrs={'class': 'input'}))
     is_email_notification = forms.BooleanField(label='Email Notification', required=False, widget=forms.CheckboxInput(attrs={'class': 'input'}))
+    is_private = forms.BooleanField(label='Private Account', required=False, widget=forms.CheckboxInput(attrs={'class': 'input'}))
     password = forms.CharField(label='Password', required=False, widget=forms.PasswordInput(attrs={'class': 'input'}))
 
     class Meta:
         model = UserProfile
-        fields = ['username', 'displayname', 'bio', 'email', 'avatar', 'is_email_notification', 'password']
+        fields = ['username', 'displayname', 'bio', 'email', 'avatar', 'is_email_notification', 'is_private', 'password']
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -176,7 +177,7 @@ class SetUserProfileForm(UserChangeForm):
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar')
         if avatar:
-            if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg')):
+            if not avatar.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp')):
                 raise ValidationError('File type is not supported')
             if avatar.size > 3*1024*1024:
                 raise ValidationError('Image file least than 3MB')

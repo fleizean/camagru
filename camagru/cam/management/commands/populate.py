@@ -22,7 +22,7 @@ class Command(BaseCommand):
             for j in range(5):
                 image = Image.objects.create(
                     user=user,
-                    image="images/deneme/deneme_vuuxPFa.webp",
+                    image="images/Kandirali/Kandirali_oTfEKVw.png",
                     description="bu bir denemedir",
                     is_edited=True,
                 )
@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
         image = Image.objects.create(
             user=user,
-            image="images/deneme/deneme_vuuxPFa.webp",
+            image="images/Kandirali/Kandirali_oTfEKVw.png",
             description="bu bir denemedir",
             is_edited=True,
         )

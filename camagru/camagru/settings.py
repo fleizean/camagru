@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = environ.get("DEBUG", default='True') == 'True'
+DEBUG = environ.get("DEBUG", 'False').lower() in ('true', '1', 't')
 
 BASE_URL = environ.get("BASE_URL", default='http://localhost:8000')
 

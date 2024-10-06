@@ -37,268 +37,276 @@
 <body>
 
     <div class="post_page">
+        <header>
+            <nav>
         <!--***** nav menu start ****** -->
-        <div class="nav_menu">
-            <div class="fix_top">
-                <!-- nav for big->medium screen -->
-                <div class="nav">
-                    <div class="logo">
-                        <a href="/home">
-                            <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
-                            <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
-                        </a>
-                    </div>
-                    <div class="menu">
-                        <ul>
-                            <li>
+                <div class="nav_menu">
+                    <div class="fix_top">
+                        <!-- nav for big->medium screen -->
+                        <div class="nav">
+                            <div class="logo">
                                 <a href="/home">
-                                    <img src="{% static "assets/bg-layers/accueil.png" %}">
-                                    <span class="d-none d-lg-block">Home</span>
+                                    <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
+                                    <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
                                 </a>
-                            </li>
-                            <li id="search_icon">
-                                <a href="#">
-                                    <img src="{% static "assets/bg-layers/search.png" %}">
-                                    <span class="d-none d-lg-block search">Search </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="active" href="/upload-image">
-                                    <img src="{% static "assets/bg-layers/plus-square.png" %}">
-                                    <span class="d-none d-lg-block ">Create</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/profile/{{request.user.username}}">
-                                    <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
-                                    <span class="d-none d-lg-block ">Profile</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="more">
-                        <div class="btn-group dropup">
-                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="{% static "assets/bg-layers/menu.png" %}">
-                                <span class="d-none d-lg-block ">More</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
-                                        <span>Settings</span>
-                                        <img src="{% static "assets/bg-layers/reglage.png" %}">
-                                    </a></li>
-                                <li><a class="dropdown-item" href="/logout">
-                                        <span>Log out</span>
-                                    </a></li>
-                            </ul>
-                        </div>
-                        <!--  -->
+                            </div>
+                            <div class="menu">
+                                <ul>
+                                    <li>
+                                        <a href="/home">
+                                            <img src="{% static "assets/bg-layers/accueil.png" %}">
+                                            <span class="d-none d-lg-block">Home</span>
+                                        </a>
+                                    </li>
+                                    <li id="search_icon">
+                                        <a href="#">
+                                            <img src="{% static "assets/bg-layers/search.png" %}">
+                                            <span class="d-none d-lg-block search">Search </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="active" href="/upload-image">
+                                            <img src="{% static "assets/bg-layers/plus-square.png" %}">
+                                            <span class="d-none d-lg-block ">Create</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/profile/{{request.user.username}}">
+                                            <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
+                                            <span class="d-none d-lg-block ">Profile</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="more">
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img src="{% static "assets/bg-layers/menu.png" %}">
+                                        <span class="d-none d-lg-block ">More</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
+                                                <span>Settings</span>
+                                                <img src="{% static "assets/bg-layers/reglage.png" %}">
+                                            </a></li>
+                                        <li><a class="dropdown-item" href="/logout">
+                                                <span>Log out</span>
+                                            </a></li>
+                                    </ul>
+                                </div>
+                                <!--  -->
 
+                            </div>
+                        </div>
+                        <!-- nav for small screen  -->
+                        <div class="nav_sm">
+                            <div class="content">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
+                                    </button>
+                                
+                                </div>
+                            
+                            </div>
+                        </div>
+
+                        <!-- nav for ex-small screen  -->
+                        <div class="nav_xm">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
+                                </button>
+                                
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <!-- menu in the botton for smal screen  -->
+                    <div class="nav_bottom">
+                        <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
+                        <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
+                        <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
+                        <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
                     </div>
                 </div>
-                <!-- nav for small screen  -->
-                <div class="nav_sm">
-                    <div class="content">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
-                            </button>
-                           
-                        </div>
-                       
+            </nav>
+        </header>
+        <!--***** nav menu end ****** -->
+        <main>
+        <!-- search  -->
+            <div id="search" class="search_section">
+                <h2>Search</h2>
+                <form method="post">
+                    <input id="searchInput" type="text" placeholder="Search">
+                </form>
+                <div class="find">
+                    <div class="desc">
+                        <h4>Results</h4>
+                        <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
                     </div>
-                </div>
-
-                <!-- nav for ex-small screen  -->
-                <div class="nav_xm">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
-                        </button>
+                    <div class="account" id="searchResults">
                         
                     </div>
-                  
                 </div>
             </div>
-            <!-- menu in the botton for smal screen  -->
-            <div class="nav_bottom">
-                <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
-                <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
-                <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
-                <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
-            </div>
-        </div>
-       <!-- search  -->
-       <div id="search" class="search_section">
-            <h2>Search</h2>
-            <form method="post">
-                <input id="searchInput" type="text" placeholder="Search">
-            </form>
-            <div class="find">
-                <div class="desc">
-                    <h4>Results</h4>
-                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
-                </div>
-                <div class="account" id="searchResults">
-                    
-                </div>
-            </div>
-        </div>
-    <!-- search  -->
-        <!--***** nav menu end ****** -->
-
-        <div class="second_container">
-            <!--***** posts_container start ****** -->
-            <div class="main_section" style="display:flex !important; justify-content:center !important; text-align:center; align-items:center; ">
-                <div class="posts_container" style="width: 100%; max-width: 600px;">
-                    <div class="upload_image_container">
-                        <div id="msg">
-                            <p id="msgText"></p>
-                        </div>
-                        <h2>Create new post</h2>
-                        <hr>
-                            {% csrf_token %}
-                            <div class="upload__file">
-                                <div class="take">
-                                    <div class="capture">
-                                        <video id="captureVideo" autoplay=""></video>
-                                        <img id="captureFilter" alt="filter">
+            <!-- search  -->
+            
+            <article>
+                <section>
+                    <div class="second_container">
+                        <!--***** posts_container start ****** -->
+                        <div class="main_section" style="display:flex !important; justify-content:center !important; text-align:center; align-items:center; ">
+                            <div class="posts_container" style="width: 100%; max-width: 600px;">
+                                <div class="upload_image_container">
+                                    <div id="msg">
+                                        <p id="msgText"></p>
                                     </div>
-                                    <div class="preview">
-                                        <canvas id="photoPreview"></canvas>
-                                        <img id="importPreview" class="import" alt="import_preview">
-                                        <img id="previewFilter" class="filter" alt="filter">
-                                    </div>
-                                    <div id="filters" class="filters">
-                                        <button class="filterBtn" data-id="1" data-file="cat-falling.png">
-                                            <img src="static/assets/filters/cat-falling.png" alt="cat-falling.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="2" data-file="batman-mask.png">
-                                            <img src="static/assets/filters/batman-mask.png" alt="batman-mask.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="3" data-file="dog-face.png">
-                                            <img src="static/assets/filters/dog-face.png" alt="dog-face.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="4" data-file="gold-crown.png">
-                                            <img src="static/assets/filters/gold-crown.png" alt="gold-crown.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="5" data-file="cool-glasses.png">
-                                            <img src="static/assets/filters/cool-glasses.png" alt="cool-glasses.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="6" data-file="linux-supporter.png">
-                                            <img src="static/assets/filters/linux-supporter.png" alt="linux-supporter.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="7" data-file="apple-supporter.png">
-                                            <img src="static/assets/filters/apple-supporter.png" alt="apple-supporter.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="8" data-file="windows-supporter.png">
-                                            <img src="static/assets/filters/windows-supporter.png" alt="windows-supporter.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="9" data-file="pardus-supporter.png">
-                                            <img src="static/assets/filters/pardus-supporter.png" alt="pardus-supporter.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="10" data-file="ecole-42.png">
-                                            <img src="static/assets/filters/ecole-42.png" alt="ecole-42.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="11" data-file="ronaldo.png">
-                                            <img src="static/assets/filters/ronaldo.png" alt="ronaldo.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="12" data-file="ana-de-armas.png">
-                                            <img src="static/assets/filters/ana-de-armas.png" alt="ana-de-armas.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="13" data-file="margot-robbie.png">
-                                            <img src="static/assets/filters/margot-robbie.png" alt="margot-robbie.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="14" data-file="sons_of_anarchy.png">
-                                            <img src="static/assets/filters/sons_of_anarchy.png" alt="sons_of_anarchy.png">
-                                        </button>
-                                        <button class="filterBtn" data-id="15" data-file="recep-ivedik-2.gif">
-                                            <img src="static/assets/filters/recep-ivedik-2.gif" alt="recep-ivedik-2.gif">
-                                        </button>
-                                        <button class="filterBtn" data-id="16" data-file="recep-ivedik-3.gif">
-                                            <img src="static/assets/filters/recep-ivedik-3.gif" alt="recep-ivedik-3.gif">
-                                        </button>
-                                        <button class="filterBtn" data-id="17" data-file="heart.gif">
-                                            <img src="static/assets/filters/heart.gif" alt="heart.gif">
-                                        </button>
-                                        <button class="filterBtn" data-id="18" data-file="pikachu-gif.gif">
-                                            <img src="static/assets/filters/pikachu-gif.gif" alt="pikachu-gif.gif">
-                                        </button>
-                                        <button class="filterBtn" data-id="19" data-file="recep-ivedik-gif.gif">
-                                            <img src="static/assets/filters/recep-ivedik-gif.gif" alt="recep-ivedik-gif.gif">
-                                        </button>
-                                    </div>
-                                    <div id="effectFilters" class="effectFilters">
-                                        <button class="effectFilterBtn" data-id="17" data-file="vintage-photo" onclick="applyFilter('contrast(1.5) sepia(0.5)')">
-                                            <img src="static/assets/filters/vintage-photo.jpeg" alt="vintage-photo.jpeg">
-                                        </button>
-                                        <button class="effectFilterBtn" data-id="18" data-file="moon-photo" onclick="applyFilter('grayscale(1) brightness(0.7)')">
-                                            <img src="static/assets/filters/moon-photo.webp" alt="moon-photo.webp">
-                                        </button>
-                                        <button class="effectFilterBtn" data-id="19" data-file="sepia-photo" onclick="applyFilter('sepia(1)')">
-                                            <img src="static/assets/filters/sepia-photo.jpeg" alt="sepia-photo.jpeg">
-                                        </button>
-                                        <button class="effectFilterBtn" data-id="20" data-file="retro-photo" onclick="applyFilter('sepia(0.5) contrast(1.5) brightness(1.1) saturate(0.8)')">
-                                            <img src="static/assets/filters/retro-photo.jpeg" alt="retro-photo.jpeg">
-                                        </button>
-                                        <button class="effectFilterBtn" data-id="21" data-file="cross-process-photo" onclick="applyFilter('contrast(1.25) sepia(0.4) saturate(1.3) hue-rotate(-15deg)')">
-                                            <img src="static/assets/filters/cross-process-photo.jpeg" alt="cross-process-photo.jpeg">
-                                        </button>
-                                    </div>
-                                    <div id="waiting" class="waiting" style="display: none;"></div>
-                                    <div class="description" id="descriptionContain" style="display:none;">
-                                        <textarea id="description" placeholder="Description"></textarea>
-                                    </div>
-                                    <div class="buttons">
-                                        <button id="takePhotoBtn" class="take-photo-btn" disabled="">Take Photo</button>
-                                        <div class="file-input">
-                                            <input id="importInput" type="file" accept=".jpg, .jpeg, .png">
-                                            <label id="importBtn" for="importInput">Import Photo</label>
+                                    <h2>Create new post</h2>
+                                    <hr>
+                                        {% csrf_token %}
+                                        <div class="upload__file">
+                                            <div class="take">
+                                                <div class="capture">
+                                                    <video id="captureVideo" autoplay=""></video>
+                                                    <img id="captureFilter" alt="filter">
+                                                </div>
+                                                <div class="preview">
+                                                    <canvas id="photoPreview"></canvas>
+                                                    <img id="importPreview" class="import" alt="import_preview">
+                                                    <img id="previewFilter" class="filter" alt="filter">
+                                                </div>
+                                                <div id="filters" class="filters">
+                                                    <button class="filterBtn" data-id="1" data-file="cat-falling.png">
+                                                        <img src="static/assets/filters/cat-falling.png" alt="cat-falling.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="2" data-file="batman-mask.png">
+                                                        <img src="static/assets/filters/batman-mask.png" alt="batman-mask.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="3" data-file="dog-face.png">
+                                                        <img src="static/assets/filters/dog-face.png" alt="dog-face.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="4" data-file="gold-crown.png">
+                                                        <img src="static/assets/filters/gold-crown.png" alt="gold-crown.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="5" data-file="cool-glasses.png">
+                                                        <img src="static/assets/filters/cool-glasses.png" alt="cool-glasses.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="6" data-file="linux-supporter.png">
+                                                        <img src="static/assets/filters/linux-supporter.png" alt="linux-supporter.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="7" data-file="apple-supporter.png">
+                                                        <img src="static/assets/filters/apple-supporter.png" alt="apple-supporter.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="8" data-file="windows-supporter.png">
+                                                        <img src="static/assets/filters/windows-supporter.png" alt="windows-supporter.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="9" data-file="pardus-supporter.png">
+                                                        <img src="static/assets/filters/pardus-supporter.png" alt="pardus-supporter.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="10" data-file="ecole-42.png">
+                                                        <img src="static/assets/filters/ecole-42.png" alt="ecole-42.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="11" data-file="ronaldo.png">
+                                                        <img src="static/assets/filters/ronaldo.png" alt="ronaldo.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="12" data-file="ana-de-armas.png">
+                                                        <img src="static/assets/filters/ana-de-armas.png" alt="ana-de-armas.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="13" data-file="margot-robbie.png">
+                                                        <img src="static/assets/filters/margot-robbie.png" alt="margot-robbie.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="14" data-file="sons_of_anarchy.png">
+                                                        <img src="static/assets/filters/sons_of_anarchy.png" alt="sons_of_anarchy.png">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="15" data-file="recep-ivedik-2.gif">
+                                                        <img src="static/assets/filters/recep-ivedik-2.gif" alt="recep-ivedik-2.gif">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="16" data-file="recep-ivedik-3.gif">
+                                                        <img src="static/assets/filters/recep-ivedik-3.gif" alt="recep-ivedik-3.gif">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="17" data-file="heart.gif">
+                                                        <img src="static/assets/filters/heart.gif" alt="heart.gif">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="18" data-file="pikachu-gif.gif">
+                                                        <img src="static/assets/filters/pikachu-gif.gif" alt="pikachu-gif.gif">
+                                                    </button>
+                                                    <button class="filterBtn" data-id="19" data-file="recep-ivedik-gif.gif">
+                                                        <img src="static/assets/filters/recep-ivedik-gif.gif" alt="recep-ivedik-gif.gif">
+                                                    </button>
+                                                </div>
+                                                <div id="effectFilters" class="effectFilters">
+                                                    <button class="effectFilterBtn" data-id="17" data-file="vintage-photo" onclick="applyFilter('contrast(1.5) sepia(0.5)')">
+                                                        <img src="static/assets/filters/vintage-photo.jpeg" alt="vintage-photo.jpeg">
+                                                    </button>
+                                                    <button class="effectFilterBtn" data-id="18" data-file="moon-photo" onclick="applyFilter('grayscale(1) brightness(0.7)')">
+                                                        <img src="static/assets/filters/moon-photo.webp" alt="moon-photo.webp">
+                                                    </button>
+                                                    <button class="effectFilterBtn" data-id="19" data-file="sepia-photo" onclick="applyFilter('sepia(1)')">
+                                                        <img src="static/assets/filters/sepia-photo.jpeg" alt="sepia-photo.jpeg">
+                                                    </button>
+                                                    <button class="effectFilterBtn" data-id="20" data-file="retro-photo" onclick="applyFilter('sepia(0.5) contrast(1.5) brightness(1.1) saturate(0.8)')">
+                                                        <img src="static/assets/filters/retro-photo.jpeg" alt="retro-photo.jpeg">
+                                                    </button>
+                                                    <button class="effectFilterBtn" data-id="21" data-file="cross-process-photo" onclick="applyFilter('contrast(1.25) sepia(0.4) saturate(1.3) hue-rotate(-15deg)')">
+                                                        <img src="static/assets/filters/cross-process-photo.jpeg" alt="cross-process-photo.jpeg">
+                                                    </button>
+                                                </div>
+                                                <div id="waiting" class="waiting" style="display: none;"></div>
+                                                <div class="description" id="descriptionContain" style="display:none;">
+                                                    <textarea id="description" placeholder="Description"></textarea>
+                                                </div>
+                                                <div class="buttons">
+                                                    <button id="takePhotoBtn" class="take-photo-btn" disabled="">Take Photo</button>
+                                                    <div class="file-input">
+                                                        <input id="importInput" type="file" accept=".jpg, .jpeg, .png">
+                                                        <label id="importBtn" for="importInput">Import Photo</label>
+                                                    </div>
+                                                    <button id="cancelBtn" class="cancel-btn">Cancel</button>
+                                                    <button id="saveBtn" class="save-btn">Save</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button id="cancelBtn" class="cancel-btn">Cancel</button>
-                                        <button id="saveBtn" class="save-btn">Save</button>
-                                    </div>
+                                        
                                 </div>
-                            </div>
-                            
-                    </div>
-                    <h2 class="ex-images-h2">Explore</h2>
-                    <div class="ex-images">
-                            {% for post in images %}
-                            <div class="ex-image-container" id="deletedPost-{{post.id}}">
-                                <a>
-                                    <img src="{{ post.image.url }}" alt="post">
-                                    <button class="ex-delete-button" onclick="deletePost({{ post.id }})"><i class="fa-solid fa-trash-can"></i></button>
-                                </a>
-                            </div>
-                            {% endfor %}
-                       
-                    </div>
+                                <h2 class="ex-images-h2">Explore</h2>
+                                <div class="ex-images">
+                                        {% for post in images %}
+                                        <div class="ex-image-container" id="deletedPost-{{post.id}}">
+                                            <a>
+                                                <img src="{{ post.image.url }}" alt="post">
+                                                <button class="ex-delete-button" onclick="deletePost({{ post.id }})"><i class="fa-solid fa-trash-can"></i></button>
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                
+                                </div>
 
-                    <footer class="footer">
-                        <p class="copyright">
-                            &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
-                        </p>
-                        <p class="links">
-                            <a href="/about">About</a>
-                            <a href="https://www.github.com/fleizean">Contact</a>
-                            <a href="https://www.github.com/fleizean">Help</a>
-                            <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
-                        </p>
-                    </footer>
+                                <footer class="footer">
+                                    <p class="copyright">
+                                        &copy; 2021 Camagru. All rights reserved by <a href="https://www.github.com/fleizean">eyagiz</a>.
+                                    </p>
+                                    <p class="links">
+                                        <a href="/about">About</a>
+                                        <a href="https://www.github.com/fleizean">Contact</a>
+                                        <a href="https://www.github.com/fleizean">Help</a>
+                                        <a href="/privacy-policy-gdpr">Privacy Policy & GDPR</a>
+                                    </p>
+                                </footer>
+                                
+                            </div>
+                        </div>
+                        <!--***** posts_container end ****** -->
+
+                        <!--***** followers_container start ****** -->
                     
-                </div>
-            </div>
-            <!--***** posts_container end ****** -->
-
-            <!--***** followers_container start ****** -->
-           
-        </div>
-
-        
+                    </div>
+                </section>
+            </article>
+        </main>
     </div>
 
 

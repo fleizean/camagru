@@ -153,7 +153,7 @@ def home(request):
     following_users_ids = request.user.following.values_list('id', flat=True)
 
     # Önerilen kullanıcıları al (mevcut kullanıcı hariç, rastgele 5 kullanıcı)
-    suggested_users = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
+    suggested_users = UserProfile.objects.exclude(username=request.user.username).filter(is_private=False).order_by('?')[:5]
 
     # Önerilen kullanıcılar için takip edilip edilmediğini kontrol et
     for user in suggested_users:
@@ -167,7 +167,7 @@ def home(request):
         if count > 5:
             user_profiles = UserProfile.objects.exclude(username=request.user.username).order_by('?')[:5]
         else:
-            user_profiles = UserProfile.objects.all().exclude(username=request.user.username)
+            user_profiles = UserProfile.objects.all().exclude(username=request.user.username).filter(is_private=False)
 
     # Her UserProfile için en son paylaşılan fotoğrafı ve bu fotoğrafa ait like/comment bilgilerini al
     profile_data = []
@@ -309,20 +309,17 @@ def send_message_post(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'})
-    print(data)
     message = data.get('message')
     image_id = data.get('id')  # Mesajın gönderileceği resmin ID'si
 
     if message and image_id:
         try:
-            print(image_id)
             # Resmi ve alıcı kullanıcıyı bul
             image = Image.objects.get(id=image_id)
             receiver_user = image.user
 
             # Mesajı Comment modeli olarak kaydet
             comment_user = Comment.objects.create(user=user, image=image, comment=message)
-            print(comment_user)
             comment_user.send_mail(request, receiver_user, image)
             return JsonResponse({
                 'status': 'ok',

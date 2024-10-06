@@ -32,68 +32,72 @@
 </head>
 <body>
     <main>
-        <div class="container">
-            <div class="login">
-                <div class="images d-none d-lg-block">
-                    <div class="frame">
-                        <img src="{% static "assets/bg-images/home-phones.png" %}" alt="picutre frame">
-                    </div>
-                    <div class="sliders">
-                        <div id="carouselExampleSlidesOnly" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="{% static "assets/bg-images/screenshot1.png" %}" class="d-block" alt="screenshot1">
+        <section>
+            <article>
+                <div class="container">
+                    <div class="login">
+                        <div class="images d-none d-lg-block">
+                            <div class="frame">
+                                <img src="{% static "assets/bg-images/home-phones.png" %}" alt="picutre frame">
                             </div>
-                            <div class="carousel-item">
-                                <img src="{% static "assets/bg-images/screenshot2.png" %}" class="d-block" alt="screenshot2">
+                            <div class="sliders">
+                                <div id="carouselExampleSlidesOnly" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="{% static "assets/bg-images/screenshot1.png" %}" class="d-block" alt="screenshot1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{% static "assets/bg-images/screenshot2.png" %}" class="d-block" alt="screenshot2">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{% static "assets/bg-images/screenshot3.png" %}" class="d-block" alt="screenshot3">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="{% static "assets/bg-images/screenshot4.png" %}" class="d-block" alt="screenshot4">
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="carousel-item">
-                                <img src="{% static "assets/bg-images/screenshot3.png" %}" class="d-block" alt="screenshot3">
+                        </div>
+                        <div class="content">
+                            <div class="log-on border_insc">
+                                <div class="logo">
+                                    <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
+                                </div>
+                                
+                                
+                                <form class="form" enctype="multipart/form-data" method="post">
+                                    {% csrf_token %}
+                                    <div>
+                                        <input type="text" name="username" required id="id_username" placeholder="Username">
+                                    </div>
+                                    <div class="password-container">
+                                        <input type="password" name="password" required id="id_password" placeholder="Password">
+                                        <button type="button" class="togglePasswordBtn" id="togglePassword">Show</button>
+                                    </div>
+                                    <button class="log_btn" type="submit">
+                                        Log in
+                                    </button>
+                                </form>
+                                <div class="other-ways">
+                                    <div class="forget-password">
+                                        <a href="/forgot-password">
+                                            Forgot password?
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="carousel-item">
-                                <img src="{% static "assets/bg-images/screenshot4.png" %}" class="d-block" alt="screenshot4">
-                            </div>
+                            <div class="sing-up border_insc">
+                                <p>
+                                    Don't have an account? 
+                                    <a href="/signup">Sign up</a>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="content">
-                    <div class="log-on border_insc">
-                        <div class="logo">
-                            <a href="/"><img src="{% static "assets/bg-images/logo.png" %}" alt="Camagru logo"></a>
-                        </div>
-                        
-                        
-                        <form class="form" enctype="multipart/form-data" method="post">
-                            {% csrf_token %}
-                            <div>
-                                <input type="text" name="username" required id="id_username" placeholder="Username">
-                            </div>
-                            <div class="password-container">
-                                <input type="password" name="password" required id="id_password" placeholder="Password">
-                                <button type="button" class="togglePasswordBtn" id="togglePassword">Show</button>
-                            </div>
-                            <button class="log_btn" type="submit">
-                                Log in
-                            </button>
-                        </form>
-                        <div class="other-ways">
-                            <div class="forget-password">
-                                <a href="/forgot-password">
-                                    Forgot password?
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sing-up border_insc">
-                        <p>
-                            Don't have an account? 
-                            <a href="/signup">Sign up</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </article>
+        </section>
     </main>
     <footer class="footer">
         <p class="copyright">

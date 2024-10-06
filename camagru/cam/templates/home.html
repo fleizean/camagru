@@ -35,308 +35,317 @@
     
 </head>
 <body>
-
-    <div class="post_page">
-        <!--***** nav menu start ****** -->
-        <div class="nav_menu">
-            <div class="fix_top">
-                <!-- nav for big->medium screen -->
-                <div class="nav">
-                    <div class="logo">
-                        <a href="/home">
-                            <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
-                            <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
-                        </a>
-                    </div>
-                    <div class="menu">
-                        <ul>
-                            <li>
-                                <a class="active" href="/home">
-                                    <img src="{% static "assets/bg-layers/accueil.png" %}">
-                                    <span class="d-none d-lg-block">Home</span>
-                                </a>
-                            </li>
-                            <li id="search_icon">
-                                <a href="#">
-                                    <img src="{% static "assets/bg-layers/search.png" %}">
-                                    <span class="d-none d-lg-block search">Search </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/upload-image">
-                                    <img src="{% static "assets/bg-layers/plus-square.png" %}">
-                                    <span class="d-none d-lg-block ">Create</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/profile/{{request.user.username}}">
-                                    <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
-                                    <span class="d-none d-lg-block ">Profile</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="more">
-                        <div class="btn-group dropup">
-                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="{% static "assets/bg-layers/menu.png" %}">
-                                <span class="d-none d-lg-block ">More</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
-                                        <span>Settings</span>
-                                        <img src="{% static "assets/bg-layers/reglage.png" %}">
-                                    </a></li>
-                                <li><a class="dropdown-item" href="/logout">
-                                        <span>Log out</span>
-                                    </a></li>
-                            </ul>
-                        </div>
-                        <!--  -->
-
-                    </div>
-                </div>
-                <!-- nav for small screen  -->
-                <div class="nav_sm">
-                    <div class="content">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
-                            </button>
-                           
-                        </div>
-                       
-                    </div>
-                </div>
-
-                <!-- nav for ex-small screen  -->
-                <div class="nav_xm">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
-                        </button>
-                        
-                    </div>
-                  
-                </div>
-            </div>
-            <!-- menu in the botton for smal screen  -->
-            <div class="nav_bottom">
-                <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
-                <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
-                <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
-                <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
-            </div>
-        </div>
-       <!-- search  -->
-       <div id="search" class="search_section">
-            <h2>Search</h2>
-            <form method="post">
-                <input id="searchInput" type="text" placeholder="Search">
-            </form>
-            <div class="find">
-                <div class="desc">
-                    <h4>Results</h4>
-                    <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
-                </div>
-                <div class="account" id="searchResults">
-                    
-                </div>
-            </div>
-        </div>
-    <!-- search  -->
-        <!--***** nav menu end ****** -->
-
-        <div class="second_container">
-            <!--***** posts_container start ****** -->
-            <div class="main_section">
-                <div class="posts_container">
-                    <div class="stories">
-                        <div class="owl-carousel items">
-                        </div>
-                    </div>
-
-                    <div class="posts">
-                        {% for post in profile_data %}
-                            
-                            <div class="post">
-                                <div class="info">
-                                    <div class="person">
-                                        <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}">
-                                        <a href="/profile/{{post.profile.username}}">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
-                                        
-                                        <span class="circle">.</span>
-                                        <span>{{post.images_data.humanized_time}}</span>
-                                    </div>
+    <main>
+        <div class="post_page">
+            <!--***** nav menu start ****** -->
+            <header>
+                <nav>
+                    <div class="nav_menu">
+                        <div class="fix_top">
+                            <!-- nav for big->medium screen -->
+                            <div class="nav">
+                                <div class="logo">
+                                    <a href="/home">
+                                        <img class="d-block d-lg-none small-logo" src="{% static "assets/favicons/favicon.png" %}" alt="logo">
+                                        <img class="d-none d-lg-block" src="{% static "assets/bg-images/logo.png" %}" width="128px" alt="logo">
+                                    </a>
                                 </div>
-                                <div class="image">
-                                    <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}">
+                                <div class="menu">
+                                    <ul>
+                                        <li>
+                                            <a class="active" href="/home">
+                                                <img src="{% static "assets/bg-layers/accueil.png" %}">
+                                                <span class="d-none d-lg-block">Home</span>
+                                            </a>
+                                        </li>
+                                        <li id="search_icon">
+                                            <a href="#">
+                                                <img src="{% static "assets/bg-layers/search.png" %}">
+                                                <span class="d-none d-lg-block search">Search </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/upload-image">
+                                                <img src="{% static "assets/bg-layers/plus-square.png" %}">
+                                                <span class="d-none d-lg-block ">Create</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/profile/{{request.user.username}}">
+                                                <img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}>
+                                                <span class="d-none d-lg-block ">Profile</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="desc">
-                                    <div class="icons">
-                                        <div class="icon_left d-flex">
-                                            <div class="like">
-                                                {% if not post.images_data.is_liked %}
-                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="color: #000000;" id="non-liked-{{post.images_data.id}}">
-                                                        <i class="fas fa-heart"></i>
-                                                    </div></a>
+                                <div class="more">
+                                    <div class="btn-group dropup">
+                                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <img src="{% static "assets/bg-layers/menu.png" %}">
+                                            <span class="d-none d-lg-block ">More</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/profile-settings/{{request.user.username}}">
+                                                    <span>Settings</span>
+                                                    <img src="{% static "assets/bg-layers/reglage.png" %}">
+                                                </a></li>
+                                            <li><a class="dropdown-item" href="/logout">
+                                                    <span>Log out</span>
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                    <!--  -->
 
-                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="display:none !important; color: red !important;" id="liked-{{post.images_data.id}}">
-                                                        <i class="fas fa-heart"></i>
-                                                    </div></a>
-                                                {% else %}
-                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="color: red !important;" id="liked-{{post.images_data.id}}">
-                                                        <i class="fas fa-heart"></i>
-                                                    </div></a>
-
-                                                    <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="display:none !important; color: #000000;" id="non-liked-{{post.images_data.id}}">
-                                                        <i class="fas fa-heart"></i>
-                                                    </div></a>
-                                                {% endif %}                                            
-                                            </div>
-                                            <div class="chat">
-                                                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">
-                                                    <img src="{% static "assets/bg-layers/bubble-chat.png" %}" style="width: 28px !important; margin-bottom:5px; ">
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="liked" style="margin-top: -10px !important;">
-                                        <a class="bold" id="like-count-{{post.images_data.id}}">{{ post.images_data.likes }} likes</a>
-                                    </div>
-                                    <div class="post_desc">
-                                        <p style="margin-top: -1px !important;">
-                                            <a class="bold" href="/profile/{{post.profile.username}}">{{ post.profile.username }}</a> {% if post.images_data.description %} <span>{{ post.images_data.description }}</span> {% endif %}
-                                        </p>
-                                        
-                                        <p style="margin-top: -10px !important;">
-                                            <a href="#" id="commentCount-{{post.images_data.id}}" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">View all {{ post.images_data.comments_count }} comments</a>
-                                        </p>
-                                        <div class="post__comment">
-                                            <p class="post_cmmnt"><a href="/profile/{{post.images_data.first_comment.user}}">{{ post.images_data.first_comment.user.username }}</a> <span> {{ post.images_data.first_comment.comment}} </span></p>
-                                        </div>
-                                        <div style="display:flex; gap:2px;">
-                                            <textarea id="not_inpost_message_{{post.images_data.id}}" rows="2" cols="50" placeholder="Add a comment..."></textarea>
-                                            <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `notinmodal`)">Post</button>
-                                        </div>
-                                        
-                                    </div>
                                 </div>
                             </div>
-                            <hr>
+                            <!-- nav for small screen  -->
+                            <div class="nav_sm">
+                                <div class="content">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
+                                        </button>
+                                    
+                                    </div>
+                                
+                                </div>
+                            </div>
 
+                            <!-- nav for ex-small screen  -->
+                            <div class="nav_xm">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <img class="logo" src="{% static "assets/favicons/favicon.png" %}">
+                                    </button>
+                                    
+                                </div>
                             
-                            <div class="modal" id="commentsModal-{{ post.profile.id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true" data-backdrop="false">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                       
-                                        <div class="modal-body">
-                                            <!-- Post Sahibi ve Açıklaması -->
-                                            <div class="modal-post-page">
-                                                <div class="modal-post-img">
-                                                    <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
+                            </div>
+                        </div>
+                        <!-- menu in the botton for smal screen  -->
+                        <div class="nav_bottom">
+                            <a href="/home"><img src="{% static "assets/bg-layers/accueil.png" %}"></a>
+                            <a href="/upload-image"><img src="{% static "assets/bg-layers/plus-square.png" %}"></a>
+                            <a href="/search"><img src="{% static "assets/bg-layers/search.png" %}"></a>
+                            <a href="/profile/{{request.user.username}}"><img class="circle story" {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %}></a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            
+            <article>
+                <section>
+                    <div id="search" class="search_section">
+                        <h2>Search</h2>
+                        <form method="post">
+                            <input id="searchInput" type="text" placeholder="Search">
+                        </form>
+                        <div class="find">
+                            <div class="desc">
+                                <h4>Results</h4>
+                                <p><button class="clear-items-all" onclick="clearSearchResults()">Clear all</button></p>
+                            </div>
+                            <div class="account" id="searchResults">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- search  -->
+                    <!--***** nav menu end ****** -->
+
+                    <div class="second_container">
+                        <!--***** posts_container start ****** -->
+                        <div class="main_section">
+                            <div class="posts_container">
+                                <div class="stories">
+                                    <div class="owl-carousel items">
+                                    </div>
+                                </div>
+
+                                <div class="posts">
+                                    {% for post in profile_data %}
+                                        
+                                        <div class="post">
+                                            <div class="info">
+                                                <div class="person">
+                                                    <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}">
+                                                    <a href="/profile/{{post.profile.username}}">{{ post.profile.username }} {% if post.profile.is_verified %} <img class="check-circle" src="{% static "assets/bg-layers/check-circle.png" %}"> {% endif %}</a>
+                                                    
+                                                    <span class="circle">.</span>
+                                                    <span>{{post.images_data.humanized_time}}</span>
                                                 </div>
                                             </div>
-                                            <div class="modal-post-info-container">
-                                                <div class="modal-post-info">
-                                                    <div class="modal-post-owner">
-                                                        <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-owner-img">
-                                                        <a href="/profile/{{ post.profile.username }}" class="modal-post-owner-username">{{ post.profile.username }}</a>
-                                                        {% if post.profile.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
-                                                        <p class="modal-post-description">{{post.images_data.description}}</p>
-                                                        <p class="modal-post-time">{{ post.images_data.humanized_time }}</p>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="modal-post-comments">
-                                                        <div class="modal-post-comments-container" id="messageListField-{{post.images_data.id}}">
-                                                            {% for comment in post.images_data.comments %}
-                                                                <div class="modal-post-comment">
-                                                                    <img src="{% if comment.user.avatar %} {{ comment.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-comment-img">
-                                                                    <a href="/profile/{{ comment.user.username }}" class="modal-post-comment-username">{{ comment.user.username }}</a>
-                                                                    <p class="modal-post-comment-comment"> {{ comment.comment }}</p>
-                                                                </div>
-                                                                
-                                                            
-                                                            {% endfor %}
+                                            <div class="image">
+                                                <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}">
+                                            </div>
+                                            <div class="desc">
+                                                <div class="icons">
+                                                    <div class="icon_left d-flex">
+                                                        <div class="like">
+                                                            {% if not post.images_data.is_liked %}
+                                                                <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="color: #000000;" id="non-liked-{{post.images_data.id}}">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </div></a>
+
+                                                                <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="display:none !important; color: red !important;" id="liked-{{post.images_data.id}}">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </div></a>
+                                                            {% else %}
+                                                                <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `unlike`)"><div style="color: red !important;" id="liked-{{post.images_data.id}}">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </div></a>
+
+                                                                <a class="like-image-home" onclick="likeImage(`{{post.images_data.id}}`, `like`)"><div style="display:none !important; color: #000000;" id="non-liked-{{post.images_data.id}}">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </div></a>
+                                                            {% endif %}                                            
+                                                        </div>
+                                                        <div class="chat">
+                                                            <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">
+                                                                <img src="{% static "assets/bg-layers/bubble-chat.png" %}" style="width: 28px !important; margin-bottom:5px; ">
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div class="modal-post-comment-input">
-                                                        <textarea class="textarea-post-comment" id="post_message_{{post.images_data.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
-                                                        <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `inmodal`)">Post</button>
+                                                </div>
+                                                <div class="liked" style="margin-top: -10px !important;">
+                                                    <a class="bold" id="like-count-{{post.images_data.id}}">{{ post.images_data.likes }} likes</a>
+                                                </div>
+                                                <div class="post_desc">
+                                                    <p style="margin-top: -1px !important;">
+                                                        <a class="bold" href="/profile/{{post.profile.username}}">{{ post.profile.username }}</a> {% if post.images_data.description %} <span>{{ post.images_data.description }}</span> {% endif %}
+                                                    </p>
+                                                    
+                                                    <p style="margin-top: -10px !important;">
+                                                        <a href="#" id="commentCount-{{post.images_data.id}}" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ post.profile.id }}">View all {{ post.images_data.comments_count }} comments</a>
+                                                    </p>
+                                                    <div class="post__comment">
+                                                        <p class="post_cmmnt"><a href="/profile/{{post.images_data.first_comment.user}}">{{ post.images_data.first_comment.user.username }}</a> <span> {{ post.images_data.first_comment.comment}} </span></p>
+                                                    </div>
+                                                    <div style="display:flex; gap:2px;">
+                                                        <textarea id="not_inpost_message_{{post.images_data.id}}" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                                        <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `notinmodal`)">Post</button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        
+                                        <div class="modal" id="commentsModal-{{ post.profile.id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true" data-backdrop="false">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                
+                                                    <div class="modal-body">
+                                                        <!-- Post Sahibi ve Açıklaması -->
+                                                        <div class="modal-post-page">
+                                                            <div class="modal-post-img">
+                                                                <img {% if post.images_data.effect %} style="filter: {{post.images_data.effect}}" {% endif %} src="{{ post.images_data.image }}" alt="Avatar" class="modal-img"> <!-- Burada modal-img sınıfı eklendi -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-post-info-container">
+                                                            <div class="modal-post-info">
+                                                                <div class="modal-post-owner">
+                                                                    <img src="{% if post.profile.avatar %} {{ post.profile.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-owner-img">
+                                                                    <a href="/profile/{{ post.profile.username }}" class="modal-post-owner-username">{{ post.profile.username }}</a>
+                                                                    {% if post.profile.is_verified %} <img src="{% static "assets/bg-layers/check-circle.png" %}" alt="Avatar" class="modal-post-owner-verified"> {% endif %}
+                                                                    <p class="modal-post-description">{{post.images_data.description}}</p>
+                                                                    <p class="modal-post-time">{{ post.images_data.humanized_time }}</p>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="modal-post-comments">
+                                                                    <div class="modal-post-comments-container" id="messageListField-{{post.images_data.id}}">
+                                                                        {% for comment in post.images_data.comments %}
+                                                                            <div class="modal-post-comment">
+                                                                                <img src="{% if comment.user.avatar %} {{ comment.user.avatar.url}} {% else %} {% static "assets/profile-photos/default-photo.png" %} {% endif %}" alt="Avatar" class="modal-post-comment-img">
+                                                                                <a href="/profile/{{ comment.user.username }}" class="modal-post-comment-username">{{ comment.user.username }}</a>
+                                                                                <p class="modal-post-comment-comment"> {{ comment.comment }}</p>
+                                                                            </div>
+                                                                            
+                                                                        
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-post-comment-input">
+                                                                    <textarea class="textarea-post-comment" id="post_message_{{post.images_data.id}}" name="w3review" rows="2" cols="50" placeholder="Add a comment..."></textarea>
+                                                                    <button class="post_comment" onclick="sendMessage(`{{post.images_data.id}}`, `inmodal`)">Post</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
+                                
                             </div>
-                        {% endfor %}
-                    </div>
-                    
-                </div>
-            </div>
-            <!--***** posts_container end ****** -->
+                        </div>
+                        <!--***** posts_container end ****** -->
 
-            <!--***** followers_container start ****** -->
-            <div class="followers_container">
-                <div>
-                    <div class="cart">
-                        <a href="/profile/{{request.user.username}}"><div>
-                            <div class="img">
-                                <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} alt="{{request.user.username}}">
-                            </div>
-                            <div class="info">
-                                <p class="name">{{request.user.username}}</p>
-                                <p class="second_name">{{request.user.displayname}}</p>
-                            </div>
-                        </div></a>
-                        <div class="switch">
-                            <a href="/logout" style="color:red;">Logout</a>
-                        </div>
-                    </div>
-                    <div class="suggestions">
-                        <div class="title">
-                            <h4>Suggestions for you</h4>
-                        </div>
-                        {% for suggestion in suggested_users %}
-                        <div class="cart">
-                            
-                                <a href="/profile/{{suggestion.username}}"><div>
-                                    <div class="img">
-                                        {% if not suggestion.avatar %}
-                                            <img src="{% static "assets/profile-photos/default-photo.png" %}" alt="">
-                                        {% else %}
-                                            <img src="{{suggestion.avatar.url}}" alt="">
-                                        {% endif %}
+                        <!--***** followers_container start ****** -->
+                        <div class="followers_container">
+                            <div>
+                                <div class="cart">
+                                    <a href="/profile/{{request.user.username}}"><div>
+                                        <div class="img">
+                                            <img {% if request.user.avatar %} src="{{ request.user.avatar.url }}" {% else %} src="{% static "assets/profile-photos/default-photo.png" %}" {% endif %} alt="{{request.user.username}}">
+                                        </div>
+                                        <div class="info">
+                                            <p class="name">{{request.user.username}}</p>
+                                            <p class="second_name">{{request.user.displayname}}</p>
+                                        </div>
+                                    </div></a>
+                                    <div class="switch">
+                                        <a href="/logout" style="color:red;">Logout</a>
                                     </div>
-                                    <div class="info">
-                                        <p class="name">{{suggestion.username}}</p>
-                                        <p class="second_name">{{suggestion.displayname}}</p>
-                                    </div>
-                                </div></a>
-                                <div class="switch">
-                                    {% if suggestion.is_followed %}
-                                        <button class="unfollow_text" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
-                                        <button class="follow_text" style="display:none !important;" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
-                                    {% else %}
-                                        <button class="follow_text" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
-                                        <button class="unfollow_text" style="display:none !important;" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
-                                    {% endif %}
                                 </div>
-                            
+                                <div class="suggestions">
+                                    <div class="title">
+                                        <h4>Suggestions for you</h4>
+                                    </div>
+                                    {% for suggestion in suggested_users %}
+                                    <div class="cart">
+                                        
+                                            <a href="/profile/{{suggestion.username}}"><div>
+                                                <div class="img">
+                                                    {% if not suggestion.avatar %}
+                                                        <img src="{% static "assets/profile-photos/default-photo.png" %}" alt="">
+                                                    {% else %}
+                                                        <img src="{{suggestion.avatar.url}}" alt="">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="info">
+                                                    <p class="name">{{suggestion.username}}</p>
+                                                    <p class="second_name">{{suggestion.displayname}}</p>
+                                                </div>
+                                            </div></a>
+                                            <div class="switch">
+                                                {% if suggestion.is_followed %}
+                                                    <button class="unfollow_text" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
+                                                    <button class="follow_text" style="display:none !important;" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
+                                                {% else %}
+                                                    <button class="follow_text" id="followbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'follow', 'home')">Follow</button>
+                                                    <button class="unfollow_text" style="display:none !important;" id="unfollowbtn-{{suggestion.username}}" onclick="followOrUnfollow('{{suggestion.username}}', 'unfollow', 'home')">Unfollow</button>
+                                                {% endif %}
+                                            </div>
+                                        
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
-                        {% endfor %}
                     </div>
-                </div>
-            </div>
+                </section>
+            </article>
+            
         </div>
-
+    </main>
         
-    </div>
     <script src="https://kit.fontawesome.com/b80699d249.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>

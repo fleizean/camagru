@@ -6,14 +6,14 @@ from django.forms import ModelChoiceField
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'displayname', 'email', 'is_verified', 'is_email_notification', 'thumbnail', 'bio')
+    list_display = ('id', 'username', 'displayname', 'email', 'is_verified', 'is_email_notification', 'is_private', 'thumbnail', 'bio')
     list_display_links = ('username', 'displayname')
     search_fields = ('username', 'displayname', 'email')
-    list_filter = ('is_verified', 'is_email_notification')
+    list_filter = ('is_verified', 'is_email_notification', 'is_private')
     readonly_fields = ('thumbnail',)
     fieldsets = (
         (None, {
-            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification', 'avatar', 'bio')
+            'fields': ('username', 'displayname', 'email', 'password', 'is_verified', 'is_email_notification', 'is_private', 'avatar', 'bio')
         }),
     )
 
