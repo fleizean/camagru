@@ -141,6 +141,11 @@ function messageDisplay(display, message) {
     const importFile = (e) => {
         const uploadedImage = e.target.files[0];
         if (uploadedImage) {
+            console.log(uploadedImage.size);
+            if (uploadedImage.size > 3 * 1024 * 1024) { // Check if the file size exceeds 3MB
+              messageDisplay(true, "Image file size must be less than 3MB");
+              return;
+            } 
             const reader = new FileReader();
             reader.onload = () => {
                 uploadedImageData = reader.result;
@@ -258,6 +263,9 @@ function messageDisplay(display, message) {
         const req = await savePhotoApi(image, selectedFilter, description, effect);
         if (!req.success) {
             messageDisplay(true, req.message);
+        }
+        else {
+            
         }
     };
 

@@ -418,7 +418,7 @@ def save_photo(request):
             if base64_image.startswith('data:image'):
                 base64_image = base64_image.split(',')[1]
             else:
-                return JsonResponse({'error': 'Invalid image data'}, status=400)
+                return JsonResponse({'success': False, 'message': 'Invalid image data'}, status=400)
                         
             filter_name = data.get('filter')
             effect = data.get('effect')
@@ -454,17 +454,21 @@ def save_photo(request):
             result_image_content_file = manual_create_content_file(result_image_io.getvalue(), name='filtered_image.' + ('gif' if filter_image.format == 'GIF' else 'png'))
             
             if result_image_content_file.size > 3*1024*1024: # 3MB'dan büyükse
-                return JsonResponse({'error': 'Image file size must be less than 3MB'}, status=400) # Hata döndür
+                return JsonResponse({'success': False, 'message': 'Image file size must be less than 3MB'}, status=400) # Hata döndür
             new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect) # Yeni bir Image nesnesi oluştur
             new_image.save()
             
-            return JsonResponse({'message': 'Image saved successfully.'})
+            return JsonResponse({'success': False, 'message': 'Image saved successfully.'})
         except UnidentifiedImageError:
-            return JsonResponse({'error': 'Cannot identify image file'}, status=400)
+            return JsonResponse({'success': False, 'message': 'Cannot identify image file'}, status=400)
+        except SuspiciousOperation as e:
+            return JsonResponse({'success': False, 'message': 'Invalid file operation'}, status=400)
+        except MemoryError as e:
+            return JsonResponse({'success': False, 'message': 'File too large'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
     else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
 
 @manual_login_required
 def deletePost(request):
