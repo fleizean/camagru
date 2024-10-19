@@ -16,27 +16,31 @@ function escapeHTML(str) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  // ID kullanarak input'a erişim
   const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener("input", function() {
-      const query = escapeHTML(this.value);
+searchInput.addEventListener("input", function() {
+    const query = escapeHTML(this.value);
 
-      fetch("/search_profiles/", { // Backend endpoint
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": getCookie("csrftoken") // CSRF token
-          },
-          body: JSON.stringify({ query: query })
-      })
-      .then(response => response.json())
-      .then(data => {
+    fetch("/search_profiles/", { // Backend endpoint
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken") // CSRF token
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
         const searchResults = document.getElementById('searchResults');
         searchResults.innerHTML = '';
-    
+
         // JSON stringini JavaScript dizisine dönüştür
-        const profiles = JSON.parse(data.profiles);
-    
+        const profiles = data.profiles;
+
         if (profiles.length > 0) {
             profiles.forEach(profile => {
                 const fields = profile.fields;
@@ -64,8 +68,11 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             `;
         }
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
     });
-  });
+});
 });
 
 // Helper function to get CSRF token

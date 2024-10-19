@@ -20,6 +20,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.csrf import csrf_exempt
 from camagru.settings import EMAIL_HOST_USER, BASE_URL
+from django.db.models import Q
+from django.utils.http import urlencode
 
 from .utils import (
     manual_model_to_dict,
@@ -197,16 +199,23 @@ def home(request):
 
 @manual_login_required
 def search_profiles(request):
-    data = json.loads(request.body)
-    query = data.get('query', '')
+    try:
+        data = json.loads(request.body)
+        query = data.get('query', '')
+
+        # Kullanıcı profillerini sorgula
+        profiles = UserProfile.objects.filter(Q(username__icontains=query) & ~Q(username__icontains="Kandirali"))
+
+        # Profilleri serileştir
+        profiles_json = serialize('json', profiles)
+        profiles_data = json.loads(profiles_json)  # JSON formatını doğrulamak için serileştirilen veriyi deserialize et
+
+        return JsonResponse({'profiles': profiles_data}, safe=False)
+    except Exception as e:
+        # Hata mesajını günlüğe kaydet
+        print(f"Error: {e}")
+        return JsonResponse({'error': str(e)}, status=500)
     
-    # Filter user profiles based on the query
-    profiles = UserProfile.objects.filter(username__icontains=query and ~Q(username_icontain="Kandirali"))
-
-    # Serialize the profiles or manually build the JSON response
-    profiles_json = serialize('json', profiles)
-    return JsonResponse({'profiles': profiles_json}, safe=False)
-
 @manual_login_required
 def search(request):
     count = UserProfile.objects.aggregate(count=Count('id'))['count']
@@ -217,6 +226,37 @@ def search(request):
         # Yeterli UserProfile yoksa, mevcut tümünü al
         user_profiles = UserProfile.objects.all()
     return manual_render(request, "search.html", {"user_profiles": user_profiles})
+
+@manual_never_cache
+def gallery_images(request, username):
+    user = manual_get_object_or_404(UserProfile, username=username)
+    page = request.GET.get('page', 1)
+    per_page = 5
+    images_list = Image.objects.filter(user=user, is_edited=True).order_by('-created_at')
+    paginator = Paginator(images_list, per_page)
+    images = paginator.get_page(page)
+
+    images_data = []
+    for image in images:
+        images_data.append({
+            'id': image.id,
+            'image_url': image.image.url,
+            'description': image.description,
+            'like_count': image.like_set.count(),
+            'comment_count': image.comment_set.count(),
+            'is_liked_by_user': image.is_liked_by_user,
+            'effect': image.effect,
+            'user': {
+                'username': image.user.username,
+                'avatar_url': image.user.avatar.url if image.user.avatar else None,
+                'is_verified': image.user.is_verified,
+            }
+        })
+
+    return JsonResponse({
+        'images': images_data,
+        'has_next': images.has_next()
+    })
 
 @manual_never_cache
 def profile_view(request, username):
