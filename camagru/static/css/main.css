@@ -1706,6 +1706,15 @@ button.sgn_btn:hover {
   .nav_xm .dropdown img {
     width: 64px;
   }
+
+  .modal-img {
+    width: 100%; /* Sabit genişlik */
+    height: 100%; /* Sabit yükseklik */
+    object-fit: cover; /* Resmi kutuya sığdır, taşan kısımları kırp */
+    border-radius: 16px 16px 0 0; /* Kenar yuvarlaklığı */
+    margin-bottom: 20px; /* Alt margini koru */
+  }
+  
 }
 
 @media screen and (max-width: 498px) {
@@ -1715,6 +1724,14 @@ button.sgn_btn:hover {
 
   .nav_xm .dropdown img {
     width: 64px;
+  }
+
+  .modal-img {
+    width: 100%; /* Sabit genişlik */
+    height: 100%; /* Sabit yükseklik */
+    object-fit: cover; /* Resmi kutuya sığdır, taşan kısımları kırp */
+    border-radius: 16px 16px 0 0; /* Kenar yuvarlaklığı */
+    margin-bottom: 20px; /* Alt margini koru */
   }
 }
 
