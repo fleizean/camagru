@@ -60,7 +60,6 @@ body {
 }
 
 .post_desc {
-  width: 577px !important;
   margin: 0 auto;
 }
 
@@ -1672,6 +1671,7 @@ button.sgn_btn:hover {
 @media screen and (max-width: 498px) {
   .nav_xm {
     display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -1933,14 +1933,22 @@ button.sgn_btn:hover {
 
 .main_section .posts_container .post .image {
   display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 15px;
+}
+
+.logout {
+  font-size: 14px;
+  color: rgb(0, 149, 246);
+  font-weight: 600;
+  margin-left: 10px;
+  padding: 20px;
 }
 
 .main_section .posts_container .post .image img {
   max-width: 100%;
   max-height: 100%;
+  width: 100%;
   border-radius: 15px;
   object-fit: cover;
   object-position: center;
@@ -2931,7 +2939,6 @@ button.sgn_btn:hover {
 @media (max-width: 768px) {
   .post_desc {
     width: 100% !important;
-    padding: 0 10px;
   }
 
   .post_desc p {
@@ -3194,6 +3201,7 @@ button.sgn_btn:hover {
   max-width: 400px;
   margin: 10px auto;
 }
+
 
 .sign_up .content .log-on .logo {
   text-align: center;

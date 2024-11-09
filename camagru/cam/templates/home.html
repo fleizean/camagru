@@ -92,9 +92,9 @@
                                             aria-expanded="false">
                                             <img class="logo" src="{% static "assets/bg-images/logo.png" %}">
                                         </button>
-                                    
+                                        
                                     </div>
-                                
+                                    <a href="logout" class="logout" id="logoutSmallSize">Logout</a>
                                 </div>
                             </div>
 
@@ -107,7 +107,7 @@
                                     </button>
                                     
                                 </div>
-                            
+                                <a href="logout" class="logout" id="logoutSmallSize">Logout</a>
                             </div>
                         </div>
                         <!-- menu in the botton for smal screen  -->
@@ -126,6 +126,7 @@
                     <div id="search" class="search_section">
                         <h2>Search</h2>
                         <form method="post">
+                            {% csrf_token %}
                             <input id="searchInput" type="text" placeholder="Search">
                         </form>
                         <div class="find">

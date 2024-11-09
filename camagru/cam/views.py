@@ -406,69 +406,96 @@ def upload_image(request):
     images = Image.objects.filter(user=request.user, is_edited=True).order_by('-created_at')
     return manual_render(request, "upload_image.html", {"images": images})
 
-
 @manual_login_required
 def save_photo(request):
+    # Kullanıcının kimlik doğrulamasını kontrol eden bir dekoratör kullanarak save_photo fonksiyonunu tanımlar
     if request.method == "POST":
+        # İstek yöntemi POST ise
         try:
             data = json.loads(request.body)
+            # İstek gövdesindeki JSON verisini ayrıştırır
             user = UserProfile.objects.get(username=request.user.username)
+            # İstek yapan kullanıcının profilini alır
             
             base64_image = data.get('image')
+            # JSON verisinden base64 kodlu resmi alır
             if base64_image.startswith('data:image'):
                 base64_image = base64_image.split(',')[1]
+                # Base64 kodlu resim verisini ayıklar
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid image data'}, status=400)
+                # Resim verisi geçersizse hata döner
                         
             filter_name = data.get('filter')
             effect = data.get('effect')
             description = data.get('description')
-            image_data = base64.b64decode(base64_image) # Base64 veriyi çöz
-            image = PilImage.open(BytesIO(image_data)) # Resmi aç
+            # JSON verisinden filtre adı, efekt ve açıklama bilgilerini alır
+            image_data = base64.b64decode(base64_image)
+            # Base64 kodlu veriyi çözer
+            image = PilImage.open(BytesIO(image_data))
+            # Çözülen veriyi bir resim olarak açar
             
             filter_path = 'static/assets/filters/' + filter_name
             filter_image = PilImage.open(filter_path)
+            # Filtre resmini belirtilen yoldan açar
             
-            # Filtrenin GIF olup olmadığını kontrol et
             if filter_image.format == 'GIF':
-                frames = [frame.copy() for frame in ImageSequence.Iterator(filter_image)] # GIF karesini ayır
+                # Filtre resminin GIF formatında olup olmadığını kontrol eder
+                frames = [frame.copy() for frame in ImageSequence.Iterator(filter_image)]
+                # GIF karesini ayırır
                 processed_frames = []
                 
-                for frame in frames: # Her bir kare için
-                    # Filtre karesini ana resmin boyutuna sığdır
+                for frame in frames:
+                    # Her bir kare için
                     resized_frame = ImageOps.fit(frame, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
-                    # Filtreyi her bir kareye uygula
+                    # Filtre karesini ana resmin boyutuna sığdırır
                     combined_frame = PilImage.alpha_composite(image.convert("RGBA"), resized_frame.convert("RGBA"))
+                    # Filtreyi her bir kareye uygular
                     processed_frames.append(combined_frame)
                 
-                # İşlenmiş kareleri GIF olarak kaydet
                 result_image_io = BytesIO()
+                # İşlenmiş kareleri GIF olarak kaydeder
                 processed_frames[0].save(result_image_io, format='GIF', save_all=True, append_images=processed_frames[1:], loop=0, duration=filter_image.info['duration'], dispose=filter_image.info.get('dispose', 2))
             else:
-                # Filtre GIF değilse, tek kareli resim için filtreyi uygula
-                resized_filter = ImageOps.fit(filter_image, image.size, method=0, bleed=0.0, centering=(0.5, 0.5)) # Filtreyi ana resmin boyutuna sığdır
-                combined_image = PilImage.alpha_composite(image.convert("RGBA"), resized_filter.convert("RGBA")) # Filtreyi ana resme uygula
-                result_image_io = BytesIO() # Sonucu bir dosya nesnesine kaydet
-                combined_image.save(result_image_io, format='PNG') # Sonucu PNG olarak kaydet
+                # Filtre GIF değilse, tek kareli resim için filtreyi uygular
+                resized_filter = ImageOps.fit(filter_image, image.size, method=0, bleed=0.0, centering=(0.5, 0.5))
+                # Filtreyi ana resmin boyutuna sığdırır
+                combined_image = PilImage.alpha_composite(image.convert("RGBA"), resized_filter.convert("RGBA"))
+                # Filtreyi ana resme uygular
+                result_image_io = BytesIO()
+                # Sonucu bir dosya nesnesine kaydeder
+                combined_image.save(result_image_io, format='PNG')
+                # Sonucu PNG olarak kaydeder
             
             result_image_content_file = manual_create_content_file(result_image_io.getvalue(), name='filtered_image.' + ('gif' if filter_image.format == 'GIF' else 'png'))
+            # İşlenmiş resmi bir ContentFile nesnesi olarak oluşturur
             
-            if result_image_content_file.size > 3*1024*1024: # 3MB'dan büyükse
-                return JsonResponse({'success': False, 'message': 'Image file size must be less than 3MB'}, status=400) # Hata döndür
-            new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect) # Yeni bir Image nesnesi oluştur
+            if result_image_content_file.size > 3*1024*1024:
+                # Dosya boyutu 3MB'dan büyükse
+                return JsonResponse({'success': False, 'message': 'Image file size must be less than 3MB'}, status=400)
+                # Hata döner
+            new_image = Image(user=user, image=result_image_content_file, description=description, is_edited=True, effect=effect)
+            # Yeni bir Image nesnesi oluşturur
             new_image.save()
+            # Yeni resmi veritabanına kaydeder
             
             return JsonResponse({'success': False, 'message': 'Image saved successfully.'})
+            # Başarılı yanıt döner
         except UnidentifiedImageError:
             return JsonResponse({'success': False, 'message': 'Cannot identify image file'}, status=400)
+            # Resim dosyası tanımlanamıyorsa hata döner
         except SuspiciousOperation as e:
             return JsonResponse({'success': False, 'message': 'Invalid file operation'}, status=400)
+            # Şüpheli dosya işlemi varsa hata döner
         except MemoryError as e:
             return JsonResponse({'success': False, 'message': 'File too large'}, status=400)
+            # Dosya çok büyükse hata döner
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
+            # Diğer tüm hatalar için genel bir hata döner
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
+        # İstek yöntemi POST değilse hata döner
 
 @manual_login_required
 def deletePost(request):

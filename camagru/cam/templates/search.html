@@ -90,17 +90,17 @@
                                 <div class="dropdown">
                                     <img class="logo" src="{% static "assets/bg-images/logo.png" %}">                           
                                 </div>
-                            
                             </div>
+                            <a href="logout" class="logout" id="logoutSmallSize">Logout</a>
                         </div>
 
                         <!-- nav for ex-small screen  -->
                         <div class="nav_xm">
                             <div class="dropdown">
-                                <img class="logo" src="{% static "assets/favicons/favicon.ico" %}">                        
+                                <img class="logo" src="{% static "assets/favicons/favicon.png" %}">                 
                             </div>
-                        
                         </div>
+                        <a href="logout" class="logout" id="logoutSmallSize">Logout</a>
                     </div>
                     <!-- menu in the botton for smal screen  -->
                     <div class="nav_bottom">
@@ -130,6 +130,7 @@
                                 <div class="search_section__search_page">
                                     <h2>Search</h2>
                                     <form method="post">
+                                        {% csrf_token %}
                                         <input id="searchInput" type="text" placeholder="Search">
                                     </form>
                                     <div class="find">

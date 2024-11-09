@@ -44,21 +44,24 @@ def get_upload_to_image(instance, filename):
     filename = "%s/%s_%s.%s" % (folder_name, instance.user.username, get_random_string(length=7), ext)
     return filename
 
-
 def manual_model_to_dict(instance):
+    # Bir model örneğini, anahtarların alan adları ve değerlerin alan değerleri olduğu bir sözlüğe dönüştürür
     return {field.name: getattr(instance, field.name) for field in instance._meta.fields}
 
 def manual_get_object_or_404(klass, *args, **kwargs):
+    # Veritabanından bir nesne almaya çalışır, nesne bulunamazsa Http404 hatası fırlatır
     try:
         return klass.objects.get(*args, **kwargs)
     except klass.DoesNotExist:
-        raise Http404("No %s matches the given query." % klass._meta.object_name)
+        raise Http404("Verilen sorguya uygun %s bulunamadı." % klass._meta.object_name)
 
 def manual_render(request, template_name, context=None, content_type=None, status=None, using=None):
+    # Belirtilen bağlamla bir şablonu render eder ve bir HttpResponse döner
     content = render_to_string(template_name, context, request=request, using=using)
     return HttpResponse(content, content_type=content_type, status=status)
 
 def manual_login_required(view_func):
+    # Kullanıcının kimlik doğrulamasını kontrol eden, doğrulanmamışsa giriş sayfasına yönlendiren bir dekoratör
     def _wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
@@ -66,6 +69,7 @@ def manual_login_required(view_func):
     return _wrapped_view
 
 def manual_never_cache(view_func):
+    # Yanıtın önbelleğe alınmasını önlemek için başlıkları ayarlayan bir dekoratör
     def _wrapped_view(request, *args, **kwargs):
         response = view_func(request, *args, **kwargs)
         response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
@@ -75,23 +79,30 @@ def manual_never_cache(view_func):
     return _wrapped_view
 
 def manual_add_message(request, level, message):
+    # Django'nun mesajlar çerçevesini kullanarak isteğe bir mesaj ekler
     messages.add_message(request, level, message)
 
 def manual_display_messages(request):
+    # Django'nun mesajlar çerçevesini kullanarak istekteki tüm mesajları yazdırır
     for message in messages.get_messages(request):
         print(message)
 
 def manual_create_content_file(content, name):
+    # Verilen içerik ve isimle bir ContentFile nesnesi oluşturur
     return ContentFile(content, name=name)
 
 def manual_urlsafe_base64_decode(s):
+    # URL güvenli bir şekilde base64 kodlu bir dizeyi çözer
     return urlsafe_base64_decode(s)
 
 def manual_generate_token(user):
+    # Django'nun varsayılan token oluşturucusunu kullanarak bir kullanıcı için token oluşturur
     return default_token_generator.make_token(user)
 
 def manual_update_session_auth_hash(request, user):
+    # Kullanıcının oturum hash'ini güncelleyerek şifre değişikliğinden sonra oturumun açık kalmasını sağlar
     update_session_auth_hash(request, user)
 
 def manual_reverse(viewname, urlconf=None, args=None, kwargs=None, current_app=None):
+    # Bir URL desenini tersine çevirerek URL dizesini elde eder
     return reverse(viewname, urlconf=urlconf, args=args, kwargs=kwargs, current_app=current_app)
